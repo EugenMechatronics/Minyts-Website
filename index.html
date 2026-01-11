@@ -1,0 +1,1038 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>Minyts Holdings LLC - Ecosystem Root for MCC, Tildilyn & Future Ventures</title>
+  <meta name="description" content="Minyts Holdings LLC is the parent structure organizing ventures into a clean ecosystem. Building integrated businesses, platforms, and operating systems designed for scale and long-term value." />
+  <meta name="keywords" content="Minyts Holdings, MCC, Tildilyn, holding company, ERP platform, business ecosystem, corporate cloud" />
+  <meta name="author" content="Minyts Holdings LLC" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://minyts.com/" />
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://minyts.com/" />
+  <meta property="og:title" content="Minyts Holdings LLC - Ecosystem Root for MCC, Tildilyn & Future Ventures" />
+  <meta property="og:description" content="Building integrated businesses, platforms, and operating systems. The ecosystem root for MCC, Tildilyn, and future ventures." />
+  <meta property="og:image" content="https://minyts.com/og-image.png" />
+  <meta property="og:site_name" content="Minyts Holdings LLC" />
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:url" content="https://minyts.com/" />
+  <meta name="twitter:title" content="Minyts Holdings LLC - Ecosystem Root for MCC, Tildilyn & Future Ventures" />
+  <meta name="twitter:description" content="Building integrated businesses, platforms, and operating systems. The ecosystem root for MCC, Tildilyn, and future ventures." />
+  <meta name="twitter:image" content="https://minyts.com/og-image.png" />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+
+  <!-- Theme Color -->
+  <meta name="theme-color" content="#1ED760" />
+
+  <style>
+    :root{
+      --bg: #FFFFFF;
+      --soft: #F7F9FB;
+      --green: #1ED760; /* Minyts Green */
+      --blue: #0A6CFF;  /* MCC Blue */
+      --text: #0B1220;
+      --muted: #5B667A;
+      --border: rgba(12, 18, 32, 0.12);
+      --shadow: 0 10px 30px rgba(10, 20, 40, 0.08);
+      --radius: 18px;
+      --container: 1120px;
+      --focus: 0 0 0 4px rgba(10, 108, 255, 0.18);
+    }
+
+    *{ box-sizing: border-box; }
+    html{ scroll-behavior: smooth; }
+    body{
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      color: var(--text);
+      background: var(--bg);
+      line-height: 1.5;
+    }
+
+    a{ color: inherit; text-decoration: none; }
+    .container{
+      max-width: var(--container);
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    /* Topbar */
+    .topbar{
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(255, 255, 255, 0.82);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+    }
+    .topbar-inner{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      height: 72px;
+    }
+
+    .brand{
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 220px;
+    }
+
+    .logo{
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      box-shadow: 0 6px 18px rgba(10, 20, 40, 0.12);
+      transition: transform 200ms ease, box-shadow 200ms ease;
+    }
+    .logo:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 8px 24px rgba(10, 20, 40, 0.16);
+    }
+
+    .brand-text{
+      display: flex;
+      flex-direction: column;
+      line-height: 1.1;
+    }
+    .brand-text strong{
+      font-size: 14px;
+      letter-spacing: 0.2px;
+    }
+    .brand-text span{
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .nav{
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .nav a{
+      font-size: 14px;
+      color: var(--muted);
+      padding: 10px 12px;
+      border-radius: 12px;
+      transition: background 160ms ease, color 160ms ease;
+    }
+    .nav a:hover{
+      background: var(--soft);
+      color: var(--text);
+    }
+    .nav a:focus{ outline: none; box-shadow: var(--focus); }
+
+    .actions{
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn{
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      height: 42px;
+      padding: 0 14px;
+      border-radius: 14px;
+      font-size: 14px;
+      font-weight: 600;
+      border: 1px solid var(--border);
+      background: transparent;
+      cursor: pointer;
+      transition: transform 120ms ease, box-shadow 180ms ease, border-color 180ms ease, background 180ms ease;
+      user-select: none;
+      white-space: nowrap;
+    }
+    .btn:hover{ transform: translateY(-1px); box-shadow: 0 10px 20px rgba(10, 20, 40, 0.08); }
+    .btn:focus{ outline: none; box-shadow: var(--focus); }
+
+    .btn-outline{
+      border-color: rgba(30, 215, 96, 0.55);
+    }
+    .btn-outline:hover{
+      background: rgba(30, 215, 96, 0.08);
+      border-color: rgba(30, 215, 96, 0.85);
+    }
+
+    .btn-solid{
+      border-color: transparent;
+      background: var(--blue);
+      color: white;
+    }
+    .btn-solid:hover{
+      background: #0B5BE0;
+    }
+
+    .hamburger{
+      display: none;
+      width: 46px;
+      height: 42px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: transparent;
+      cursor: pointer;
+    }
+    .hamburger:focus{ outline: none; box-shadow: var(--focus); }
+    .hamburger .lines{
+      width: 18px;
+      height: 12px;
+      margin: 0 auto;
+      display: grid;
+      gap: 4px;
+    }
+    .hamburger .lines span{
+      display: block;
+      height: 2px;
+      width: 100%;
+      background: var(--text);
+      opacity: 0.8;
+      border-radius: 3px;
+    }
+
+    /* Hero */
+    .hero{
+      padding: 56px 0 22px;
+      background:
+        radial-gradient(900px 500px at 15% 10%, rgba(10,108,255,0.10), transparent 60%),
+        radial-gradient(900px 500px at 85% 20%, rgba(30,215,96,0.10), transparent 60%),
+        linear-gradient(180deg, var(--bg), var(--soft));
+      border-bottom: 1px solid var(--border);
+    }
+    .hero-inner{
+      text-align: center;
+      padding: 30px 0 10px;
+    }
+    .kicker{
+      display: inline-flex;
+      gap: 10px;
+      align-items: center;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.6);
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .dot{
+      width: 9px; height: 9px; border-radius: 999px;
+      background: var(--green);
+      box-shadow: 0 0 0 4px rgba(30,215,96,0.16);
+    }
+
+    h1{
+      margin: 18px 0 10px;
+      font-size: clamp(36px, 4.4vw, 56px);
+      letter-spacing: -0.8px;
+      line-height: 1.05;
+    }
+    .subtext{
+      margin: 0 auto;
+      max-width: 780px;
+      font-size: 16px;
+      color: var(--muted);
+    }
+
+    .hero-ctas{
+      margin-top: 22px;
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .stats{
+      margin: 28px auto 0;
+      max-width: 980px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      padding: 0 6px;
+    }
+    .stat{
+      background: rgba(255,255,255,0.72);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px;
+      text-align: left;
+      box-shadow: 0 10px 26px rgba(10,20,40,0.06);
+    }
+    .stat strong{
+      display: block;
+      font-size: 14px;
+    }
+    .stat span{
+      display: block;
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    /* Sections */
+    section{
+      padding: 56px 0;
+    }
+    section.alt{
+      background: var(--soft);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .section-head{
+      display: grid;
+      gap: 10px;
+      margin-bottom: 22px;
+    }
+    .section-head h2{
+      margin: 0;
+      font-size: 28px;
+      letter-spacing: -0.4px;
+    }
+    .section-head p{
+      margin: 0;
+      color: var(--muted);
+      max-width: 820px;
+    }
+
+    /* Ecosystem map */
+    .ecosystem{
+      display: grid;
+      grid-template-columns: 1.1fr 1fr;
+      gap: 18px;
+      align-items: stretch;
+    }
+    .panel{
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px;
+      box-shadow: var(--shadow);
+    }
+    .map{
+      display: grid;
+      gap: 12px;
+    }
+    .node{
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 14px;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      background: rgba(247,249,251,0.65);
+    }
+    .badge{
+      width: 36px; height: 36px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--border);
+      background: white;
+      flex: 0 0 auto;
+    }
+    .badge.blue{ box-shadow: 0 0 0 4px rgba(10,108,255,0.12); }
+    .badge.green{ box-shadow: 0 0 0 4px rgba(30,215,96,0.14); }
+    .badge.gray{ box-shadow: 0 0 0 4px rgba(12,18,32,0.06); }
+    .node h3{
+      margin: 0;
+      font-size: 15px;
+      letter-spacing: -0.2px;
+    }
+    .node p{
+      margin: 6px 0 0;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .callout{
+      display: grid;
+      gap: 12px;
+    }
+    .callout .pillrow{
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .pill{
+      font-size: 12px;
+      color: var(--muted);
+      border: 1px solid var(--border);
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.7);
+    }
+
+    /* Companies grid */
+    .grid{
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+    .card{
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px;
+      box-shadow: var(--shadow);
+      display: grid;
+      gap: 12px;
+      min-height: 200px;
+    }
+    .card-top{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .tag{
+      font-size: 12px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: rgba(247,249,251,0.75);
+      color: var(--muted);
+      white-space: nowrap;
+    }
+    .card h3{
+      margin: 0;
+      font-size: 18px;
+      letter-spacing: -0.2px;
+    }
+    .card p{
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .card .links{
+      margin-top: 4px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .link{
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--blue);
+      padding: 8px 10px;
+      border-radius: 12px;
+      border: 1px solid rgba(10,108,255,0.18);
+      background: rgba(10,108,255,0.06);
+      transition: background 160ms ease, transform 120ms ease, border-color 160ms ease;
+    }
+    .link:hover{
+      transform: translateY(-1px);
+      background: rgba(10,108,255,0.10);
+      border-color: rgba(10,108,255,0.26);
+    }
+    .link.green{
+      color: #0D7B3B;
+      border-color: rgba(30,215,96,0.20);
+      background: rgba(30,215,96,0.08);
+    }
+    .link.green:hover{
+      background: rgba(30,215,96,0.12);
+      border-color: rgba(30,215,96,0.30);
+    }
+    .link:focus{
+      outline: none;
+      box-shadow: var(--focus);
+    }
+
+    /* Contact */
+    .contact{
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+    .contact .panel p{
+      margin: 0;
+      color: var(--muted);
+    }
+    .contact-list{
+      margin-top: 12px;
+      display: grid;
+      gap: 10px;
+    }
+    .contact-item{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 12px 14px;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      background: rgba(247,249,251,0.65);
+    }
+    .contact-item strong{
+      font-size: 13px;
+    }
+    .contact-item a{
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--blue);
+    }
+    .contact-item a:focus{ outline: none; box-shadow: var(--focus); border-radius: 10px; }
+
+    /* Footer */
+    footer{
+      padding: 28px 0;
+      border-top: 1px solid var(--border);
+      background: var(--bg);
+    }
+    .footer-inner{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    /* Mobile */
+    @media (max-width: 940px){
+      .ecosystem{ grid-template-columns: 1fr; }
+      .grid{ grid-template-columns: 1fr; }
+      .contact{ grid-template-columns: 1fr; }
+      .stats{ grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 860px){
+      .nav{ display: none; }
+      .hamburger{ display: inline-flex; align-items: center; justify-content: center; }
+      .actions{ gap: 8px; }
+      .brand{ min-width: unset; }
+    }
+
+    /* Mobile nav drawer */
+    .drawer{
+      display: none;
+      border-top: 1px solid var(--border);
+      background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(10px);
+    }
+    .drawer.open{ display: block; }
+    .drawer .drawer-inner{
+      padding: 12px 0 16px;
+      display: grid;
+      gap: 8px;
+    }
+    .drawer a{
+      color: var(--muted);
+      padding: 12px 12px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: rgba(247,249,251,0.6);
+      font-size: 14px;
+    }
+    .drawer a:hover{ color: var(--text); background: rgba(247,249,251,0.9); }
+    .drawer a:focus{ outline: none; box-shadow: var(--focus); }
+
+    /* Utility */
+    .sr-only{
+      position:absolute;
+      width:1px;height:1px;
+      padding:0;margin:-1px;
+      overflow:hidden;clip:rect(0,0,0,0);
+      white-space:nowrap;border:0;
+    }
+
+    /* Animations */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .hero-inner {
+      animation: fadeInUp 0.8s ease-out;
+    }
+
+    .card, .panel, .node {
+      animation: fadeInUp 0.6s ease-out backwards;
+    }
+
+    .card:nth-child(1) { animation-delay: 0.1s; }
+    .card:nth-child(2) { animation-delay: 0.2s; }
+    .card:nth-child(3) { animation-delay: 0.3s; }
+
+    /* Scroll enhancement */
+    @media (prefers-reduced-motion: no-preference) {
+      html {
+        scroll-behavior: smooth;
+      }
+    }
+
+    /* Focus visible for better accessibility */
+    *:focus-visible {
+      outline: 2px solid var(--blue);
+      outline-offset: 2px;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Topbar -->
+  <header class="topbar">
+    <div class="container topbar-inner">
+      <a class="brand" href="#top" aria-label="Minyts Holdings Home">
+        <div class="logo" aria-hidden="true">
+          <svg width="42" height="42" viewBox="0 0 200 200" role="img" aria-label="Minyts Holdings umbrella logo">
+            <defs>
+              <style>
+                .navy { fill: #1E3A5F; }
+                .gold { fill: #D4AF37; }
+                .cream { fill: #F5F1E8; }
+              </style>
+            </defs>
+
+            <!-- Background circle -->
+            <circle cx="100" cy="100" r="100" class="cream"/>
+
+            <!-- Umbrella -->
+            <g transform="translate(100, 70)">
+              <!-- Umbrella canopy -->
+              <path d="M -45 0 Q -45 -30, -25 -35 Q -15 -38, 0 -40 Q 15 -38, 25 -35 Q 45 -30, 45 0"
+                    class="navy" stroke="#1E3A5F" stroke-width="2"/>
+              <path d="M -45 0 Q -30 -5, 0 -5 Q 30 -5, 45 0"
+                    class="navy" opacity="0.3"/>
+
+              <!-- Umbrella handle/pole -->
+              <rect x="-2" y="-5" width="4" height="50" class="gold" rx="2"/>
+              <path d="M -2 45 Q -2 52, 5 52 Q 8 52, 8 48"
+                    fill="none" stroke="#D4AF37" stroke-width="4" stroke-linecap="round"/>
+            </g>
+
+            <!-- Building -->
+            <g transform="translate(100, 125)">
+              <rect x="-20" y="-25" width="40" height="50" class="navy"/>
+              <rect x="-18" y="25" width="36" height="3" class="navy"/>
+
+              <!-- Windows (5 floors, 2 columns) -->
+              <rect x="-14" y="-20" width="6" height="6" class="cream"/>
+              <rect x="8" y="-20" width="6" height="6" class="cream"/>
+
+              <rect x="-14" y="-10" width="6" height="6" class="cream"/>
+              <rect x="8" y="-10" width="6" height="6" class="cream"/>
+
+              <rect x="-14" y="0" width="6" height="6" class="cream"/>
+              <rect x="8" y="0" width="6" height="6" class="cream"/>
+
+              <rect x="-14" y="10" width="6" height="6" class="cream"/>
+              <rect x="8" y="10" width="6" height="6" class="cream"/>
+
+              <rect x="-14" y="20" width="6" height="5" class="cream"/>
+              <rect x="8" y="20" width="6" height="5" class="cream"/>
+            </g>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <strong>Minyts Holdings LLC</strong>
+          <span>Ecosystem root</span>
+        </div>
+      </a>
+
+      <nav class="nav" aria-label="Primary">
+        <a href="#about">About</a>
+        <a href="#ecosystem">Ecosystem</a>
+        <a href="#companies">Companies</a>
+        <a href="#contact">Contact</a>
+      </nav>
+
+      <div class="actions">
+        <a class="btn btn-outline" href="#ecosystem">View Ecosystem</a>
+        <a class="btn btn-solid" href="#companies">Explore Companies</a>
+
+        <button class="hamburger" id="hamburger" aria-controls="mobileDrawer" aria-expanded="false">
+          <span class="sr-only">Open menu</span>
+          <span class="lines" aria-hidden="true">
+            <span></span><span></span><span></span>
+          </span>
+        </button>
+      </div>
+    </div>
+
+    <div class="drawer" id="mobileDrawer">
+      <div class="container drawer-inner">
+        <a href="#about">About</a>
+        <a href="#ecosystem">Ecosystem</a>
+        <a href="#companies">Companies</a>
+        <a href="#contact">Contact</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <main id="top">
+    <section class="hero">
+      <div class="container hero-inner">
+        <div class="kicker">
+          <span class="dot" aria-hidden="true"></span>
+          <span>Building integrated businesses, platforms, and operating systems</span>
+        </div>
+
+        <h1>Minyts Holdings LLC</h1>
+        <p class="subtext">
+          The ecosystem root for <strong>MCC</strong>, <strong>Tildilyn</strong>, and future ventures.
+          Designed for scale, structure, and long-term compounding.
+        </p>
+
+        <div class="hero-ctas">
+          <a class="btn btn-outline" href="#ecosystem">View Ecosystem</a>
+          <a class="btn btn-solid" href="#contact">Partner or Connect</a>
+        </div>
+
+        <div class="stats" aria-label="Highlights">
+          <div class="stat">
+            <strong>Holding Company Core</strong>
+            <span>Governance, ownership, and strategic direction across ventures.</span>
+          </div>
+          <div class="stat">
+            <strong>Platform Mindset</strong>
+            <span>Systems that power operations, automation, and business intelligence.</span>
+          </div>
+          <div class="stat">
+            <strong>Expansion Ready</strong>
+            <span>Built to add subsidiaries, products, and verticals without redesign chaos.</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- About -->
+    <section id="about">
+      <div class="container">
+        <div class="section-head">
+          <h2>About Minyts</h2>
+          <p>
+            Minyts Holdings LLC is the parent structure that organizes ventures into a clean ecosystem.
+            The goal is simple: build companies that work together like a well-tuned operating system,
+            not a pile of disconnected tools.
+          </p>
+        </div>
+
+        <div class="panel">
+          <div class="callout">
+            <p>
+              Think of Minyts as the “root folder” for everything we build: shared standards, shared direction,
+              and a consistent way to launch new products without reinventing the wheel each time.
+            </p>
+            <div class="pillrow" aria-label="Principles">
+              <span class="pill">Clarity over clutter</span>
+              <span class="pill">Security by design</span>
+              <span class="pill">Enterprise-grade structure</span>
+              <span class="pill">Scalable systems</span>
+              <span class="pill">Compounding value</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Ecosystem -->
+    <section id="ecosystem" class="alt">
+      <div class="container">
+        <div class="section-head">
+          <h2>Ecosystem</h2>
+          <p>
+            One parent. Multiple subsidiaries. Shared foundations. Each company does its job,
+            and the whole ecosystem gets stronger.
+          </p>
+        </div>
+
+        <div class="ecosystem">
+          <div class="panel map" aria-label="Ecosystem map">
+            <div class="node">
+              <div class="badge gray" aria-hidden="true">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                  <path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z" stroke="#0B1220" stroke-width="2" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <div>
+                <h3>Minyts Holdings LLC</h3>
+                <p>Governance, ownership, strategy, and the shared operating blueprint.</p>
+              </div>
+            </div>
+
+            <div class="node">
+              <div class="badge blue" aria-hidden="true">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                  <path d="M4 7h16v10H4V7z" stroke="#0A6CFF" stroke-width="2" />
+                  <path d="M7 10h4M7 13h7" stroke="#0A6CFF" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+              </div>
+              <div>
+                <h3>MCC (Minyts Corporate Cloud)</h3>
+                <p>ERP platform foundation: onboarding, tenants, permissions, finance, ops, and automation.</p>
+              </div>
+            </div>
+
+            <div class="node">
+              <div class="badge green" aria-hidden="true">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                  <path d="M12 21s-7-4.5-7-11a4 4 0 0 1 7-2a4 4 0 0 1 7 2c0 6.5-7 11-7 11z" stroke="#1ED760" stroke-width="2"/>
+                </svg>
+              </div>
+              <div>
+                <h3>Tildilyn</h3>
+                <p>Service utility business: scalable services supported by systems, scheduling, and quality ops.</p>
+              </div>
+            </div>
+
+            <div class="node">
+              <div class="badge gray" aria-hidden="true">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                  <path d="M12 2v6M12 16v6M4 12h6M14 12h6" stroke="#0B1220" stroke-width="2" stroke-linecap="round"/>
+                  <path d="M12 12l4-4" stroke="#0B1220" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+              </div>
+              <div>
+                <h3>Future Ventures</h3>
+                <p>New subsidiaries slot into the same standards, branding, and platform foundation.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel callout">
+            <h3 style="margin:0;font-size:18px;letter-spacing:-0.2px;">How this turns into pages later</h3>
+            <p style="margin:0;color:var(--muted);">
+              This landing page stays simple. When you’re ready, we split each company into its own page,
+              and connect MCC to its actual portal login.
+            </p>
+
+            <div class="pillrow">
+              <span class="pill">/mcc (marketing)</span>
+              <span class="pill">/mccportal (login)</span>
+              <span class="pill">/tildilyn</span>
+              <span class="pill">/ventures</span>
+              <span class="pill">/contact</span>
+            </div>
+
+            <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:6px;">
+              <a class="btn btn-outline" href="#companies">See Companies</a>
+              <a class="btn btn-solid" href="#contact">Get in Touch</a>
+            </div>
+
+            <p style="margin:0;color:var(--muted);font-size:13px;">
+              When you’re ready, tell me what URL you want for MCC (example: <strong>minyts.com/mccportal</strong>)
+              and we’ll wire the button directly to it.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Companies -->
+    <section id="companies">
+      <div class="container">
+        <div class="section-head">
+          <h2>Companies</h2>
+          <p>
+            Each company is a focused engine. Minyts is the chassis that keeps everything aligned and upgradeable.
+          </p>
+        </div>
+
+        <div class="grid">
+          <article class="card">
+            <div class="card-top">
+              <h3>MCC</h3>
+              <span class="tag">Platform</span>
+            </div>
+            <p>
+              Minyts Corporate Cloud: an ERP and operating system foundation for onboarding, tenants, RBAC,
+              finance, and business automation.
+            </p>
+            <div class="links">
+              <a class="link" href="#contact" aria-label="Discuss MCC">Discuss MCC</a>
+              <a class="link green" href="#ecosystem" aria-label="See MCC in the ecosystem">See Ecosystem</a>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="card-top">
+              <h3>Tildilyn</h3>
+              <span class="tag">Services</span>
+            </div>
+            <p>
+              A service utility built to scale. Clean processes, scheduling, accountability, and a strong
+              operational backbone.
+            </p>
+            <div class="links">
+              <a class="link" href="#contact" aria-label="Discuss Tildilyn">Discuss Tildilyn</a>
+              <a class="link green" href="#about" aria-label="Learn about Minyts">About Minyts</a>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="card-top">
+              <h3>Future Venture</h3>
+              <span class="tag">Coming soon</span>
+            </div>
+            <p>
+              New subsidiaries plug into the same standards: brand system, security posture, and shared platform tooling.
+            </p>
+            <div class="links">
+              <a class="link" href="#contact" aria-label="Propose a venture">Propose a Venture</a>
+              <a class="link green" href="#ecosystem" aria-label="How ventures fit">How it fits</a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact -->
+    <section id="contact" class="alt">
+      <div class="container">
+        <div class="section-head">
+          <h2>Contact</h2>
+          <p>
+            Keep it simple: one clean lane for partnerships, platform interest, or business inquiries.
+          </p>
+        </div>
+
+        <div class="contact">
+          <div class="panel">
+            <h3 style="margin:0;font-size:18px;letter-spacing:-0.2px;">Fastest way to connect</h3>
+            <p style="margin-top:8px;">
+              For now, this page is intentionally lightweight. Next phase we can add a proper contact form
+              (that actually sends emails) once you choose hosting.
+            </p>
+
+            <div class="contact-list" aria-label="Contact options">
+              <div class="contact-item">
+                <div>
+                  <strong>Email</strong>
+                  <div style="color:var(--muted);font-size:12px;">Business inquiries</div>
+                </div>
+                <a href="mailto:info@minyts.com">info@minyts.com</a>
+              </div>
+
+              <div class="contact-item">
+                <div>
+                  <strong>Domain</strong>
+                  <div style="color:var(--muted);font-size:12px;">Primary site</div>
+                </div>
+                <a href="#top">minyts.com</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel">
+            <h3 style="margin:0;font-size:18px;letter-spacing:-0.2px;">Next upgrades (when you say go)</h3>
+            <p style="margin-top:8px;">
+              If you want this to feel “Apple-level clean,” the next move is to add:
+            </p>
+            <div class="pillrow" style="margin-top:10px;">
+              <span class="pill">Real logo file (SVG)</span>
+              <span class="pill">MCC Portal button link</span>
+              <span class="pill">Subpages: /mcc, /tildilyn</span>
+              <span class="pill">SEO titles + schema</span>
+              <span class="pill">Contact form backend</span>
+              <span class="pill">Analytics</span>
+            </div>
+            <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap;">
+              <a class="btn btn-outline" href="#companies">Review companies</a>
+              <a class="btn btn-solid" href="#about">Read the vision</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <div class="container footer-inner">
+        <div>© <span id="year"></span> Minyts Holdings LLC</div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+          <a href="#about">About</a>
+          <a href="#ecosystem">Ecosystem</a>
+          <a href="#companies">Companies</a>
+          <a href="#contact">Contact</a>
+        </div>
+      </div>
+    </footer>
+  </main>
+
+  <!-- Structured Data (Schema.org) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Minyts Holdings LLC",
+    "url": "https://minyts.com",
+    "logo": "https://minyts.com/favicon.svg",
+    "description": "Minyts Holdings LLC is the parent structure organizing ventures into a clean ecosystem. Building integrated businesses, platforms, and operating systems designed for scale and long-term value.",
+    "foundingDate": "2024",
+    "email": "info@minyts.com",
+    "sameAs": [],
+    "owns": [
+      {
+        "@type": "SoftwareApplication",
+        "name": "MCC (Minyts Corporate Cloud)",
+        "applicationCategory": "BusinessApplication",
+        "description": "ERP platform foundation: onboarding, tenants, permissions, finance, ops, and automation."
+      },
+      {
+        "@type": "Organization",
+        "name": "Tildilyn",
+        "description": "Service utility business: scalable services supported by systems, scheduling, and quality ops."
+      }
+    ],
+    "address": {
+      "@type": "PostalAddress",
+      "addressCountry": "US"
+    }
+  }
+  </script>
+
+  <script>
+    // Mobile drawer
+    (function(){
+      const btn = document.getElementById("hamburger");
+      const drawer = document.getElementById("mobileDrawer");
+      const links = drawer.querySelectorAll("a");
+
+      function setOpen(open){
+        drawer.classList.toggle("open", open);
+        btn.setAttribute("aria-expanded", String(open));
+      }
+
+      btn.addEventListener("click", () => {
+        const isOpen = drawer.classList.contains("open");
+        setOpen(!isOpen);
+      });
+
+      links.forEach(a => a.addEventListener("click", () => setOpen(false)));
+
+      // Footer year
+      document.getElementById("year").textContent = new Date().getFullYear();
+    })();
+  </script>
+</body>
+</html>
