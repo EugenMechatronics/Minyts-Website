@@ -48,21 +48,64 @@
       --focus: 0 0 0 4px rgba(10, 108, 255, 0.18);
     }
 
+    /* -------------------------
+       Mobile-friendly defaults
+    -------------------------- */
     *{ box-sizing: border-box; }
-    html{ scroll-behavior: smooth; }
+    html{
+      scroll-behavior: smooth;
+      -webkit-text-size-adjust: 100%;
+    }
     body{
       margin: 0;
       font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Apple Color Emoji","Segoe UI Emoji";
       color: var(--text);
       background: var(--bg);
-      line-height: 1.5;
+
+      line-height: 1.6;
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+
+      overflow-x: hidden;
     }
 
     a{ color: inherit; text-decoration: none; }
+
+    /* Keep media from overflowing */
+    img, video, svg, canvas{
+      max-width: 100%;
+      height: auto;
+    }
+
+    /* Helpful on mobile tapping */
+    *{ -webkit-tap-highlight-color: transparent; }
+
     .container{
       max-width: var(--container);
       margin: 0 auto;
       padding: 0 20px;
+    }
+
+    /* Accessibility helper for skip links */
+    .sr-only{
+      position: absolute !important;
+      width: 1px !important;
+      height: 1px !important;
+      padding: 0 !important;
+      margin: -1px !important;
+      overflow: hidden !important;
+      clip: rect(0, 0, 0, 0) !important;
+      white-space: nowrap !important;
+      border: 0 !important;
+    }
+    .sr-only.focus\:not-sr-only:focus{
+      position: static !important;
+      width: auto !important;
+      height: auto !important;
+      margin: 0 !important;
+      overflow: visible !important;
+      clip: auto !important;
     }
 
     /* Topbar */
@@ -97,6 +140,7 @@
       place-items: center;
       box-shadow: 0 6px 18px rgba(10, 20, 40, 0.12);
       transition: transform 200ms ease, box-shadow 200ms ease;
+      flex: 0 0 auto;
     }
     .logo:hover{
       transform: translateY(-1px);
@@ -146,8 +190,10 @@
       align-items: center;
       justify-content: center;
       gap: 10px;
+
       height: 42px;
       padding: 0 14px;
+
       border-radius: 14px;
       font-size: 14px;
       font-weight: 600;
@@ -157,6 +203,9 @@
       transition: transform 120ms ease, box-shadow 180ms ease, border-color 180ms ease, background 180ms ease;
       user-select: none;
       white-space: nowrap;
+
+      /* Mobile tap target */
+      min-height: 44px;
     }
     .btn:hover{ transform: translateY(-1px); box-shadow: 0 10px 20px rgba(10, 20, 40, 0.08); }
     .btn:focus{ outline: none; box-shadow: var(--focus); }
@@ -186,6 +235,7 @@
       border: 1px solid var(--border);
       background: transparent;
       cursor: pointer;
+      min-height: 44px;
     }
     .hamburger:focus{ outline: none; box-shadow: var(--focus); }
     .hamburger .lines{
@@ -254,6 +304,16 @@
       gap: 12px;
       flex-wrap: wrap;
     }
+    /* Mobile: stack hero buttons cleanly */
+    @media (max-width: 520px){
+      .hero-ctas{
+        width: 100%;
+        gap: 10px;
+      }
+      .hero-ctas .btn{
+        width: 100%;
+      }
+    }
 
     .stats{
       margin: 28px auto 0;
@@ -286,6 +346,16 @@
     section{
       padding: 56px 0;
     }
+    /* Mobile-friendly spacing */
+    @media (max-width: 640px){
+      section{
+        padding: 40px 0;
+      }
+      .hero{
+        padding: 44px 0 18px;
+      }
+    }
+
     section.alt{
       background: var(--soft);
       border-top: 1px solid var(--border);
@@ -426,6 +496,7 @@
     .link{
       display: inline-flex;
       align-items: center;
+      justify-content: center;
       gap: 8px;
       font-size: 13px;
       font-weight: 700;
@@ -435,6 +506,9 @@
       border: 1px solid rgba(10,108,255,0.18);
       background: rgba(10,108,255,0.06);
       transition: background 160ms ease, transform 120ms ease, border-color 160ms ease;
+
+      /* tap target */
+      min-height: 44px;
     }
     .link:hover{
       transform: translateY(-1px);
@@ -453,6 +527,11 @@
     .link:focus{
       outline: none;
       box-shadow: var(--focus);
+    }
+    /* Mobile: make card links full width when cramped */
+    @media (max-width: 520px){
+      .card .links{ gap: 8px; }
+      .card .links .link{ width: 100%; }
     }
 
     /* Contact */
@@ -487,6 +566,9 @@
       font-size: 13px;
       font-weight: 800;
       color: var(--blue);
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
     }
     .contact-item a:focus{ outline: none; box-shadow: var(--focus); border-radius: 10px; }
 
@@ -506,7 +588,7 @@
       font-size: 13px;
     }
 
-    /* Mobile */
+    /* Responsive layout shifts */
     @media (max-width: 940px){
       .ecosystem{ grid-template-columns: 1fr; }
       .grid{ grid-template-columns: 1fr; }
@@ -541,57 +623,37 @@
       border: 1px solid var(--border);
       background: rgba(247,249,251,0.6);
       font-size: 14px;
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
     }
     .drawer a:hover{ color: var(--text); background: rgba(247,249,251,0.9); }
     .drawer a:focus{ outline: none; box-shadow: var(--focus); }
 
-    /* Utility */
-    .sr-only{
-      position:absolute;
-      width:1px;height:1px;
-      padding:0;margin:-1px;
-      overflow:hidden;clip:rect(0,0,0,0);
-      white-space:nowrap;border:0;
-    }
-
     /* Animations */
     @keyframes fadeInUp {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
     }
-
     @keyframes fadeIn {
       from { opacity: 0; }
       to { opacity: 1; }
     }
 
-    .hero-inner {
-      animation: fadeInUp 0.8s ease-out;
-    }
-
-    .card, .panel, .node {
-      animation: fadeInUp 0.6s ease-out backwards;
-    }
-
+    .hero-inner { animation: fadeInUp 0.8s ease-out; }
+    .card, .panel, .node { animation: fadeInUp 0.6s ease-out backwards; }
     .card:nth-child(1) { animation-delay: 0.1s; }
     .card:nth-child(2) { animation-delay: 0.2s; }
     .card:nth-child(3) { animation-delay: 0.3s; }
 
-    /* Scroll enhancement */
-    @media (prefers-reduced-motion: no-preference) {
-      html {
-        scroll-behavior: smooth;
-      }
+    /* Respect reduced-motion users */
+    @media (prefers-reduced-motion: reduce){
+      *{ animation: none !important; transition: none !important; }
+      html{ scroll-behavior: auto; }
     }
 
     /* Focus visible for better accessibility */
-    *:focus-visible {
+    *:focus-visible{
       outline: 2px solid var(--blue);
       outline-offset: 2px;
     }

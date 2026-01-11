@@ -2,69 +2,118 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Custom styles */
+/* -------------------------
+   Mobile-friendly defaults
+-------------------------- */
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
 body {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-    color: #1F2937;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  color: #1F2937;
+
+  /* readability on mobile */
+  line-height: 1.6;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  /* reduce weird horizontal scroll on tiny screens */
+  overflow-x: hidden;
+}
+
+/* Keep media from blowing past the viewport */
+img,
+video,
+svg,
+canvas {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Helpful on mobile tapping (optional, but nice) */
+* {
+  -webkit-tap-highlight-color: transparent;
 }
 
 /* Accessibility helper for skip links */
 .sr-only {
-    position: absolute !important;
-    width: 1px !important;
-    height: 1px !important;
-    padding: 0 !important;
-    margin: -1px !important;
-    overflow: hidden !important;
-    clip: rect(0, 0, 0, 0) !important;
-    white-space: nowrap !important;
-    border: 0 !important;
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
 }
 
 .sr-only.focus\:not-sr-only:focus {
-    position: static !important;
-    width: auto !important;
-    height: auto !important;
-    margin: 0 !important;
-    overflow: visible !important;
-    clip: auto !important;
+  position: static !important;
+  width: auto !important;
+  height: auto !important;
+  margin: 0 !important;
+  overflow: visible !important;
+  clip: auto !important;
 }
 
+/* Container: already good, but keep it */
 .container {
-    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
 }
 
 /* Small utility for link-like buttons */
 .btn-link {
-    @apply text-blue-600 hover:text-blue-800 font-medium;
-}
-
-/* Smooth scrolling */
-html {
-    scroll-behavior: smooth;
+  @apply text-blue-600 hover:text-blue-800 font-medium;
+  /* bigger tap target on mobile */
+  @apply inline-flex items-center py-2;
 }
 
 /* Custom button styles */
 .btn-primary {
-    @apply bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors duration-200;
+  /* full-width on phones, normal button sizing on larger screens */
+  @apply w-full sm:w-auto inline-flex items-center justify-center;
+  @apply bg-blue-600 text-white px-6 py-3 rounded-lg font-medium;
+  @apply hover:bg-blue-700 transition-colors duration-200;
+
+  /* mobile tap target minimum */
+  @apply min-h-[44px];
 }
 
-/* Card hover effect */
+/* Card hover effect (also works better for keyboard/focus) */
 .card-hover {
-    @apply transition-all duration-200 hover:shadow-lg hover:-translate-y-1;
+  @apply transition-all duration-200 hover:shadow-lg hover:-translate-y-1;
+  @apply focus-within:shadow-lg focus-within:-translate-y-1;
 }
 
 /* Form inputs */
 .input-field {
-    @apply w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500;
+  /* text-base prevents iOS zoom on focus */
+  @apply w-full px-4 py-2 text-base;
+  @apply border border-gray-300 rounded-lg;
+  @apply focus:ring-2 focus:ring-blue-500 focus:border-blue-500;
+
+  /* mobile tap target minimum */
+  @apply min-h-[44px];
 }
 
-/* Section spacing */
+/* Section spacing (lighter on mobile, roomier on larger screens) */
 .section {
-    @apply py-16;
+  @apply py-10 sm:py-14 lg:py-16;
 }
 
 /* Gradient backgrounds */
 .gradient-bg {
-    background: linear-gradient(135deg, #E0F2FE 0%, #D1FAE5 100%);
+  background: linear-gradient(135deg, #E0F2FE 0%, #D1FAE5 100%);
+}
+
+/* Optional: global focus ring for keyboard users */
+:focus-visible {
+  outline: 2px solid #3B82F6;
+  outline-offset: 2px;
 }
