@@ -66,11 +66,7 @@
     }
 
     a{ color: inherit; text-decoration: none; }
-
-    img, video, svg, canvas{
-      max-width: 100%;
-      height: auto;
-    }
+    img, video, svg, canvas{ max-width: 100%; height: auto; }
     *{ -webkit-tap-highlight-color: transparent; }
 
     .container{
@@ -91,7 +87,9 @@
       border: 0 !important;
     }
 
-    /* Topbar */
+    /* =========================
+       TOPBAR (Mobile-first)
+    ========================== */
     .topbar{
       position: sticky;
       top: 0;
@@ -100,12 +98,13 @@
       backdrop-filter: blur(10px);
       border-bottom: 1px solid var(--border);
     }
+
     .topbar-inner{
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 14px;
-      height: 72px;
+      gap: 12px;
+      height: 68px;
     }
 
     .brand{
@@ -114,23 +113,23 @@
       gap: 12px;
       flex: 1 1 auto;
       min-width: 0;
+      max-width: 75%;
     }
 
     .logo{
-      width: 42px;
-      height: 42px;
+      width: 40px;
+      height: 40px;
       border-radius: 12px;
       display: grid;
       place-items: center;
       box-shadow: 0 6px 18px rgba(10, 20, 40, 0.12);
-      transition: transform 200ms ease, box-shadow 200ms ease;
       flex: 0 0 auto;
     }
 
     .brand-text{
       display: flex;
       flex-direction: column;
-      line-height: 1.1;
+      line-height: 1.05;
       min-width: 0;
     }
     .brand-text strong{
@@ -148,23 +147,9 @@
       text-overflow: ellipsis;
     }
 
-    .nav{
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .nav a{
-      font-size: 14px;
-      color: var(--muted);
-      padding: 10px 12px;
-      border-radius: 12px;
-      transition: background 160ms ease, color 160ms ease;
-    }
-    .nav a:hover{
-      background: var(--soft);
-      color: var(--text);
-    }
-    .nav a:focus{ outline: none; box-shadow: var(--focus); }
+    /* ✅ MOBILE-FIRST: hide desktop nav + header CTA by default */
+    .nav{ display: none; }
+    .header-cta{ display: none; }
 
     .actions{
       display: flex;
@@ -186,15 +171,13 @@
       border: 1px solid var(--border);
       background: transparent;
       cursor: pointer;
-      transition: transform 120ms ease, box-shadow 180ms ease, border-color 180ms ease, background 180ms ease;
       user-select: none;
       white-space: nowrap;
       min-height: 44px; /* tap target */
+      transition: transform 120ms ease, box-shadow 180ms ease, border-color 180ms ease, background 180ms ease;
     }
 
-    .btn-outline{
-      border-color: rgba(30, 215, 96, 0.55);
-    }
+    .btn-outline{ border-color: rgba(30, 215, 96, 0.55); }
     .btn-outline:hover{
       background: rgba(30, 215, 96, 0.08);
       border-color: rgba(30, 215, 96, 0.85);
@@ -205,15 +188,11 @@
       background: var(--blue);
       color: white;
     }
-    .btn-solid:hover{
-      background: #0B5BE0;
-    }
+    .btn-solid:hover{ background: #0B5BE0; }
 
-    /* ✅ Desktop-only header CTAs (this is the fix) */
-    .header-cta{ display: none; }
-
+    /* ✅ MOBILE: hamburger visible */
     .hamburger{
-      display: inline-flex;               /* ✅ visible by default (mobile) */
+      display: inline-flex;
       align-items: center;
       justify-content: center;
       width: 46px;
@@ -241,7 +220,82 @@
       border-radius: 3px;
     }
 
-    /* Hero */
+    /* Mobile drawer */
+    .drawer{
+      display: none;
+      border-top: 1px solid var(--border);
+      background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(10px);
+    }
+    .drawer.open{ display: block; }
+
+    .drawer .drawer-inner{
+      padding: 12px 0 16px;
+      display: grid;
+      gap: 8px;
+    }
+
+    .drawer a{
+      color: var(--muted);
+      padding: 12px 12px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: rgba(247,249,251,0.6);
+      font-size: 14px;
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
+    }
+    .drawer a:hover{ color: var(--text); background: rgba(247,249,251,0.9); }
+
+    .drawer-actions{
+      margin-top: 6px;
+      display: grid;
+      gap: 10px;
+    }
+    .drawer-actions .btn{
+      width: 100%;
+      height: 46px;
+    }
+
+    /* ✅ PHONE TWEAKS */
+    @media (max-width: 520px){
+      .container{ padding: 0 16px; }
+      .topbar-inner{ height: 64px; }
+      .brand-text span{ display: none; } /* hide "Ecosystem root" line on small screens */
+      .logo{ width: 38px; height: 38px; }
+    }
+
+    /* ✅ TABLET/DESKTOP: show nav, hide hamburger */
+    @media (min-width: 900px){
+      .nav{
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .nav a{
+        font-size: 14px;
+        color: var(--muted);
+        padding: 10px 12px;
+        border-radius: 12px;
+        transition: background 160ms ease, color 160ms ease;
+      }
+      .nav a:hover{ background: var(--soft); color: var(--text); }
+      .nav a:focus{ outline: none; box-shadow: var(--focus); }
+
+      .hamburger{ display: none; }
+      .brand{ max-width: 46%; }
+    }
+
+    /* ✅ WIDE DESKTOP: show header CTA buttons */
+    @media (min-width: 1100px){
+      .header-cta{ display: inline-flex; }
+      .brand{ max-width: 38%; }
+    }
+
+    /* =========================
+       HERO + SECTIONS
+    ========================== */
     .hero{
       padding: 56px 0 22px;
       background:
@@ -294,9 +348,6 @@
     @media (max-width: 520px){
       .hero-ctas{ width: 100%; gap: 10px; }
       .hero-ctas .btn{ width: 100%; }
-      .container{ padding: 0 16px; }
-      .topbar-inner{ height: 64px; }
-      .brand-text span{ display: none; } /* hide “Ecosystem root” to reduce header height */
     }
 
     .stats{
@@ -319,14 +370,15 @@
     .stat span{ display: block; font-size: 13px; color: var(--muted); margin-top: 4px; }
 
     section{ padding: 56px 0; }
+    @media (max-width: 640px){
+      section{ padding: 40px 0; }
+      .hero{ padding: 44px 0 18px; }
+    }
+
     section.alt{
       background: var(--soft);
       border-top: 1px solid var(--border);
       border-bottom: 1px solid var(--border);
-    }
-    @media (max-width: 640px){
-      section{ padding: 40px 0; }
-      .hero{ padding: 44px 0 18px; }
     }
 
     .section-head{ display: grid; gap: 10px; margin-bottom: 22px; }
@@ -429,11 +481,21 @@
       border: 1px solid rgba(10,108,255,0.18);
       background: rgba(10,108,255,0.06);
       min-height: 44px;
+      transition: background 160ms ease, transform 120ms ease, border-color 160ms ease;
+    }
+    .link:hover{
+      transform: translateY(-1px);
+      background: rgba(10,108,255,0.10);
+      border-color: rgba(10,108,255,0.26);
     }
     .link.green{
       color: #0D7B3B;
       border-color: rgba(30,215,96,0.20);
       background: rgba(30,215,96,0.08);
+    }
+    .link.green:hover{
+      background: rgba(30,215,96,0.12);
+      border-color: rgba(30,215,96,0.30);
     }
     @media (max-width: 520px){
       .links .link{ width: 100%; }
@@ -480,53 +542,11 @@
       font-size: 13px;
     }
 
-    /* Mobile layout stacks */
     @media (max-width: 940px){
       .ecosystem{ grid-template-columns: 1fr; }
       .grid{ grid-template-columns: 1fr; }
       .contact{ grid-template-columns: 1fr; }
       .stats{ grid-template-columns: 1fr; }
-    }
-
-    /* ✅ Desktop rules (nav + CTAs appear, hamburger disappears) */
-    @media (min-width: 861px){
-      .header-cta{ display: inline-flex; }
-      .hamburger{ display: none; }
-    }
-
-    /* Mobile drawer */
-    .drawer{
-      display: none;
-      border-top: 1px solid var(--border);
-      background: rgba(255,255,255,0.95);
-      backdrop-filter: blur(10px);
-    }
-    .drawer.open{ display: block; }
-    .drawer .drawer-inner{
-      padding: 12px 0 16px;
-      display: grid;
-      gap: 8px;
-    }
-    .drawer a{
-      color: var(--muted);
-      padding: 12px 12px;
-      border-radius: 14px;
-      border: 1px solid var(--border);
-      background: rgba(247,249,251,0.6);
-      font-size: 14px;
-      min-height: 44px;
-      display: inline-flex;
-      align-items: center;
-    }
-
-    .drawer-actions{
-      margin-top: 6px;
-      display: grid;
-      gap: 10px;
-    }
-    .drawer-actions .btn{
-      width: 100%;
-      height: 46px;
     }
 
     @media (prefers-reduced-motion: reduce){
@@ -591,7 +611,7 @@
         </div>
       </a>
 
-      <!-- Nav stays visible on desktop -->
+      <!-- Desktop nav (hidden on mobile by default) -->
       <nav class="nav" aria-label="Primary">
         <a href="#about">About</a>
         <a href="#ecosystem">Ecosystem</a>
@@ -600,11 +620,11 @@
       </nav>
 
       <div class="actions">
-        <!-- ✅ Desktop-only CTAs (never show on mobile, prevents cutoff) -->
+        <!-- Wide-desktop CTAs (hidden on mobile + normal desktop) -->
         <a class="btn btn-outline header-cta" href="#ecosystem">View Ecosystem</a>
         <a class="btn btn-solid header-cta" href="#companies">Explore Companies</a>
 
-        <!-- ✅ Mobile hamburger -->
+        <!-- Mobile hamburger -->
         <button class="hamburger" id="hamburger" aria-controls="mobileDrawer" aria-expanded="false">
           <span class="sr-only">Open menu</span>
           <span class="lines" aria-hidden="true">
@@ -622,7 +642,6 @@
         <a href="#companies">Companies</a>
         <a href="#contact">Contact</a>
 
-        <!-- ✅ Mobile CTAs (thumb-friendly, full width) -->
         <div class="drawer-actions" aria-label="Quick actions">
           <a class="btn btn-outline" href="#ecosystem">View Ecosystem</a>
           <a class="btn btn-solid" href="#companies">Explore Companies</a>
@@ -862,7 +881,7 @@
         <div class="contact">
           <div class="panel">
             <h3 style="margin:0;font-size:18px;letter-spacing:-0.2px;">Fastest way to connect</h3>
-            <p style="margin-top:8px;">
+            <p style="margin-top:8px;color:var(--muted);">
               For now, this page is intentionally lightweight. Next phase we can add a proper contact form
               (that actually sends emails) once you choose hosting.
             </p>
@@ -888,7 +907,7 @@
 
           <div class="panel">
             <h3 style="margin:0;font-size:18px;letter-spacing:-0.2px;">Next upgrades (when you say go)</h3>
-            <p style="margin-top:8px;">
+            <p style="margin-top:8px;color:var(--muted);">
               If you want this to feel “Apple-level clean,” the next move is to add:
             </p>
             <div class="pillrow" style="margin-top:10px;">
@@ -943,3 +962,39 @@
   </script>
 </body>
 </html>
+    .topbar{
+      position: sticky;
+      top: 0; left: 0; right: 0;
+      background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+      z-index: 1000;
+    }
+    .topbar-inner{
+      height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .brand{
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: var(--text);
+      max-width: 60%;
+    }
+
+    .logo{
+      width: 42px; height: 42px;
+      border-radius: 12px;
+      background: var(--soft);
+      display: grid;
+      place-items: center;
+    }
+
+    .brand-text{
+      display: flex;
+      flex-direction: column;   
