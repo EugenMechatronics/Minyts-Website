@@ -270,11 +270,27 @@
     /* ✅ PHONE TWEAKS */
     @media (max-width: 520px){
       .container{ padding: 0 12px; }
-      .topbar-inner{ height: 64px; gap: 8px; }
+      .topbar-inner{
+        height: auto;
+        gap: 6px;
+        flex-wrap: wrap;
+        padding: 8px 0;
+      }
+      .brand{
+        width: 100%;
+        max-width: 100%;
+        justify-content: flex-start;
+      }
       .brand-text span{ display: none; } /* hide "Ecosystem root" line on small screens */
       .logo{ display: none; }
       .logo{ width: 36px; height: 36px; }
-      .brand{ max-width: 70%; }
+      .actions{
+        width: 100%;
+        justify-content: flex-end;
+      }
+      .actions .hamburger{
+        margin-right: 0;
+      }
       body{ font-size: 15px; }
     }
 
