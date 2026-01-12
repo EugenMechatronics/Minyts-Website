@@ -274,7 +274,7 @@
         height: auto;
         gap: 6px;
         flex-wrap: wrap;
-        padding: 8px 0;
+        padding: 8px 12px 8px 16px;
       }
       .brand{
         width: 100%;
@@ -467,6 +467,18 @@
       padding: 7px 10px;
       border-radius: 999px;
       background: rgba(255,255,255,0.7);
+      white-space: nowrap;
+    }
+
+    @media (max-width: 640px){
+      .pillrow{
+        justify-content: flex-start;
+      }
+      .pill{
+        white-space: normal;
+        word-break: break-word;
+        max-width: calc(100% - 16px);
+      }
     }
 
     .grid{
