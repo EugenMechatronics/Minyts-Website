@@ -20,7 +20,7 @@
   <header class="topbar" role="banner">
     <div class="container topbar-inner">
       <a class="brand" href="#top" aria-label="Minyts Holdings Home">
-        <!-- NEW LOGO: 3 hands that form a true "M" -->
+        <!-- LOGO: 3 hands that form a true "M" -->
         <span class="logo-mark" id="minytsLogo" aria-hidden="true">
           <svg viewBox="0 0 32 32" class="logo-svg" role="img" aria-hidden="true">
             <defs>
@@ -45,10 +45,7 @@
             <circle class="logo-ring" cx="16" cy="16" r="13.5"></circle>
 
             <!-- 3 "hands" = 3 strokes that form the M -->
-            <!-- hour hand: left upstroke -->
             <line class="logo-hand hour" x1="8" y1="22" x2="12" y2="10"></line>
-
-            <!-- minute hand: middle zig (one hand, but shaped like a polyline) -->
             <polyline class="logo-hand minute" points="12,10 16,22 20,10"></polyline>
 
             <!-- second hand: right downstroke (ticks into place ONCE) -->
@@ -158,20 +155,8 @@
     <!-- OUR IDENTITY -->
     <section class="section" id="our-identity">
       <div class="container">
-        <!-- Badge on LEFT -->
-        <div class="identity-grid identity-left">
-          <aside class="identity-media" aria-label="Company badge">
-            <img
-              class="identity-badge"
-              src="assets/badge.png"
-              alt="Minyts company badge"
-              width="800"
-              height="1000"
-              loading="lazy"
-              decoding="async"
-            />
-          </aside>
-
+        <!-- IMPORTANT: Copy comes FIRST so mobile stacks as: copy then badge -->
+        <div class="identity-grid">
           <div class="identity-copy">
             <div class="section-head">
               <h2>Our Identity</h2>
@@ -190,6 +175,19 @@
               The Holding Company Minyts is a basket and if you turn that basket upside down it becomes an umbrella.
             </p>
           </div>
+
+          <!-- Badge sits UNDER copy on mobile, LEFT of copy on desktop -->
+          <aside class="identity-media" aria-label="Company badge">
+            <img
+              class="identity-badge"
+              src="assets/badge.png"
+              alt="Minyts company badge"
+              width="800"
+              height="1000"
+              loading="lazy"
+              decoding="async"
+            />
+          </aside>
         </div>
       </div>
     </section>
@@ -361,13 +359,12 @@
       // Reset each refresh
       logo.classList.remove('is-formed');
 
-      // Set initial rotation away from the M
       // Pivot at right peak (20,10)
       const pivotX = 20;
       const pivotY = 10;
 
-      let startDeg = -140;  // away
-      const endDeg = 0;     // aligned
+      let startDeg = -140;
+      const endDeg = 0;
       secGroup.setAttribute('transform', `rotate(${startDeg} ${pivotX} ${pivotY})`);
 
       if (reduced) {
@@ -376,7 +373,6 @@
         return;
       }
 
-      // Tick with steps (one time)
       const steps = 14;
       const totalMs = 1050;
       const stepMs = Math.round(totalMs / steps);

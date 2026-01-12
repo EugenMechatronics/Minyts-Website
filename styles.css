@@ -165,7 +165,6 @@ section[id]{ scroll-margin-top: calc(var(--nav-h) + 1rem); }
   stroke: rgba(11,18,32,0.14);
   stroke-width: 1;
 }
-
 .logo-hand{
   fill: none;
   stroke: #0B1220;
@@ -173,21 +172,12 @@ section[id]{ scroll-margin-top: calc(var(--nav-h) + 1rem); }
   stroke-linecap: round;
   stroke-linejoin: round;
 }
-
-.logo-hub{
-  fill: #0B1220;
-}
+.logo-hub{ fill: #0B1220; }
 
 /* After formation: swap strokes to gradients */
-#minytsLogo.is-formed .logo-hand.hour{
-  stroke: url(#gBlue);
-}
-#minytsLogo.is-formed .logo-hand.minute{
-  stroke: url(#gNavy);
-}
-#minytsLogo.is-formed .logo-hand.second{
-  stroke: url(#gOrange);
-}
+#minytsLogo.is-formed .logo-hand.hour{ stroke: url(#gBlue); }
+#minytsLogo.is-formed .logo-hand.minute{ stroke: url(#gNavy); }
+#minytsLogo.is-formed .logo-hand.second{ stroke: url(#gOrange); }
 
 /* NAV */
 .nav-wrap{
@@ -346,11 +336,7 @@ section[id]{ scroll-margin-top: calc(var(--nav-h) + 1rem); }
 }
 
 /* HERO IMAGE (no frame) */
-.hero-art{
-  border: none;
-  background: transparent;
-  padding: 0;
-}
+.hero-art{ border: none; background: transparent; padding: 0; }
 .hero-illustration{
   width: 100%;
   height: auto;
@@ -358,28 +344,37 @@ section[id]{ scroll-margin-top: calc(var(--nav-h) + 1rem); }
   object-fit: cover;
 }
 
-/* OUR IDENTITY: badge LEFT on desktop, stacked on mobile */
+/* OUR IDENTITY
+   Mobile: copy then badge (badge sits UNDER)
+   Desktop: badge on LEFT of copy */
 .identity-grid{
   display: grid;
-  gap: 1.5rem;
+  gap: 1.25rem;
   align-items: start;
 }
-@media (min-width: 900px){
-  .identity-grid{
-    grid-template-columns: 0.85fr 1.15fr; /* media then copy */
-    gap: 2rem;
-  }
-}
+.identity-copy{ min-width: 0; }
 .identity-media{
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
 }
 .identity-badge{
   width: 100%;
-  max-width: 420px;
+  max-width: 280px;        /* smaller */
   height: auto;
-  border-radius: 1.25rem;
+  border-radius: 1.1rem;
   object-fit: contain;
+}
+
+@media (min-width: 900px){
+  .identity-grid{
+    grid-template-columns: 0.85fr 1.15fr;
+    gap: 2rem;
+    grid-template-areas: "media copy";
+    align-items: start;
+  }
+  .identity-media{ grid-area: media; justify-content: flex-start; }
+  .identity-copy{ grid-area: copy; }
+  .identity-badge{ max-width: 240px; } /* even tighter on desktop */
 }
 
 /* BUTTONS */
