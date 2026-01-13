@@ -356,8 +356,8 @@ section[id]{ scroll-margin-top: calc(var(--nav-h) + 1rem); }
   gap: 1.25rem;
   align-items: start;
   position: relative;
-  width: min(960px, 100%);
-  margin: 0 auto;
+  justify-content: start;
+  width: 100%;
 }
 
 .identity-copy{
@@ -378,11 +378,23 @@ section[id]{ scroll-margin-top: calc(var(--nav-h) + 1rem); }
   object-fit: contain;
 }
 
+/* Bring the Our Identity module up so it aligns with the hero breakpoint marker */
+#our-identity {
+  margin-top: -1.75rem;
+  padding-top: calc(var(--section-pad-mobile) - 1.5rem);
+}
+@media (min-width: 1024px) {
+  #our-identity {
+    margin-top: -2.5rem;
+    padding-top: calc(var(--section-pad-desktop) - 1.5rem);
+  }
+}
+
 /* Desktop: badge LEFT, copy RIGHT */
 @media (min-width: 900px){
   .identity-grid{
-    grid-template-columns: minmax(0, 320px) minmax(0, 1fr);
-    gap: 1.5rem;
+    grid-template-columns: minmax(0, 300px) minmax(0, 1fr);
+    gap: 2rem;
   }
 
   .identity-media{
