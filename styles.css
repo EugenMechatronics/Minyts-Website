@@ -88,7 +88,6 @@ section[id]{ scroll-margin-top: calc(var(--nav-h) + 1rem); }
 @media (min-width: 1024px){
   .section{ padding: var(--section-pad-desktop) 0; }
 }
-
 .section-soft{
   background: var(--bg-soft);
   border-top: 1px solid var(--border);
@@ -176,7 +175,6 @@ section[id]{ scroll-margin-top: calc(var(--nav-h) + 1rem); }
 
 .logo-hub{ fill: #0B1220; }
 
-/* After formation: swap strokes to gradients */
 #minytsLogo.is-formed .logo-hand.hour{ stroke: url(#gBlue); }
 #minytsLogo.is-formed .logo-hand.minute{ stroke: url(#gNavy); }
 #minytsLogo.is-formed .logo-hand.second{ stroke: url(#gOrange); }
@@ -201,7 +199,7 @@ section[id]{ scroll-margin-top: calc(var(--nav-h) + 1rem); }
   left: 0;
   right: 0;
   bottom: -8px;
-  height: var(--nav-baseline);
+  height: 1px;
   background: var(--border);
 }
 
@@ -217,7 +215,7 @@ section[id]{ scroll-margin-top: calc(var(--nav-h) + 1rem); }
 .nav-label{ white-space: nowrap; }
 
 .nav-hand{
-  height: var(--nav-hand);
+  height: 2px;
   background: rgba(11, 18, 32, 0.55);
   width: 40%;
   transition: transform var(--t-std) var(--ease), background var(--t-std) var(--ease);
@@ -233,7 +231,7 @@ section[id]{ scroll-margin-top: calc(var(--nav-h) + 1rem); }
   top: 0;
   margin-left: 6px;
   width: 14px;
-  height: var(--nav-hand);
+  height: 2px;
   background: rgba(11, 18, 32, 0.35);
 }
 .nav-item:hover .nav-hand{
@@ -337,12 +335,7 @@ section[id]{ scroll-margin-top: calc(var(--nav-h) + 1rem); }
   max-width: 70ch;
 }
 
-/* HERO IMAGE */
-.hero-art{
-  border: none;
-  background: transparent;
-  padding: 0;
-}
+.hero-art{ border: none; background: transparent; padding: 0; }
 .hero-illustration{
   width: 100%;
   height: auto;
@@ -350,17 +343,11 @@ section[id]{ scroll-margin-top: calc(var(--nav-h) + 1rem); }
   object-fit: cover;
 }
 
-/* OUR IDENTITY LAYOUT */
+/* OUR IDENTITY */
 .identity-grid{
   display: grid;
   gap: 1.25rem;
   align-items: start;
-  position: relative;
-  justify-content: start;
-  width: 100%;
-}
-
-.identity-copy{
   position: relative;
 }
 
@@ -378,39 +365,15 @@ section[id]{ scroll-margin-top: calc(var(--nav-h) + 1rem); }
   object-fit: contain;
 }
 
-/* Bring the Our Identity module up so it aligns with the hero breakpoint marker */
-#our-identity {
-  margin-top: -1.75rem;
-  padding-top: calc(var(--section-pad-mobile) - 1.5rem);
-}
-@media (min-width: 1024px) {
-  #our-identity {
-    margin-top: -2.5rem;
-    padding-top: calc(var(--section-pad-desktop) - 1.5rem);
-  }
-}
-
-/* Desktop: badge LEFT, copy RIGHT */
 @media (min-width: 900px){
   .identity-grid{
-    grid-template-columns: minmax(0, 300px) minmax(0, 1fr);
+    grid-template-columns: 0.85fr 1.15fr;
     gap: 2rem;
-  }
-
-  .identity-media{
-    justify-content: flex-end;
-  }
-
-  .identity-copy{
-    padding-left: 1.25rem;
   }
 }
 
-/* Mobile: badge becomes watermark behind text */
 @media (max-width: 899px){
-  .identity-grid{
-    grid-template-columns: 1fr;
-  }
+  .identity-grid{ grid-template-columns: 1fr; }
 
   .identity-copy{
     position: relative;
@@ -430,7 +393,6 @@ section[id]{ scroll-margin-top: calc(var(--nav-h) + 1rem); }
     max-width: 340px;
     z-index: 1;
     pointer-events: none;
-    justify-content: flex-start;
   }
 
   .identity-badge{
@@ -440,10 +402,9 @@ section[id]{ scroll-margin-top: calc(var(--nav-h) + 1rem); }
     transform: rotate(-10deg);
     border-radius: 1.25rem;
   }
-
 }
 
-/* BUTTONS */
+/* Buttons */
 .btn{
   display: inline-flex;
   align-items: center;
@@ -503,7 +464,7 @@ section[id]{ scroll-margin-top: calc(var(--nav-h) + 1rem); }
   font-size: 0.98rem;
 }
 
-/* GRIDS */
+/* Grids */
 .grid{
   display: grid;
   gap: 1rem;
@@ -512,18 +473,9 @@ section[id]{ scroll-margin-top: calc(var(--nav-h) + 1rem); }
 @media (min-width: 768px){
   .grid{ gap: 1.25rem; }
 }
-#how-we-operate .section-head{
-  max-width: 640px;
-  margin: 0 auto;
-}
 .principles{ grid-template-columns: 1fr; }
 @media (min-width: 900px){
   .principles{ grid-template-columns: repeat(3, 1fr); }
-}
-
-#how-we-operate .principles{
-  max-width: 960px;
-  margin: 1.25rem auto 0;
 }
 
 .holdings{ grid-template-columns: 1fr; }
