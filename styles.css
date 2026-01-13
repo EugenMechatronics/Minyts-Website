@@ -88,6 +88,7 @@ section[id]{ scroll-margin-top: calc(var(--nav-h) + 1rem); }
 @media (min-width: 1024px){
   .section{ padding: var(--section-pad-desktop) 0; }
 }
+
 .section-soft{
   background: var(--bg-soft);
   border-top: 1px solid var(--border);
@@ -159,12 +160,12 @@ section[id]{ scroll-margin-top: calc(var(--nav-h) + 1rem); }
   display: block;
 }
 
-/* ring + strokes */
 .logo-ring{
   fill: #fff;
   stroke: rgba(11,18,32,0.14);
   stroke-width: 1;
 }
+
 .logo-hand{
   fill: none;
   stroke: #0B1220;
@@ -172,6 +173,7 @@ section[id]{ scroll-margin-top: calc(var(--nav-h) + 1rem); }
   stroke-linecap: round;
   stroke-linejoin: round;
 }
+
 .logo-hub{ fill: #0B1220; }
 
 /* After formation: swap strokes to gradients */
@@ -335,8 +337,12 @@ section[id]{ scroll-margin-top: calc(var(--nav-h) + 1rem); }
   max-width: 70ch;
 }
 
-/* HERO IMAGE (no frame) */
-.hero-art{ border: none; background: transparent; padding: 0; }
+/* HERO IMAGE */
+.hero-art{
+  border: none;
+  background: transparent;
+  padding: 0;
+}
 .hero-illustration{
   width: 100%;
   height: auto;
@@ -344,37 +350,85 @@ section[id]{ scroll-margin-top: calc(var(--nav-h) + 1rem); }
   object-fit: cover;
 }
 
-/* OUR IDENTITY
-   Mobile: copy then badge (badge sits UNDER)
-   Desktop: badge on LEFT of copy */
+/* OUR IDENTITY LAYOUT */
 .identity-grid{
   display: grid;
   gap: 1.25rem;
   align-items: start;
+  position: relative;
+  width: min(960px, 100%);
+  margin: 0 auto;
 }
-.identity-copy{ min-width: 0; }
+
+.identity-copy{
+  position: relative;
+}
+
 .identity-media{
   display: flex;
+  align-items: flex-start;
   justify-content: flex-start;
 }
+
 .identity-badge{
   width: 100%;
-  max-width: 280px;        /* smaller */
+  max-width: 240px;
   height: auto;
   border-radius: 1.1rem;
   object-fit: contain;
 }
 
+/* Desktop: badge LEFT, copy RIGHT */
 @media (min-width: 900px){
   .identity-grid{
-    grid-template-columns: 0.85fr 1.15fr;
-    gap: 2rem;
-    grid-template-areas: "media copy";
-    align-items: start;
+    grid-template-columns: minmax(0, 320px) minmax(0, 1fr);
+    gap: 1.5rem;
   }
-  .identity-media{ grid-area: media; justify-content: flex-start; }
-  .identity-copy{ grid-area: copy; }
-  .identity-badge{ max-width: 240px; } /* even tighter on desktop */
+
+  .identity-media{
+    justify-content: flex-end;
+  }
+
+  .identity-copy{
+    padding-left: 1.25rem;
+  }
+}
+
+/* Mobile: badge becomes watermark behind text */
+@media (max-width: 899px){
+  .identity-grid{
+    grid-template-columns: 1fr;
+  }
+
+  .identity-copy{
+    position: relative;
+    z-index: 2;
+    background: rgba(255, 255, 255, 0.88);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+    border-radius: 1rem;
+    padding: 1rem;
+  }
+
+  .identity-media{
+    position: absolute;
+    top: 0.15rem;
+    right: -0.15rem;
+    width: 70%;
+    max-width: 340px;
+    z-index: 1;
+    pointer-events: none;
+    justify-content: flex-start;
+  }
+
+  .identity-badge{
+    max-width: 100%;
+    opacity: 0.18;
+    filter: blur(8px);
+    transform: rotate(-10deg);
+    border-radius: 1.25rem;
+  }
+
 }
 
 /* BUTTONS */
@@ -446,9 +500,18 @@ section[id]{ scroll-margin-top: calc(var(--nav-h) + 1rem); }
 @media (min-width: 768px){
   .grid{ gap: 1.25rem; }
 }
+#how-we-operate .section-head{
+  max-width: 640px;
+  margin: 0 auto;
+}
 .principles{ grid-template-columns: 1fr; }
 @media (min-width: 900px){
   .principles{ grid-template-columns: repeat(3, 1fr); }
+}
+
+#how-we-operate .principles{
+  max-width: 960px;
+  margin: 1.25rem auto 0;
 }
 
 .holdings{ grid-template-columns: 1fr; }

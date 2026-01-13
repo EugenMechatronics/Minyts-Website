@@ -155,8 +155,21 @@
     <!-- OUR IDENTITY -->
     <section class="section" id="our-identity">
       <div class="container">
-        <!-- IMPORTANT: Copy comes FIRST so mobile stacks as: copy then badge -->
         <div class="identity-grid">
+          <!-- BADGE (LEFT on desktop, watermark on mobile) -->
+          <aside class="identity-media" aria-label="Company badge">
+            <img
+              class="identity-badge"
+              src="assets/badge.png"
+              alt="Minyts company badge"
+              width="800"
+              height="1000"
+              loading="lazy"
+              decoding="async"
+            />
+          </aside>
+
+          <!-- COPY -->
           <div class="identity-copy">
             <div class="section-head">
               <h2>Our Identity</h2>
@@ -175,25 +188,12 @@
               The Holding Company Minyts is a basket and if you turn that basket upside down it becomes an umbrella.
             </p>
           </div>
-
-          <!-- Badge sits UNDER copy on mobile, LEFT of copy on desktop -->
-          <aside class="identity-media" aria-label="Company badge">
-            <img
-              class="identity-badge"
-              src="assets/badge.png"
-              alt="Minyts company badge"
-              width="800"
-              height="1000"
-              loading="lazy"
-              decoding="async"
-            />
-          </aside>
         </div>
       </div>
     </section>
 
     <!-- HOW WE OPERATE -->
-    <section class="section section-soft" id="how-we-operate">
+    <section class="section" id="how-we-operate">
       <div class="container">
         <div class="section-head">
           <h2>How We Operate</h2>
@@ -356,10 +356,8 @@
 
       const reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-      // Reset each refresh
       logo.classList.remove('is-formed');
 
-      // Pivot at right peak (20,10)
       const pivotX = 20;
       const pivotY = 10;
 
