@@ -94,14 +94,9 @@ section[id]{ scroll-margin-top: calc(var(--nav-h) + 1rem); }
   border-bottom: 1px solid var(--border);
 }
 
-/* Reduce the top spacing of the identity block so it sits closer to the preceding divider */
-#our-identity{
-  padding-top: 2rem;
-}
+#our-identity{ padding-top: 2rem; }
 @media (min-width: 1024px){
-  #our-identity{
-    padding-top: 3rem;
-  }
+  #our-identity{ padding-top: 3rem; }
 }
 
 .section-head h2{
@@ -168,13 +163,11 @@ section[id]{ scroll-margin-top: calc(var(--nav-h) + 1rem); }
   height: 28px;
   display: block;
 }
-
 .logo-ring{
   fill: #fff;
   stroke: rgba(11,18,32,0.14);
   stroke-width: 1;
 }
-
 .logo-hand{
   fill: none;
   stroke: #0B1220;
@@ -182,7 +175,6 @@ section[id]{ scroll-margin-top: calc(var(--nav-h) + 1rem); }
   stroke-linecap: round;
   stroke-linejoin: round;
 }
-
 .logo-hub{ fill: #0B1220; }
 
 #minytsLogo.is-formed .logo-hand.hour{ stroke: url(#gBlue); }
@@ -195,7 +187,6 @@ section[id]{ scroll-margin-top: calc(var(--nav-h) + 1rem); }
   align-items: center;
   gap: 1rem;
 }
-
 .nav-group{
   display: none;
   position: relative;
@@ -212,7 +203,6 @@ section[id]{ scroll-margin-top: calc(var(--nav-h) + 1rem); }
   height: 1px;
   background: var(--border);
 }
-
 .nav-item{
   display: inline-flex;
   flex-direction: column;
@@ -223,7 +213,6 @@ section[id]{ scroll-margin-top: calc(var(--nav-h) + 1rem); }
   padding: 0.25rem 0;
 }
 .nav-label{ white-space: nowrap; }
-
 .nav-hand{
   height: 2px;
   background: rgba(11, 18, 32, 0.55);
@@ -248,7 +237,6 @@ section[id]{ scroll-margin-top: calc(var(--nav-h) + 1rem); }
   background: rgba(10, 108, 255, 0.65);
   transform: translateY(-1px);
 }
-
 .nav-signature{
   display: none;
   font-size: var(--fs-signature);
@@ -257,7 +245,6 @@ section[id]{ scroll-margin-top: calc(var(--nav-h) + 1rem); }
   white-space: nowrap;
   user-select: none;
 }
-
 .nav-toggle{
   height: 38px;
   padding: 0 0.9rem;
@@ -304,7 +291,6 @@ section[id]{ scroll-margin-top: calc(var(--nav-h) + 1rem); }
     padding-bottom: calc(var(--section-pad-desktop) - 0.5rem);
   }
 }
-
 .hero-grid{
   display: grid;
   gap: 1.5rem;
@@ -316,7 +302,6 @@ section[id]{ scroll-margin-top: calc(var(--nav-h) + 1rem); }
     gap: 2rem;
   }
 }
-
 .hero-line{
   margin: 0;
   font-size: var(--fs-h1-mobile);
@@ -327,7 +312,6 @@ section[id]{ scroll-margin-top: calc(var(--nav-h) + 1rem); }
 @media (min-width: 768px){
   .hero-line{ font-size: var(--fs-h1-desktop); max-width: 40ch; }
 }
-
 .hero-link{
   color: rgba(10, 108, 255, 0.85);
   border-bottom: 1px solid transparent;
@@ -338,13 +322,11 @@ section[id]{ scroll-margin-top: calc(var(--nav-h) + 1rem); }
   border-color: rgba(10, 108, 255, 0.55);
 }
 .hero-signature{ white-space: nowrap; }
-
 .hero-micro{
   margin: 0.75rem 0 0;
   color: var(--text-muted);
   max-width: 70ch;
 }
-
 .hero-art{ border: none; background: transparent; padding: 0; }
 .hero-illustration{
   width: 100%;
@@ -360,13 +342,11 @@ section[id]{ scroll-margin-top: calc(var(--nav-h) + 1rem); }
   align-items: start;
   position: relative;
 }
-
 .identity-media{
   display: flex;
   align-items: flex-start;
   justify-content: flex-start;
 }
-
 .identity-badge{
   width: 100%;
   max-width: 240px;
@@ -374,7 +354,6 @@ section[id]{ scroll-margin-top: calc(var(--nav-h) + 1rem); }
   border-radius: 1.1rem;
   object-fit: contain;
 }
-
 @media (min-width: 900px){
   .identity-grid{
     grid-template-columns: 0.75fr 1.25fr;
@@ -386,7 +365,6 @@ section[id]{ scroll-margin-top: calc(var(--nav-h) + 1rem); }
     margin-right: 1.75rem;
   }
 }
-
 @media (max-width: 899px){
   .identity-grid{ grid-template-columns: 1fr; }
 
@@ -419,7 +397,7 @@ section[id]{ scroll-margin-top: calc(var(--nav-h) + 1rem); }
   }
 }
 
-/* HOW WE OPERATE layout (2 left images + right aligned hero image) */
+/* HOW WE OPERATE */
 #how-we-operate{
   background: #fff;
 }
@@ -431,7 +409,7 @@ section[id]{ scroll-margin-top: calc(var(--nav-h) + 1rem); }
   margin-bottom: 1.5rem;
 }
 
-/* Desktop: 3 columns, right image spans rows */
+/* Desktop: top row = copy spans 2 cols; second row = 3 images EVEN */
 @media (min-width: 900px){
   .operate-layout{
     grid-template-columns: 1fr 1fr 1.15fr;
@@ -445,11 +423,9 @@ section[id]{ scroll-margin-top: calc(var(--nav-h) + 1rem); }
     grid-row: 1;
   }
 
-  .operate-hero{
+  .operate-spacer{
     grid-column: 3;
-    grid-row: 1 / span 2;
-    justify-self: end; /* align right */
-    align-self: start;
+    grid-row: 1;
   }
 
   .operate-box-ops{
@@ -461,22 +437,17 @@ section[id]{ scroll-margin-top: calc(var(--nav-h) + 1rem); }
     grid-column: 2;
     grid-row: 2;
   }
+
+  .operate-box-hero{
+    grid-column: 3;
+    grid-row: 2;
+    justify-self: end; /* keep it visually right */
+  }
 }
 
-/* Shared image styling */
-.operate-hero,
 .operate-box{
   margin: 0;
 }
-
-.operate-hero img{
-  width: 520px;
-  max-width: 100%;
-  height: auto;
-  border-radius: 1.35rem;
-  object-fit: contain;
-}
-
 .operate-box img{
   width: 100%;
   height: auto;
@@ -484,16 +455,9 @@ section[id]{ scroll-margin-top: calc(var(--nav-h) + 1rem); }
   object-fit: contain;
 }
 
-/* Mobile: stack nicely */
+/* Mobile stacks cleanly */
 @media (max-width: 899px){
-  .operate-copy{ order: 1; }
-  .operate-hero{ order: 2; }
-  .operate-box-ops{ order: 3; }
-  .operate-box-instructions{ order: 4; }
-
-  .operate-hero img{
-    width: 100%;
-  }
+  .operate-spacer{ display: none; }
 }
 
 /* BUTTONS */
@@ -514,7 +478,6 @@ section[id]{ scroll-margin-top: calc(var(--nav-h) + 1rem); }
   margin-top: 1.25rem;
 }
 .btn:hover{ transform: translateY(-1px); }
-
 .btn-primary{
   background: var(--minyts-green);
   color: #0B1220;
@@ -535,7 +498,6 @@ section[id]{ scroll-margin-top: calc(var(--nav-h) + 1rem); }
   margin-top: 0;
 }
 .btn-link:hover{ transform: translateY(-1px); }
-
 .btn-small{
   height: 42px;
   padding: 0 1rem;
@@ -549,7 +511,6 @@ section[id]{ scroll-margin-top: calc(var(--nav-h) + 1rem); }
   max-width: 70ch;
 }
 .bullets li{ margin: 0.75rem 0; }
-
 .signature-line{
   margin: 1.25rem 0 0;
   max-width: 70ch;
@@ -618,7 +579,6 @@ section[id]{ scroll-margin-top: calc(var(--nav-h) + 1rem); }
   .card{ padding: 1.5rem; }
 }
 .card:hover{ transform: translateY(-2px); }
-
 .card-title{
   margin: 0;
   font-size: 1.125rem;

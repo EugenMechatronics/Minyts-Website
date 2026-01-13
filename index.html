@@ -184,11 +184,11 @@
       </div>
     </section>
 
-    <!-- HOW WE OPERATE (with 2 left images + right aligned hero image) -->
+    <!-- HOW WE OPERATE -->
     <section class="section section-soft" id="how-we-operate">
       <div class="container">
         <div class="operate-layout">
-          <!-- copy -->
+          <!-- copy (top-left row) -->
           <div class="operate-copy">
             <div class="section-head">
               <h2>How We Operate</h2>
@@ -198,17 +198,10 @@
             </div>
           </div>
 
-          <!-- right illustration (aligned right, spans rows like your screenshot) -->
-          <figure class="operate-hero" role="presentation">
-            <img
-              src="assets/theoperation.png"
-              alt="Operations control illustration"
-              loading="lazy"
-              decoding="async"
-            />
-          </figure>
+          <!-- spacer (top-right cell) just to preserve the grid structure -->
+          <div class="operate-spacer" aria-hidden="true"></div>
 
-          <!-- left box 1 -->
+          <!-- row of 3 images (ALL EVEN) -->
           <figure class="operate-box operate-box-ops" role="presentation">
             <img
               src="assets/Operations.png"
@@ -218,7 +211,6 @@
             />
           </figure>
 
-          <!-- left box 2 -->
           <figure class="operate-box operate-box-instructions" role="presentation">
             <img
               src="assets/Instructions.png"
@@ -227,9 +219,17 @@
               decoding="async"
             />
           </figure>
+
+          <figure class="operate-box operate-box-hero" role="presentation">
+            <img
+              src="assets/theoperation.png"
+              alt="Operations control illustration"
+              loading="lazy"
+              decoding="async"
+            />
+          </figure>
         </div>
 
-        <!-- cards/panels below -->
         <div class="grid principles">
           <article class="panel">
             <h3>Build the Foundation</h3>
@@ -340,7 +340,6 @@
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
 
-    // Mobile menu toggle
     const toggle = document.querySelector('.nav-toggle');
     const menu = document.getElementById('mobile-menu');
 
@@ -360,7 +359,6 @@
       if (target) closeMenu();
     });
 
-    // Smooth scroll
     document.addEventListener('click', (e) => {
       const a = e.target.closest('a[href^="#"]');
       if (!a) return;
@@ -376,7 +374,6 @@
       history.pushState(null, '', id);
     });
 
-    // Logo: tick right leg (second hand) into place ONCE per refresh, then colorize
     (function () {
       const logo = document.getElementById('minytsLogo');
       const secGroup = document.getElementById('secGroup');
