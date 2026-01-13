@@ -94,11 +94,6 @@ section[id]{ scroll-margin-top: calc(var(--nav-h) + 1rem); }
   border-bottom: 1px solid var(--border);
 }
 
-#our-identity{ padding-top: 2rem; }
-@media (min-width: 1024px){
-  #our-identity{ padding-top: 3rem; }
-}
-
 .section-head h2{
   margin: 0;
   font-size: var(--fs-h2-mobile);
@@ -176,6 +171,7 @@ section[id]{ scroll-margin-top: calc(var(--nav-h) + 1rem); }
   stroke-linejoin: round;
 }
 .logo-hub{ fill: #0B1220; }
+
 #minytsLogo.is-formed .logo-hand.hour{ stroke: url(#gBlue); }
 #minytsLogo.is-formed .logo-hand.minute{ stroke: url(#gNavy); }
 #minytsLogo.is-formed .logo-hand.second{ stroke: url(#gOrange); }
@@ -199,7 +195,7 @@ section[id]{ scroll-margin-top: calc(var(--nav-h) + 1rem); }
   left: 0;
   right: 0;
   bottom: -8px;
-  height: 1px;
+  height: var(--nav-baseline);
   background: var(--border);
 }
 .nav-item{
@@ -213,7 +209,7 @@ section[id]{ scroll-margin-top: calc(var(--nav-h) + 1rem); }
 }
 .nav-label{ white-space: nowrap; }
 .nav-hand{
-  height: 2px;
+  height: var(--nav-hand);
   background: rgba(11, 18, 32, 0.55);
   width: 40%;
   transition: transform var(--t-std) var(--ease), background var(--t-std) var(--ease);
@@ -229,13 +225,14 @@ section[id]{ scroll-margin-top: calc(var(--nav-h) + 1rem); }
   top: 0;
   margin-left: 6px;
   width: 14px;
-  height: 2px;
+  height: var(--nav-hand);
   background: rgba(11, 18, 32, 0.35);
 }
 .nav-item:hover .nav-hand{
   background: rgba(10, 108, 255, 0.65);
   transform: translateY(-1px);
 }
+
 .nav-signature{
   display: none;
   font-size: var(--fs-signature);
@@ -244,6 +241,7 @@ section[id]{ scroll-margin-top: calc(var(--nav-h) + 1rem); }
   white-space: nowrap;
   user-select: none;
 }
+
 .nav-toggle{
   height: 38px;
   padding: 0 0.9rem;
@@ -334,134 +332,6 @@ section[id]{ scroll-margin-top: calc(var(--nav-h) + 1rem); }
   object-fit: cover;
 }
 
-/* OUR IDENTITY */
-.identity-grid{
-  display: grid;
-  gap: 1.25rem;
-  align-items: start;
-  position: relative;
-}
-.identity-media{
-  display: flex;
-  align-items: flex-start;
-  justify-content: flex-start;
-}
-.identity-badge{
-  width: 100%;
-  max-width: 240px;
-  height: auto;
-  border-radius: 1.1rem;
-  object-fit: contain;
-}
-@media (min-width: 900px){
-  .identity-grid{
-    grid-template-columns: 0.75fr 1.25fr;
-    gap: 1rem;
-  }
-  .identity-media{
-    margin-top: -0.5rem;
-    justify-content: flex-end;
-    margin-right: 1.75rem;
-  }
-}
-@media (max-width: 899px){
-  .identity-grid{ grid-template-columns: 1fr; }
-
-  .identity-copy{
-    position: relative;
-    z-index: 2;
-    background: rgba(255, 255, 255, 0.88);
-    backdrop-filter: blur(2px);
-    -webkit-backdrop-filter: blur(2px);
-    border-radius: 1rem;
-    padding: 1rem;
-  }
-
-  .identity-media{
-    position: absolute;
-    top: 0.15rem;
-    right: -0.15rem;
-    width: 70%;
-    max-width: 340px;
-    z-index: 1;
-    pointer-events: none;
-  }
-
-  .identity-badge{
-    max-width: 100%;
-    opacity: 0.18;
-    filter: blur(8px);
-    transform: rotate(-10deg);
-    border-radius: 1.25rem;
-  }
-}
-
-/* HOW WE OPERATE */
-#how-we-operate{ background: #fff; }
-
-.operate-layout{
-  display: grid;
-  gap: 1.35rem;
-  align-items: start;
-  margin-bottom: 1.5rem;
-}
-@media (min-width: 900px){
-  .operate-layout{
-    grid-template-columns: 1fr 1fr 1.15fr;
-    grid-template-rows: auto auto;
-    column-gap: 1.75rem;
-    row-gap: 1.5rem;
-  }
-
-  .operate-copy{ grid-column: 1 / span 2; grid-row: 1; }
-  .operate-spacer{ grid-column: 3; grid-row: 1; }
-
-  .operate-box-ops{ grid-column: 1; grid-row: 2; }
-  .operate-box-instructions{ grid-column: 2; grid-row: 2; }
-  .operate-box-hero{
-    grid-column: 3;
-    grid-row: 2;
-    justify-self: end;
-  }
-}
-.operate-box{ margin: 0; }
-.operate-box img{
-  width: 100%;
-  height: auto;
-  border-radius: 1.25rem;
-  object-fit: contain;
-}
-@media (max-width: 899px){
-  .operate-spacer{ display: none; }
-}
-
-/* NEW: COMPANIES/HOLDINGS HEADER + UMBRELLA ART */
-.holdings-head{
-  display: grid;
-  gap: 1.25rem;
-  align-items: start;
-  margin-bottom: 1.25rem;
-}
-@media (min-width: 900px){
-  .holdings-head{
-    grid-template-columns: 1fr 0.95fr;
-    align-items: center;
-    gap: 1.75rem;
-  }
-}
-.holdings-art{
-  margin: 0;
-  justify-self: end;
-  width: 100%;
-  max-width: 460px; /* controls the red-box size */
-}
-.holdings-illustration{
-  width: 100%;
-  height: auto;
-  border-radius: 1.25rem;
-  object-fit: contain;
-}
-
 /* BUTTONS */
 .btn{
   display: inline-flex;
@@ -480,6 +350,7 @@ section[id]{ scroll-margin-top: calc(var(--nav-h) + 1rem); }
   margin-top: 1.25rem;
 }
 .btn:hover{ transform: translateY(-1px); }
+
 .btn-primary{
   background: var(--minyts-green);
   color: #0B1220;
@@ -500,6 +371,7 @@ section[id]{ scroll-margin-top: calc(var(--nav-h) + 1rem); }
   margin-top: 0;
 }
 .btn-link:hover{ transform: translateY(-1px); }
+
 .btn-small{
   height: 42px;
   padding: 0 1rem;
@@ -513,6 +385,7 @@ section[id]{ scroll-margin-top: calc(var(--nav-h) + 1rem); }
   max-width: 70ch;
 }
 .bullets li{ margin: 0.75rem 0; }
+
 .signature-line{
   margin: 1.25rem 0 0;
   max-width: 70ch;
@@ -565,6 +438,128 @@ section[id]{ scroll-margin-top: calc(var(--nav-h) + 1rem); }
   max-width: 70ch;
 }
 
+/* OUR IDENTITY */
+.identity-grid{
+  display: grid;
+  gap: 1.25rem;
+  align-items: start;
+  position: relative;
+}
+.identity-media{
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+.identity-badge{
+  width: 100%;
+  max-width: clamp(170px, 18vw, 230px);
+  height: auto;
+  border-radius: 1.1rem;
+  object-fit: contain;
+}
+
+@media (min-width: 900px){
+  .identity-grid{
+    grid-template-columns: 0.75fr 1.25fr;
+    gap: 1rem;
+  }
+  .identity-media{
+    margin-top: -0.35rem;
+    justify-content: flex-end;
+    margin-right: 1.25rem;
+  }
+}
+
+@media (max-width: 899px){
+  .identity-grid{ grid-template-columns: 1fr; }
+
+  /* text stays readable */
+  .identity-copy{
+    position: relative;
+    z-index: 2;
+    background: rgba(255, 255, 255, 0.90);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+    border-radius: 1rem;
+    padding: 1rem;
+  }
+
+  /* badge becomes a soft watermark BEHIND text */
+  .identity-media{
+    position: absolute;
+    top: -0.25rem;
+    right: -0.25rem;
+    width: min(86%, 360px);
+    z-index: 1;
+    pointer-events: none;
+    justify-content: flex-end;
+  }
+
+  .identity-badge{
+    max-width: 100%;
+    opacity: 0.16;
+    filter: blur(10px);
+    transform: rotate(-10deg);
+    border-radius: 1.25rem;
+  }
+}
+
+/* HOW WE OPERATE: make section white (matches your images) */
+#how-we-operate{
+  background: #fff;
+}
+
+/* HOW WE OPERATE IMAGES: bottom aligned so theoperation.png sits EVEN */
+.operate-media{
+  margin-top: 1.5rem;
+  display: grid;
+  gap: 1rem;
+  align-items: end; /* key: align bottoms */
+}
+@media (min-width: 900px){
+  .operate-media{
+    grid-template-columns: 1fr 1fr 1.25fr; /* right column a bit wider */
+    gap: 1.25rem;
+  }
+}
+.operate-media-item{
+  margin: 0;
+  border-radius: 1.5rem;
+  background: transparent;
+  overflow: hidden;
+  align-self: end; /* keep each item stuck to the baseline */
+}
+.operate-media-item img{
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: inherit;
+}
+.operate-media-item--control{
+  justify-self: end;
+}
+
+/* COMPANIES HEADER with umbrella image */
+.holdings-head{
+  display: grid;
+  gap: 1.5rem;
+  align-items: center;
+}
+@media (min-width: 900px){
+  .holdings-head{
+    grid-template-columns: 1.1fr 0.9fr;
+  }
+  .holdings-media{
+    justify-self: end;
+  }
+}
+.holdings-media img{
+  width: 100%;
+  max-width: 520px;
+  height: auto;
+  display: block;
+}
+
 /* Cards */
 .card{
   position: relative;
@@ -581,6 +576,7 @@ section[id]{ scroll-margin-top: calc(var(--nav-h) + 1rem); }
   .card{ padding: 1.5rem; }
 }
 .card:hover{ transform: translateY(-2px); }
+
 .card-title{
   margin: 0;
   font-size: 1.125rem;
@@ -634,7 +630,12 @@ section[id]{ scroll-margin-top: calc(var(--nav-h) + 1rem); }
 }
 .inline-link:hover{ border-bottom-color: rgba(10, 108, 255, 0.75); }
 
-/* Contact */
+/* CONTACT: make background white so the image blends */
+#contact-info.section-soft{
+  background: #fff;
+}
+
+/* Contact layout with image on right above CTA */
 .contact-grid{
   margin-top: 1.25rem;
   display: grid;
@@ -646,6 +647,24 @@ section[id]{ scroll-margin-top: calc(var(--nav-h) + 1rem); }
     align-items: start;
   }
 }
+.contact-side{
+  display: grid;
+  gap: 1rem;
+  align-content: start;
+}
+.contact-illustration{
+  margin: 0;
+  border-radius: 1.5rem;
+  overflow: hidden;
+}
+.contact-illustration img{
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: inherit;
+}
+
+/* CTA card */
 .contact-cta{
   border: 1px solid var(--border);
   border-radius: var(--radius-card);

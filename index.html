@@ -20,6 +20,7 @@
   <header class="topbar" role="banner">
     <div class="container topbar-inner">
       <a class="brand" href="#top" aria-label="Minyts Holdings Home">
+        <!-- LOGO -->
         <span class="logo-mark" id="minytsLogo" aria-hidden="true">
           <svg viewBox="0 0 32 32" class="logo-svg" role="img" aria-hidden="true">
             <defs>
@@ -150,6 +151,7 @@
     <section class="section" id="our-identity">
       <div class="container">
         <div class="identity-grid">
+          <!-- Badge on desktop left column, on mobile becomes watermark behind text -->
           <aside class="identity-media" aria-label="Company badge">
             <img
               class="identity-badge"
@@ -187,40 +189,37 @@
     <!-- HOW WE OPERATE -->
     <section class="section section-soft" id="how-we-operate">
       <div class="container">
-        <div class="operate-layout">
-          <div class="operate-copy">
-            <div class="section-head">
-              <h2>How We Operate</h2>
-              <p class="lead">
-                We create and steward companies by building the structure first, then scaling the work that proves itself.
-              </p>
-            </div>
-          </div>
+        <div class="section-head">
+          <h2>How We Operate</h2>
+          <p class="lead">
+            We create and steward companies by building the structure first, then scaling the work that proves itself.
+          </p>
+        </div>
 
-          <div class="operate-spacer" aria-hidden="true"></div>
-
-          <figure class="operate-box operate-box-ops" role="presentation">
+        <!-- 3 images aligned on the SAME baseline (bottom aligned) -->
+        <div class="operate-media" aria-label="How we operate visuals">
+          <figure class="operate-media-item" aria-label="Operations">
             <img
               src="assets/Operations.png"
-              alt="Operations visual"
+              alt="Operations blueprint illustration"
               loading="lazy"
               decoding="async"
             />
           </figure>
 
-          <figure class="operate-box operate-box-instructions" role="presentation">
+          <figure class="operate-media-item" aria-label="Instructions">
             <img
               src="assets/Instructions.png"
-              alt="Instructions visual"
+              alt="Instructions manual illustration"
               loading="lazy"
               decoding="async"
             />
           </figure>
 
-          <figure class="operate-box operate-box-hero" role="presentation">
+          <figure class="operate-media-item operate-media-item--control" aria-label="The operation control center">
             <img
               src="assets/theoperation.png"
-              alt="Operations control illustration"
+              alt="Operations control center illustration"
               loading="lazy"
               decoding="async"
             />
@@ -253,23 +252,23 @@
     <!-- COMPANIES / HOLDINGS -->
     <section class="section" id="companies-holdings">
       <div class="container">
-        <!-- NEW: heading + umbrella art (replaces your red box area) -->
         <div class="holdings-head">
-          <div class="section-head">
-            <h2>Companies/Holdings</h2>
-            <p class="lead">Here’s what lives in the Minyts venture universe right now.</p>
-            <p class="helper">Explore a company below, or check back as new ventures enter orbit.</p>
+          <div class="holdings-copy">
+            <div class="section-head">
+              <h2>Companies/Holdings</h2>
+              <p class="lead">Here’s what lives in the Minyts venture universe right now.</p>
+              <p class="helper">Explore a company below, or check back as new ventures enter orbit.</p>
+            </div>
           </div>
 
-          <figure class="holdings-art" aria-label="Minyts umbrella mark">
+          <aside class="holdings-media" aria-label="Minyts umbrella illustration">
             <img
-              class="holdings-illustration"
               src="assets/TheMinytsUmbrella.png"
               alt="Minyts umbrella illustration"
               loading="lazy"
               decoding="async"
             />
-          </figure>
+          </aside>
         </div>
 
         <div class="grid holdings">
@@ -332,9 +331,20 @@
             <p><strong>Location:</strong> Lawrenceville, Georgia</p>
           </div>
 
-          <div class="contact-cta">
-            <a class="btn btn-primary btn-small" href="mailto:contact@minyts.com?subject=Minyts%20Inquiry">Send a message</a>
-            <p class="muted">We reply within 1–2 business days.</p>
+          <div class="contact-side">
+            <figure class="contact-illustration" aria-label="Communications illustration">
+              <img
+                src="assets/Communications.png"
+                alt="Communications illustration"
+                loading="lazy"
+                decoding="async"
+              />
+            </figure>
+
+            <div class="contact-cta">
+              <a class="btn btn-primary btn-small" href="mailto:contact@minyts.com?subject=Minyts%20Inquiry">Send a message</a>
+              <p class="muted">We reply within 1–2 business days.</p>
+            </div>
           </div>
         </div>
       </div>
