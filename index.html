@@ -20,7 +20,6 @@
   <header class="topbar" role="banner">
     <div class="container topbar-inner">
       <a class="brand" href="#top" aria-label="Minyts Holdings Home">
-        <!-- LOGO -->
         <span class="logo-mark" id="minytsLogo" aria-hidden="true">
           <svg viewBox="0 0 32 32" class="logo-svg" role="img" aria-hidden="true">
             <defs>
@@ -151,7 +150,6 @@
     <section class="section" id="our-identity">
       <div class="container">
         <div class="identity-grid">
-          <!-- Badge on desktop left column, on mobile becomes watermark behind text -->
           <aside class="identity-media" aria-label="Company badge">
             <img
               class="identity-badge"
@@ -196,33 +194,17 @@
           </p>
         </div>
 
-        <!-- 3 images aligned on the SAME baseline (bottom aligned) -->
         <div class="operate-media" aria-label="How we operate visuals">
           <figure class="operate-media-item" aria-label="Operations">
-            <img
-              src="assets/Operations.png"
-              alt="Operations blueprint illustration"
-              loading="lazy"
-              decoding="async"
-            />
+            <img src="assets/Operations.png" alt="Operations blueprint illustration" loading="lazy" decoding="async" />
           </figure>
 
           <figure class="operate-media-item" aria-label="Instructions">
-            <img
-              src="assets/Instructions.png"
-              alt="Instructions manual illustration"
-              loading="lazy"
-              decoding="async"
-            />
+            <img src="assets/Instructions.png" alt="Instructions manual illustration" loading="lazy" decoding="async" />
           </figure>
 
           <figure class="operate-media-item operate-media-item--control" aria-label="The operation control center">
-            <img
-              src="assets/theoperation.png"
-              alt="Operations control center illustration"
-              loading="lazy"
-              decoding="async"
-            />
+            <img src="assets/theoperation.png" alt="Operations control center illustration" loading="lazy" decoding="async" />
           </figure>
         </div>
 
@@ -262,12 +244,7 @@
           </div>
 
           <aside class="holdings-media" aria-label="Minyts umbrella illustration">
-            <img
-              src="assets/TheMinytsUmbrella.png"
-              alt="Minyts umbrella illustration"
-              loading="lazy"
-              decoding="async"
-            />
+            <img src="assets/TheMinytsUmbrella.png" alt="Minyts umbrella illustration" loading="lazy" decoding="async" />
           </aside>
         </div>
 
@@ -319,19 +296,22 @@
     <!-- CONTACT INFO -->
     <section class="section section-soft" id="contact-info">
       <div class="container">
-        <div class="section-head">
-          <h2>Contact Info</h2>
-          <p class="lead">If you’re reaching out about partnership, services, or platform access, this is the fastest path.</p>
-        </div>
+        <!-- NEW: header + image share the same grid row so the image can align to the top -->
+        <div class="contact-layout">
+          <div class="contact-left">
+            <div class="section-head">
+              <h2>Contact Info</h2>
+              <p class="lead">If you’re reaching out about partnership, services, or platform access, this is the fastest path.</p>
+            </div>
 
-        <div class="contact-grid">
-          <div class="contact-lines">
-            <p><strong>Email:</strong> <a class="inline-link" href="mailto:contact@minyts.com">contact@minyts.com</a></p>
-            <p><strong>Phone:</strong> <a class="inline-link" href="tel:+14702821164">470.282.1164</a></p>
-            <p><strong>Location:</strong> Lawrenceville, Georgia</p>
+            <div class="contact-lines">
+              <p><strong>Email:</strong> <a class="inline-link" href="mailto:contact@minyts.com">contact@minyts.com</a></p>
+              <p><strong>Phone:</strong> <a class="inline-link" href="tel:+14702821164">470.282.1164</a></p>
+              <p><strong>Location:</strong> Lawrenceville, Georgia</p>
+            </div>
           </div>
 
-          <div class="contact-side">
+          <div class="contact-right">
             <figure class="contact-illustration" aria-label="Communications illustration">
               <img
                 src="assets/Communications.png"
