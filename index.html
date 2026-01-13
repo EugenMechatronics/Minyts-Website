@@ -188,7 +188,6 @@
     <section class="section section-soft" id="how-we-operate">
       <div class="container">
         <div class="operate-layout">
-          <!-- copy (top-left row) -->
           <div class="operate-copy">
             <div class="section-head">
               <h2>How We Operate</h2>
@@ -198,10 +197,8 @@
             </div>
           </div>
 
-          <!-- spacer (top-right cell) just to preserve the grid structure -->
           <div class="operate-spacer" aria-hidden="true"></div>
 
-          <!-- row of 3 images (ALL EVEN) -->
           <figure class="operate-box operate-box-ops" role="presentation">
             <img
               src="assets/Operations.png"
@@ -256,10 +253,23 @@
     <!-- COMPANIES / HOLDINGS -->
     <section class="section" id="companies-holdings">
       <div class="container">
-        <div class="section-head">
-          <h2>Companies/Holdings</h2>
-          <p class="lead">Here’s what lives in the Minyts venture universe right now.</p>
-          <p class="helper">Explore a company below, or check back as new ventures enter orbit.</p>
+        <!-- NEW: heading + umbrella art (replaces your red box area) -->
+        <div class="holdings-head">
+          <div class="section-head">
+            <h2>Companies/Holdings</h2>
+            <p class="lead">Here’s what lives in the Minyts venture universe right now.</p>
+            <p class="helper">Explore a company below, or check back as new ventures enter orbit.</p>
+          </div>
+
+          <figure class="holdings-art" aria-label="Minyts umbrella mark">
+            <img
+              class="holdings-illustration"
+              src="assets/TheMinytsUmbrella.png"
+              alt="Minyts umbrella illustration"
+              loading="lazy"
+              decoding="async"
+            />
+          </figure>
         </div>
 
         <div class="grid holdings">
@@ -340,6 +350,7 @@
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
 
+    // Mobile menu toggle
     const toggle = document.querySelector('.nav-toggle');
     const menu = document.getElementById('mobile-menu');
 
@@ -359,6 +370,7 @@
       if (target) closeMenu();
     });
 
+    // Smooth scroll
     document.addEventListener('click', (e) => {
       const a = e.target.closest('a[href^="#"]');
       if (!a) return;
@@ -374,6 +386,7 @@
       history.pushState(null, '', id);
     });
 
+    // Logo: tick right leg (second hand) into place ONCE per refresh, then colorize
     (function () {
       const logo = document.getElementById('minytsLogo');
       const secGroup = document.getElementById('secGroup');
