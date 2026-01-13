@@ -20,6 +20,7 @@
   <header class="topbar" role="banner">
     <div class="container topbar-inner">
       <a class="brand" href="#top" aria-label="Minyts Holdings Home">
+        <!-- LOGO -->
         <span class="logo-mark" id="minytsLogo" aria-hidden="true">
           <svg viewBox="0 0 32 32" class="logo-svg" role="img" aria-hidden="true">
             <defs>
@@ -194,16 +195,17 @@
           </p>
         </div>
 
+        <!-- Desktop: 3 images. Mobile: ONLY the same image desktop uses (theoperation.png) -->
         <div class="operate-media" aria-label="How we operate visuals">
-          <figure class="operate-media-item" aria-label="Operations">
+          <figure class="operate-media-item operate-media-item--ops" aria-label="Operations">
             <img src="assets/Operations.png" alt="Operations blueprint illustration" loading="lazy" decoding="async" />
           </figure>
 
-          <figure class="operate-media-item" aria-label="Instructions">
+          <figure class="operate-media-item operate-media-item--inst" aria-label="Instructions">
             <img src="assets/Instructions.png" alt="Instructions manual illustration" loading="lazy" decoding="async" />
           </figure>
 
-          <figure class="operate-media-item operate-media-item--control" aria-label="The operation control center">
+          <figure class="operate-media-item operate-media-item--main" aria-label="Control center">
             <img src="assets/theoperation.png" alt="Operations control center illustration" loading="lazy" decoding="async" />
           </figure>
         </div>
@@ -234,8 +236,8 @@
     <!-- COMPANIES / HOLDINGS -->
     <section class="section" id="companies-holdings">
       <div class="container">
-        <div class="holdings-head">
-          <div class="holdings-copy">
+        <div class="companies-grid">
+          <div class="companies-copy">
             <div class="section-head">
               <h2>Companies/Holdings</h2>
               <p class="lead">Here’s what lives in the Minyts venture universe right now.</p>
@@ -243,9 +245,15 @@
             </div>
           </div>
 
-          <aside class="holdings-media" aria-label="Minyts umbrella illustration">
-            <img src="assets/TheMinytsUmbrella.png" alt="Minyts umbrella illustration" loading="lazy" decoding="async" />
-          </aside>
+          <div class="companies-art" aria-label="Minyts umbrella graphic">
+            <img
+              class="companies-illustration"
+              src="assets/TheMinytsUmbrella.png"
+              alt="Minyts umbrella illustration"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
         </div>
 
         <div class="grid holdings">
@@ -296,8 +304,7 @@
     <!-- CONTACT INFO -->
     <section class="section section-soft" id="contact-info">
       <div class="container">
-        <!-- NEW: header + image share the same grid row so the image can align to the top -->
-        <div class="contact-layout">
+        <div class="contact-grid">
           <div class="contact-left">
             <div class="section-head">
               <h2>Contact Info</h2>
@@ -313,12 +320,8 @@
 
           <div class="contact-right">
             <figure class="contact-illustration" aria-label="Communications illustration">
-              <img
-                src="assets/Communications.png"
-                alt="Communications illustration"
-                loading="lazy"
-                decoding="async"
-              />
+              <!-- If your filename differs, rename the file or update this src -->
+              <img src="assets/communications.png" alt="Communications illustration" loading="lazy" decoding="async" />
             </figure>
 
             <div class="contact-cta">
