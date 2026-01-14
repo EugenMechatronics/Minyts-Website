@@ -56,6 +56,14 @@
 
 *{ box-sizing: border-box; }
 html{ scroll-behavior: smooth; }
+
+/* ✅ IMPORTANT: kills tiny left/right scroll if anything paints outside viewport */
+html, body{
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
 body{
   margin: 0;
   font-family: var(--font-sans);
@@ -64,6 +72,7 @@ body{
   color: var(--text);
   background: var(--bg);
 }
+
 img{ max-width: 100%; display: block; }
 a{ color: inherit; text-decoration: none; }
 
@@ -130,18 +139,31 @@ section[id]{ scroll-margin-top: calc(var(--nav-h) + 1rem); }
   align-items: center;
   justify-content: space-between;
   gap: var(--nav-gap-logo-links);
+  min-width: 0; /* ✅ lets children shrink instead of overflowing */
 }
 
 .brand{
   display: inline-flex;
   align-items: center;
   gap: 0.75rem;
-  min-width: 200px;
+  min-width: 0; /* ✅ was 200px before; shrink safely on mobile */
 }
 .brand-text{
   font-weight: 650;
   letter-spacing: -0.01em;
   white-space: nowrap;
+
+  /* ✅ prevents topbar text from ever forcing page wider */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 55vw;
+}
+@media (min-width: 900px){
+  .brand-text{
+    max-width: none;
+    overflow: visible;
+    text-overflow: clip;
+  }
 }
 
 /* LOGO */
@@ -183,6 +205,7 @@ section[id]{ scroll-margin-top: calc(var(--nav-h) + 1rem); }
   display: flex;
   align-items: center;
   gap: 1rem;
+  min-width: 0;
 }
 
 .nav-group{
@@ -268,6 +291,7 @@ section[id]{ scroll-margin-top: calc(var(--nav-h) + 1rem); }
 .mobile-menu{
   border-bottom: 1px solid var(--border);
   background: #fff;
+  overflow-x: hidden; /* ✅ just in case pseudo elements paint outside */
 }
 .mobile-menu-inner{
   padding: 1rem var(--gutter-mobile) 1.25rem;
@@ -298,6 +322,7 @@ section[id]{ scroll-margin-top: calc(var(--nav-h) + 1rem); }
   display: grid;
   gap: 1.5rem;
   align-items: center;
+  min-width: 0;
 }
 @media (min-width: 900px){
   .hero-grid{
@@ -407,6 +432,7 @@ section[id]{ scroll-margin-top: calc(var(--nav-h) + 1rem); }
   display: grid;
   gap: 1rem;
   margin-top: 1.25rem;
+  min-width: 0;
 }
 @media (min-width: 768px){
   .grid{ gap: 1.25rem; }
@@ -483,7 +509,10 @@ section[id]{ scroll-margin-top: calc(var(--nav-h) + 1rem); }
 }
 
 @media (max-width: 899px){
-  .identity-grid{ grid-template-columns: 1fr; }
+  .identity-grid{
+    grid-template-columns: 1fr;
+    overflow: hidden; /* ✅ clips any decorative overhang so it can't create side-scroll */
+  }
 
   .identity-copy{
     position: relative;
@@ -498,7 +527,7 @@ section[id]{ scroll-margin-top: calc(var(--nav-h) + 1rem); }
   .identity-media{
     position: absolute;
     top: 0.15rem;
-    right: -0.15rem;
+    right: 0;          /* ✅ was -0.15rem (caused the tiny scroll) */
     width: 70%;
     max-width: 340px;
     z-index: 1;
@@ -527,6 +556,7 @@ section[id]{ scroll-margin-top: calc(var(--nav-h) + 1rem); }
   grid-template-columns: repeat(3, 1fr);
   gap: 1.25rem;
   align-items: end; /* bottoms line up */
+  min-width: 0;
 }
 
 .operate-media-item{
@@ -627,6 +657,7 @@ section[id]{ scroll-margin-top: calc(var(--nav-h) + 1rem); }
   gap: 1.25rem;
   align-items: start;
   margin-bottom: 1.25rem;
+  min-width: 0;
 }
 @media (min-width: 900px){
   .companies-grid{
@@ -658,6 +689,7 @@ section[id]{ scroll-margin-top: calc(var(--nav-h) + 1rem); }
   display: grid;
   gap: 1.5rem;
   align-items: start;
+  min-width: 0;
 }
 @media (min-width: 900px){
   .contact-grid{
