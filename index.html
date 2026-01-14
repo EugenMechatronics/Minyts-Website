@@ -115,6 +115,9 @@
     </div>
   </header>
 
+  <!-- Spacer reserves topbar height (page NEVER shifts) -->
+  <div class="topbar-spacer" aria-hidden="true"></div>
+
   <main>
     <!-- HERO -->
     <section class="section hero">
@@ -195,7 +198,6 @@
           </p>
         </div>
 
-        <!-- Desktop: 3 images. Mobile: ONLY the same image desktop uses (theoperation.png) -->
         <div class="operate-media" aria-label="How we operate visuals">
           <figure class="operate-media-item operate-media-item--ops" aria-label="Operations">
             <img src="assets/Operations.png" alt="Operations blueprint illustration" loading="lazy" decoding="async" />
@@ -320,7 +322,6 @@
 
           <div class="contact-right">
             <figure class="contact-illustration" aria-label="Communications illustration">
-              <!-- If your filename differs, rename the file or update this src -->
               <img src="assets/communications.png" alt="Communications illustration" loading="lazy" decoding="async" />
             </figure>
 
@@ -347,6 +348,10 @@
     const toggle = document.querySelector('.nav-toggle');
     const menu = document.getElementById('mobile-menu');
 
+    function showTopbar() {
+      document.querySelector('.topbar')?.classList.remove('topbar--hidden');
+    }
+
     function closeMenu() {
       menu.hidden = true;
       toggle.setAttribute('aria-expanded', 'false');
@@ -354,6 +359,7 @@
 
     toggle?.addEventListener('click', () => {
       const isOpen = toggle.getAttribute('aria-expanded') === 'true';
+      if (!isOpen) showTopbar(); // keep bar present while menu opens
       toggle.setAttribute('aria-expanded', String(!isOpen));
       menu.hidden = isOpen;
     });
@@ -373,6 +379,8 @@
 
       const el = document.querySelector(id);
       if (!el) return;
+
+      showTopbar();
 
       e.preventDefault();
       el.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -402,8 +410,8 @@
         return;
       }
 
-      const steps = 14;
-      const totalMs = 1050;
+      const steps = 16;
+      const totalMs = 1200;
       const stepMs = Math.round(totalMs / steps);
       const delta = (endDeg - startDeg) / steps;
 
@@ -419,6 +427,115 @@
           logo.classList.add('is-formed');
         }
       }, stepMs);
+    })();
+
+    // ✅ Topbar auto hide/show (SMOOTH + NO PAGE MOVEMENT)
+    (function () {
+      const bar = document.querySelector('.topbar');
+      const spacer = document.querySelector('.topbar-spacer');
+      if (!bar || !spacer) return;
+
+      const root = document.documentElement;
+      const inner = bar.querySelector('.topbar-inner');
+
+      const TOP_LOCK_PX = 2;
+      const HIDE_DELAY_MS = 1400; // enough time to actually click
+      let hideTimer = null;
+
+      let isInteracting = false;
+      let ticking = false;
+
+      function isMenuOpen() {
+        return !!toggle && toggle.getAttribute('aria-expanded') === 'true';
+      }
+
+      function syncTopbarHeight() {
+        const h = (inner ? inner.offsetHeight : bar.offsetHeight) || 68;
+        root.style.setProperty('--topbar-h', h + 'px');
+        spacer.style.height = `var(--topbar-h)`;
+      }
+
+      function showBar() {
+        if (!bar.classList.contains('topbar--hidden')) return;
+        bar.classList.remove('topbar--hidden');
+      }
+
+      function hideBar() {
+        if (window.scrollY <= TOP_LOCK_PX) return;
+        if (isMenuOpen()) return;
+        if (isInteracting) return;
+        bar.classList.add('topbar--hidden');
+      }
+
+      function clearHideTimer() {
+        if (hideTimer) clearTimeout(hideTimer);
+        hideTimer = null;
+      }
+
+      function scheduleHide() {
+        clearHideTimer();
+        const snapshotY = window.scrollY;
+
+        hideTimer = setTimeout(() => {
+          // If still drifting (momentum), wait again
+          if (Math.abs(window.scrollY - snapshotY) > 1) {
+            scheduleHide();
+            return;
+          }
+          hideBar();
+        }, HIDE_DELAY_MS);
+      }
+
+      function handleScroll() {
+        if (window.scrollY <= TOP_LOCK_PX) {
+          bar.classList.remove('topbar--hidden');
+          clearHideTimer();
+          return;
+        }
+
+        // visible while moving
+        bar.classList.remove('topbar--hidden');
+        scheduleHide();
+      }
+
+      function onScroll() {
+        if (ticking) return;
+        ticking = true;
+        window.requestAnimationFrame(() => {
+          handleScroll();
+          ticking = false;
+        });
+      }
+
+      function setInteracting(v) {
+        isInteracting = v;
+        if (v) {
+          bar.classList.remove('topbar--hidden');
+          clearHideTimer();
+        } else {
+          if (window.scrollY > TOP_LOCK_PX) scheduleHide();
+        }
+      }
+
+      // Interaction protection
+      bar.addEventListener('pointerenter', () => setInteracting(true));
+      bar.addEventListener('pointerleave', () => setInteracting(false));
+      bar.addEventListener('pointerdown', () => setInteracting(true));
+      bar.addEventListener('pointerup', () => setInteracting(false));
+
+      bar.addEventListener('focusin', () => setInteracting(true));
+      bar.addEventListener('focusout', () => {
+        setTimeout(() => {
+          const stillFocused = bar.contains(document.activeElement);
+          setInteracting(stillFocused);
+        }, 80);
+      });
+
+      window.addEventListener('scroll', onScroll, { passive: true });
+      window.addEventListener('resize', syncTopbarHeight);
+
+      syncTopbarHeight();
+      handleScroll();
     })();
   </script>
 </body>
