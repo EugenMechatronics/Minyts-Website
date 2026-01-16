@@ -281,6 +281,25 @@
               <p class="lead">Here's what lives in the Minyts venture universe right now.</p>
               <p class="helper">Explore a company below, or check back as new ventures enter orbit.</p>
             </div>
+
+            <!-- NEWS TICKER -->
+            <aside class="news-ticker" aria-label="Latest news from Minyts">
+              <div class="news-ticker-header">
+                <span class="news-ticker-dot" aria-hidden="true"></span>
+                <h3 class="news-ticker-title">Latest News</h3>
+              </div>
+              <div class="news-ticker-viewport">
+                <div class="news-ticker-track" id="newsTickerTrack">
+                  <p class="news-ticker-loading">Updates loading...</p>
+                </div>
+              </div>
+              <div class="news-ticker-footer">
+                <a class="news-ticker-link" href="news.html">
+                  Read more news
+                  <span class="news-ticker-arrow" aria-hidden="true">&rarr;</span>
+                </a>
+              </div>
+            </aside>
           </div>
 
           <div class="companies-art" aria-label="Minyts umbrella graphic">
@@ -571,6 +590,70 @@
 
       syncTopbarHeight();
       handleScroll();
+    })();
+
+    // NEWS TICKER
+    (function() {
+      const track = document.getElementById('newsTickerTrack');
+      if (!track) return;
+
+      const MAX_ITEMS = 5;
+      const DATA_URL = 'journal/index.json';
+
+      function formatDate(dateStr) {
+        const date = new Date(dateStr + 'T00:00:00');
+        return date.toLocaleDateString('en-US', {
+          month: 'short',
+          day: 'numeric',
+          year: 'numeric'
+        });
+      }
+
+      function renderTicker(entries) {
+        if (!entries || entries.length === 0) {
+          track.innerHTML = '<p class="news-ticker-loading">No updates available.</p>';
+          return;
+        }
+
+        // Filter published and sort by date descending
+        const published = entries
+          .filter(e => e.status === 'published')
+          .sort((a, b) => new Date(b.date) - new Date(a.date))
+          .slice(0, MAX_ITEMS);
+
+        if (published.length === 0) {
+          track.innerHTML = '<p class="news-ticker-loading">No updates available.</p>';
+          return;
+        }
+
+        // Create items HTML
+        const itemsHTML = published.map(entry => `
+          <a class="news-ticker-item" href="journal/${entry.id}.html">
+            <p class="news-ticker-date">${formatDate(entry.date)}</p>
+            <p class="news-ticker-headline">${entry.title}</p>
+          </a>
+        `).join('');
+
+        // Duplicate for seamless loop
+        track.innerHTML = itemsHTML + itemsHTML;
+
+        // Adjust animation duration based on item count
+        const itemHeight = 60; // approximate height per item
+        const totalHeight = published.length * itemHeight;
+        const duration = published.length * 4; // ~4 seconds per item
+        track.style.animationDuration = duration + 's';
+      }
+
+      // Fetch data
+      fetch(DATA_URL)
+        .then(res => {
+          if (!res.ok) throw new Error('Failed to load');
+          return res.json();
+        })
+        .then(data => renderTicker(data.entries))
+        .catch(() => {
+          track.innerHTML = '<p class="news-ticker-loading">Updates loading...</p>';
+        });
     })();
   </script>
 </body>

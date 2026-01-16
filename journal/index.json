@@ -1,0 +1,39 @@
+{
+  "entries": [
+    {
+      "id": "mcc-phase1-update",
+      "title": "MCC Phase-1 Internal Build Update",
+      "date": "2026-01-16",
+      "status": "published",
+      "excerpt": "Progress update on the Minyts Corporate Cloud internal build."
+    },
+    {
+      "id": "tildilyn-live",
+      "title": "Tildilyn Now Live in the Minyts Universe",
+      "date": "2026-01-10",
+      "status": "published",
+      "excerpt": "Tildilyn officially enters the Minyts portfolio as a live venture."
+    },
+    {
+      "id": "holdings-structure-complete",
+      "title": "Holdings Structure Finalized",
+      "date": "2026-01-05",
+      "status": "published",
+      "excerpt": "Minyts Holdings governance and structure now in place."
+    },
+    {
+      "id": "website-launch",
+      "title": "Minyts Holdings Website Launches",
+      "date": "2025-12-20",
+      "status": "published",
+      "excerpt": "The official Minyts Holdings website is now live."
+    },
+    {
+      "id": "mcc-early-access-open",
+      "title": "MCC Early Access Program Opens",
+      "date": "2025-12-15",
+      "status": "published",
+      "excerpt": "Early access signups now available for the Minyts Corporate Cloud platform."
+    }
+  ]
+}
