@@ -393,6 +393,116 @@
       border-radius: var(--radius);
     }
 
+    /* URL Preview Card */
+    .url-input-row {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .url-input-row input {
+      flex: 1;
+    }
+
+    .url-fetch-btn {
+      padding: 0.625rem 1rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+      background: var(--mcc-blue);
+      color: white;
+      border: none;
+      border-radius: var(--radius);
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .url-fetch-btn:hover {
+      background: #0856CC;
+    }
+
+    .url-fetch-btn:disabled {
+      background: var(--text-muted);
+      cursor: not-allowed;
+    }
+
+    .url-preview-card {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      background: var(--bg);
+      max-width: 100%;
+    }
+
+    .url-preview-image {
+      width: 100%;
+      height: 140px;
+      object-fit: cover;
+      background: var(--bg-soft);
+      display: block;
+    }
+
+    .url-preview-image.placeholder {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+      font-size: 2rem;
+    }
+
+    .url-preview-content {
+      padding: 0.875rem;
+    }
+
+    .url-preview-site {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      margin-bottom: 0.375rem;
+      display: flex;
+      align-items: center;
+      gap: 0.375rem;
+    }
+
+    .url-preview-site img {
+      width: 14px;
+      height: 14px;
+      border-radius: 2px;
+    }
+
+    .url-preview-title {
+      font-size: 0.9375rem;
+      font-weight: 600;
+      line-height: 1.3;
+      margin-bottom: 0.375rem;
+      color: var(--text);
+    }
+
+    .url-preview-desc {
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .url-preview-loading {
+      padding: 2rem;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.875rem;
+    }
+
+    .url-preview-error {
+      padding: 1rem;
+      text-align: center;
+      color: var(--danger);
+      font-size: 0.8125rem;
+      background: rgba(220, 38, 38, 0.05);
+    }
+
     /* Video Options */
     .video-options {
       display: flex;
@@ -708,6 +818,9 @@
           <button class="add-block-btn" onclick="addBlock('video')">
             <span>+</span> Video
           </button>
+          <button class="add-block-btn" onclick="addBlock('url')">
+            <span>+</span> URL
+          </button>
         </div>
       </div>
 
@@ -914,6 +1027,25 @@
             </div>
           `;
           break;
+
+        case 'url':
+          blockHTML = `
+            <div class="block" id="${blockId}" draggable="true" data-type="url">
+              <div class="block-header">
+                <span class="block-drag">⋮⋮</span>
+                <span class="block-type">URL Preview</span>
+                <button class="block-remove" onclick="removeBlock('${blockId}')">&times;</button>
+              </div>
+              <div class="block-content">
+                <div class="url-input-row">
+                  <input type="text" placeholder="Paste URL to preview..." class="url-input" id="${blockId}-url">
+                  <button class="url-fetch-btn" onclick="fetchUrlPreview('${blockId}')">Fetch</button>
+                </div>
+                <div id="${blockId}-preview"></div>
+              </div>
+            </div>
+          `;
+          break;
       }
 
       container.insertAdjacentHTML('beforeend', blockHTML);
@@ -967,6 +1099,117 @@
       const block = document.getElementById(blockId);
       block.dataset.videoFile = file.name;
       showToast(`Video selected: ${file.name}`, 'success');
+    }
+
+    // ============================================
+    // URL PREVIEW
+    // ============================================
+    async function fetchUrlPreview(blockId) {
+      const input = document.getElementById(`${blockId}-url`);
+      const previewContainer = document.getElementById(`${blockId}-preview`);
+      const block = document.getElementById(blockId);
+      const url = input.value.trim();
+
+      if (!url) {
+        showToast('Please enter a URL', 'error');
+        return;
+      }
+
+      // Validate URL
+      try {
+        new URL(url);
+      } catch {
+        showToast('Please enter a valid URL', 'error');
+        return;
+      }
+
+      // Show loading
+      previewContainer.innerHTML = '<div class="url-preview-loading">Fetching preview...</div>';
+
+      try {
+        // Extract domain info
+        const urlObj = new URL(url);
+        const domain = urlObj.hostname.replace('www.', '');
+        const favicon = `https://www.google.com/s2/favicons?domain=${domain}&sz=32`;
+
+        // Use a CORS proxy or fallback to basic info
+        // For local development, we'll create a manual preview
+        // In production, you'd use a metadata API like open-graph.io or microlink.io
+
+        // Try to fetch Open Graph data via a proxy (optional - works with some URLs)
+        let title = url;
+        let description = '';
+        let image = '';
+
+        // For now, create a basic preview with the URL info
+        // Store the data on the block
+        block.dataset.urlData = JSON.stringify({
+          url: url,
+          domain: domain,
+          title: title,
+          description: description,
+          image: image,
+          favicon: favicon
+        });
+
+        // Render the preview card
+        renderUrlPreview(blockId, {
+          url,
+          domain,
+          title: domain,
+          description: url,
+          image: '',
+          favicon
+        });
+
+        showToast('URL added', 'success');
+      } catch (error) {
+        previewContainer.innerHTML = '<div class="url-preview-error">Failed to fetch preview. URL will still be saved.</div>';
+
+        // Still save basic URL data
+        const urlObj = new URL(url);
+        block.dataset.urlData = JSON.stringify({
+          url: url,
+          domain: urlObj.hostname.replace('www.', ''),
+          title: url,
+          description: '',
+          image: '',
+          favicon: ''
+        });
+      }
+    }
+
+    function renderUrlPreview(blockId, data) {
+      const previewContainer = document.getElementById(`${blockId}-preview`);
+
+      const imageHTML = data.image
+        ? `<img class="url-preview-image" src="${data.image}" alt="" onerror="this.outerHTML='<div class=\\'url-preview-image placeholder\\'>🔗</div>'">`
+        : '<div class="url-preview-image placeholder">🔗</div>';
+
+      previewContainer.innerHTML = `
+        <div class="url-preview-card">
+          ${imageHTML}
+          <div class="url-preview-content">
+            <div class="url-preview-site">
+              ${data.favicon ? `<img src="${data.favicon}" alt="" onerror="this.style.display='none'">` : ''}
+              ${data.domain}
+            </div>
+            <div class="url-preview-title">${data.title || data.domain}</div>
+            <div class="url-preview-desc">${data.description || data.url}</div>
+          </div>
+        </div>
+      `;
+    }
+
+    function updateUrlPreviewData(blockId, field, value) {
+      const block = document.getElementById(blockId);
+      if (!block.dataset.urlData) return;
+
+      const data = JSON.parse(block.dataset.urlData);
+      data[field] = value;
+      block.dataset.urlData = JSON.stringify(data);
+
+      renderUrlPreview(blockId, data);
     }
 
     // ============================================
@@ -1081,6 +1324,21 @@
               content.push({ type: 'video', mode: 'embed', url: embedUrl });
             } else if (uploadFile) {
               content.push({ type: 'video', mode: 'upload', file: `media/${uploadFile}` });
+            }
+            break;
+
+          case 'url':
+            if (block.dataset.urlData) {
+              const urlData = JSON.parse(block.dataset.urlData);
+              content.push({
+                type: 'url',
+                url: urlData.url,
+                domain: urlData.domain,
+                title: urlData.title,
+                description: urlData.description,
+                image: urlData.image,
+                favicon: urlData.favicon
+              });
             }
             break;
         }
@@ -1359,6 +1617,18 @@
             if (block.mode === 'embed') {
               lastBlock.querySelector('.video-url').value = block.url || '';
             }
+            break;
+          case 'url':
+            lastBlock.querySelector('.url-input').value = block.url || '';
+            lastBlock.dataset.urlData = JSON.stringify({
+              url: block.url,
+              domain: block.domain,
+              title: block.title,
+              description: block.description,
+              image: block.image,
+              favicon: block.favicon
+            });
+            renderUrlPreview(lastBlock.id, block);
             break;
         }
       });
