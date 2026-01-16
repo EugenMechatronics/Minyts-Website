@@ -1586,163 +1586,154 @@
       });
 
       // Generate content HTML from blocks
-      let contentHTML = '';
+      const contentParts = [];
       entry.content.forEach(block => {
         switch(block.type) {
           case 'paragraph':
-            contentHTML += `            <p>${escapeHTML(block.text)}</p>\n\n`;
+            contentParts.push('            <p>' + escapeHTML(block.text) + '<' + '/p>');
             break;
           case 'image':
-            contentHTML += `            <figure class="journal-image">
-              <img src="${block.file}" alt="${escapeHTML(block.caption || '')}" />
-              ${block.caption ? `<figcaption>${escapeHTML(block.caption)}</figcaption>` : ''}
-            </figure>\n\n`;
+            contentParts.push('            <figure class="journal-image">');
+            contentParts.push('              <img src="' + block.file + '" alt="' + escapeHTML(block.caption || '') + '" />');
+            if (block.caption) contentParts.push('              <figcaption>' + escapeHTML(block.caption) + '<' + '/figcaption>');
+            contentParts.push('            <' + '/figure>');
             break;
           case 'video':
             if (block.mode === 'embed') {
               const videoId = extractVideoId(block.url);
               if (videoId.type === 'youtube') {
-                contentHTML += `            <div class="journal-video">
-              <iframe src="https://www.youtube.com/embed/${videoId.id}" frameborder="0" allowfullscreen></iframe>
-            </div>\n\n`;
+                contentParts.push('            <div class="journal-video">');
+                contentParts.push('              <iframe src="https://www.youtube.com/embed/' + videoId.id + '" frameborder="0" allowfullscreen><' + '/iframe>');
+                contentParts.push('            <' + '/div>');
               } else if (videoId.type === 'vimeo') {
-                contentHTML += `            <div class="journal-video">
-              <iframe src="https://player.vimeo.com/video/${videoId.id}" frameborder="0" allowfullscreen></iframe>
-            </div>\n\n`;
+                contentParts.push('            <div class="journal-video">');
+                contentParts.push('              <iframe src="https://player.vimeo.com/video/' + videoId.id + '" frameborder="0" allowfullscreen><' + '/iframe>');
+                contentParts.push('            <' + '/div>');
               }
             }
             break;
           case 'url':
-            contentHTML += `            <a class="journal-url-card" href="${escapeHTML(block.url)}" target="_blank" rel="noopener noreferrer">
-              <div class="journal-url-image placeholder">🔗</div>
-              <div class="journal-url-content">
-                <div class="journal-url-site">
-                  ${block.favicon ? `<img src="${escapeHTML(block.favicon)}" alt="" />` : ''}
-                  ${escapeHTML(block.domain)}
-                </div>
-                <div class="journal-url-title">${escapeHTML(block.title || block.domain)}</div>
-                <div class="journal-url-desc">${escapeHTML(block.description || block.url)}</div>
-              </div>
-            </a>\n\n`;
+            contentParts.push('            <a class="journal-url-card" href="' + escapeHTML(block.url) + '" target="_blank" rel="noopener noreferrer">');
+            contentParts.push('              <div class="journal-url-image placeholder">🔗<' + '/div>');
+            contentParts.push('              <div class="journal-url-content">');
+            contentParts.push('                <div class="journal-url-site">');
+            if (block.favicon) contentParts.push('                  <img src="' + escapeHTML(block.favicon) + '" alt="" />');
+            contentParts.push('                  ' + escapeHTML(block.domain));
+            contentParts.push('                <' + '/div>');
+            contentParts.push('                <div class="journal-url-title">' + escapeHTML(block.title || block.domain) + '<' + '/div>');
+            contentParts.push('                <div class="journal-url-desc">' + escapeHTML(block.description || block.url) + '<' + '/div>');
+            contentParts.push('              <' + '/div>');
+            contentParts.push('            <' + '/a>');
             break;
         }
       });
 
-      let html = `<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+      // Build HTML using array join to avoid any closing tags in template literals
+      const parts = [];
+      parts.push('<!DOCTYPE html>');
+      parts.push('<html lang="en">');
+      parts.push('<head>');
+      parts.push('  <meta charset="UTF-8" />');
+      parts.push('  <meta name="viewport" content="width=device-width, initial-scale=1" />');
+      parts.push('  <title>' + escapeHTML(entry.title) + ' | Minyts Holdings<' + '/title>');
+      parts.push('  <meta name="description" content="' + escapeHTML(entry.summary || '') + '" />');
+      parts.push('  <meta name="robots" content="index, follow" />');
+      parts.push('  <link rel="stylesheet" href="../styles.css" />');
+      parts.push('  <link rel="icon" type="image/png" href="../assets/favicon-96x96.png" sizes="96x96" />');
+      parts.push('  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />');
+      parts.push('  <link rel="shortcut icon" href="../assets/favicon.ico" />');
+      parts.push('  <link rel="apple-touch-icon" sizes="180x180" href="../assets/apple-touch-icon.png" />');
+      parts.push('  <meta name="apple-mobile-web-app-title" content="Minyts Holdings" />');
+      parts.push('  <link rel="manifest" href="../assets/site.webmanifest" />');
+      parts.push('  <' + 'style>');
+      parts.push('    .journal-entry { max-width: 680px; margin: 0 auto; }');
+      parts.push('    .journal-header { margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--border); }');
+      parts.push('    .journal-date { font-size: 0.875rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 0.75rem; }');
+      parts.push('    .journal-title { font-size: var(--fs-h1-mobile); line-height: var(--lh-h1); letter-spacing: var(--ls-h1); margin: 0 0 1rem; }');
+      parts.push('    @media (min-width: 768px) { .journal-title { font-size: var(--fs-h1-desktop); } }');
+      parts.push('    .journal-excerpt { font-size: var(--fs-lead); color: var(--text-muted); margin: 0; }');
+      parts.push('    .journal-content { font-size: 1.0625rem; line-height: 1.7; }');
+      parts.push('    .journal-content p { margin: 0 0 1.5rem; }');
+      parts.push('    .journal-content a { color: var(--mcc-blue); text-decoration: underline; text-underline-offset: 2px; }');
+      parts.push('    .journal-content a:hover { text-decoration: none; }');
+      parts.push('    .journal-image { margin: 1.5rem 0; }');
+      parts.push('    .journal-image img { width: 100%; border-radius: var(--radius-card); }');
+      parts.push('    .journal-image figcaption { font-size: 0.875rem; color: var(--text-muted); margin-top: 0.5rem; text-align: center; }');
+      parts.push('    .journal-video { margin: 1.5rem 0; position: relative; padding-bottom: 56.25%; height: 0; }');
+      parts.push('    .journal-video iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: var(--radius-card); }');
+      parts.push('    .journal-url-card { border: 1px solid var(--border); border-radius: var(--radius-card); overflow: hidden; margin: 1.5rem 0; transition: transform var(--t-fast) var(--ease), box-shadow var(--t-fast) var(--ease); display: block; text-decoration: none; color: inherit; }');
+      parts.push('    .journal-url-card:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.08); }');
+      parts.push('    .journal-url-image { width: 100%; height: 160px; background: var(--bg-soft); display: flex; align-items: center; justify-content: center; font-size: 3rem; color: var(--text-muted); }');
+      parts.push('    .journal-url-content { padding: 1rem 1.25rem; }');
+      parts.push('    .journal-url-site { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.03em; margin-bottom: 0.375rem; display: flex; align-items: center; gap: 0.375rem; }');
+      parts.push('    .journal-url-site img { width: 16px; height: 16px; border-radius: 2px; }');
+      parts.push('    .journal-url-title { font-size: 1.125rem; font-weight: 600; margin-bottom: 0.375rem; }');
+      parts.push('    .journal-url-desc { font-size: 0.875rem; color: var(--text-muted); }');
+      parts.push('    .journal-footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--border); }');
+      parts.push('    .back-link { display: inline-flex; align-items: center; gap: 0.35rem; font-size: 0.875rem; font-weight: 600; color: var(--mcc-blue); }');
+      parts.push('    .back-link:hover .back-arrow { transform: translateX(-2px); }');
+      parts.push('    .back-arrow { transition: transform var(--t-fast) var(--ease); }');
+      parts.push('  <' + '/style>');
+      parts.push('<' + '/head>');
+      parts.push('<body>');
+      parts.push('  <header class="topbar" role="banner">');
+      parts.push('    <div class="container topbar-inner">');
+      parts.push('      <a class="brand" href="../index.html" aria-label="Minyts Holdings Home">');
+      parts.push('        <span class="logo-mark" aria-hidden="true">');
+      parts.push('          <img src="../assets/minytsbetalogo.svg" alt="Minyts logo" width="40" height="40" />');
+      parts.push('        <' + '/span>');
+      parts.push('        <span class="brand-text">Minyts Holdings LLC<' + '/span>');
+      parts.push('      <' + '/a>');
+      parts.push('      <div class="nav-wrap">');
+      parts.push('        <nav class="nav-group" aria-label="Primary navigation">');
+      parts.push('          <a class="nav-item" href="../index.html#our-identity"><span class="nav-label">Regards<' + '/span><span class="nav-hand hand-hour" aria-hidden="true"><' + '/span><' + '/a>');
+      parts.push('          <a class="nav-item" href="../index.html#how-we-operate"><span class="nav-label">The Manual<' + '/span><span class="nav-hand hand-minute" aria-hidden="true"><' + '/span><' + '/a>');
+      parts.push('          <a class="nav-item" href="../index.html#companies-holdings"><span class="nav-label">Accompaniments<' + '/span><span class="nav-hand hand-second" aria-hidden="true"><' + '/span><' + '/a>');
+      parts.push('          <a class="nav-item" href="../index.html#contact-info"><span class="nav-label">Communicate<' + '/span><span class="nav-hand hand-continuation" aria-hidden="true"><' + '/span><' + '/a>');
+      parts.push('          <a class="nav-item" href="../news.html"><span class="nav-label">Journal\'s<' + '/span><span class="nav-hand hand-hour" aria-hidden="true"><' + '/span><' + '/a>');
+      parts.push('        <' + '/nav>');
+      parts.push('        <div class="nav-signature" aria-label="Brand signature">in Minyts.<' + '/div>');
+      parts.push('      <' + '/div>');
+      parts.push('    <' + '/div>');
+      parts.push('  <' + '/header>');
+      parts.push('  <div class="topbar-spacer" aria-hidden="true"><' + '/div>');
+      parts.push('  <main>');
+      parts.push('    <section class="section">');
+      parts.push('      <div class="container">');
+      parts.push('        <article class="journal-entry">');
+      parts.push('          <header class="journal-header">');
+      parts.push('            <p class="journal-date">' + formattedDate + '<' + '/p>');
+      parts.push('            <h1 class="journal-title">' + escapeHTML(entry.title) + '<' + '/h1>');
+      parts.push('            <p class="journal-excerpt">' + escapeHTML(entry.summary || '') + '<' + '/p>');
+      parts.push('          <' + '/header>');
+      parts.push('          <div class="journal-content">');
+      parts.push(contentParts.join('\n'));
+      parts.push('          <' + '/div>');
+      parts.push('          <footer class="journal-footer">');
+      parts.push('            <a class="back-link" href="../news.html">');
+      parts.push('              <span class="back-arrow" aria-hidden="true">&larr;<' + '/span>');
+      parts.push('              Back to all news');
+      parts.push('            <' + '/a>');
+      parts.push('          <' + '/footer>');
+      parts.push('        <' + '/article>');
+      parts.push('      <' + '/div>');
+      parts.push('    <' + '/section>');
+      parts.push('  <' + '/main>');
+      parts.push('  <footer class="footer" role="contentinfo">');
+      parts.push('    <div class="container footer-inner">');
+      parts.push('      <p>&copy; <span id="year"><' + '/span> Minyts Holdings LLC. All rights reserved.<' + '/p>');
+      parts.push('    <' + '/div>');
+      parts.push('  <' + '/footer>');
+      parts.push('  <' + 'script>document.getElementById("year").textContent = new Date().getFullYear();<' + '/script>');
+      parts.push('<' + '/body>');
+      parts.push('<' + '/html>');
 
-  <title>${escapeHTML(entry.title)} | Minyts Holdings</title>
-  <meta name="description" content="${escapeHTML(entry.summary || '')}" />
-  <meta name="robots" content="index, follow" />
-
-  <link rel="stylesheet" href="../styles.css" />
-  <link rel="icon" type="image/png" href="../assets/favicon-96x96.png" sizes="96x96" />
-  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />
-  <link rel="shortcut icon" href="../assets/favicon.ico" />
-  <link rel="apple-touch-icon" sizes="180x180" href="../assets/apple-touch-icon.png" />
-  <meta name="apple-mobile-web-app-title" content="Minyts Holdings" />
-  <link rel="manifest" href="../assets/site.webmanifest" />
-
-  <style>
-    .journal-entry { max-width: 680px; margin: 0 auto; }
-    .journal-header { margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--border); }
-    .journal-date { font-size: 0.875rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 0.75rem; }
-    .journal-title { font-size: var(--fs-h1-mobile); line-height: var(--lh-h1); letter-spacing: var(--ls-h1); margin: 0 0 1rem; }
-    @media (min-width: 768px) { .journal-title { font-size: var(--fs-h1-desktop); } }
-    .journal-excerpt { font-size: var(--fs-lead); color: var(--text-muted); margin: 0; }
-    .journal-content { font-size: 1.0625rem; line-height: 1.7; }
-    .journal-content p { margin: 0 0 1.5rem; }
-    .journal-content a { color: var(--mcc-blue); text-decoration: underline; text-underline-offset: 2px; }
-    .journal-content a:hover { text-decoration: none; }
-    .journal-image { margin: 1.5rem 0; }
-    .journal-image img { width: 100%; border-radius: var(--radius-card); }
-    .journal-image figcaption { font-size: 0.875rem; color: var(--text-muted); margin-top: 0.5rem; text-align: center; }
-    .journal-video { margin: 1.5rem 0; position: relative; padding-bottom: 56.25%; height: 0; }
-    .journal-video iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: var(--radius-card); }
-    .journal-url-card { border: 1px solid var(--border); border-radius: var(--radius-card); overflow: hidden; margin: 1.5rem 0; transition: transform var(--t-fast) var(--ease), box-shadow var(--t-fast) var(--ease); display: block; text-decoration: none; color: inherit; }
-    .journal-url-card:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
-    .journal-url-image { width: 100%; height: 160px; background: var(--bg-soft); display: flex; align-items: center; justify-content: center; font-size: 3rem; color: var(--text-muted); }
-    .journal-url-content { padding: 1rem 1.25rem; }
-    .journal-url-site { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.03em; margin-bottom: 0.375rem; display: flex; align-items: center; gap: 0.375rem; }
-    .journal-url-site img { width: 16px; height: 16px; border-radius: 2px; }
-    .journal-url-title { font-size: 1.125rem; font-weight: 600; margin-bottom: 0.375rem; }
-    .journal-url-desc { font-size: 0.875rem; color: var(--text-muted); }
-    .journal-footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--border); }
-    .back-link { display: inline-flex; align-items: center; gap: 0.35rem; font-size: 0.875rem; font-weight: 600; color: var(--mcc-blue); }
-    .back-link:hover .back-arrow { transform: translateX(-2px); }
-    .back-arrow { transition: transform var(--t-fast) var(--ease); }
-  </style>
-</head>
-
-<body>
-  <header class="topbar" role="banner">
-    <div class="container topbar-inner">
-      <a class="brand" href="../index.html" aria-label="Minyts Holdings Home">
-        <span class="logo-mark" aria-hidden="true">
-          <img src="../assets/minytsbetalogo.svg" alt="Minyts logo" width="40" height="40" />
-        </span>
-        <span class="brand-text">Minyts Holdings LLC</span>
-      </a>
-      <div class="nav-wrap">
-        <nav class="nav-group" aria-label="Primary navigation">
-          <a class="nav-item" href="../index.html#our-identity"><span class="nav-label">Regards</span><span class="nav-hand hand-hour" aria-hidden="true"></span></a>
-          <a class="nav-item" href="../index.html#how-we-operate"><span class="nav-label">The Manual</span><span class="nav-hand hand-minute" aria-hidden="true"></span></a>
-          <a class="nav-item" href="../index.html#companies-holdings"><span class="nav-label">Accompaniments</span><span class="nav-hand hand-second" aria-hidden="true"></span></a>
-          <a class="nav-item" href="../index.html#contact-info"><span class="nav-label">Communicate</span><span class="nav-hand hand-continuation" aria-hidden="true"></span></a>
-          <a class="nav-item" href="../news.html"><span class="nav-label">Journal's</span><span class="nav-hand hand-hour" aria-hidden="true"></span></a>
-        </nav>
-        <div class="nav-signature" aria-label="Brand signature">in Minyts.</div>
-      </div>
-    </div>
-  </header>
-
-  <div class="topbar-spacer" aria-hidden="true"></div>
-
-  <main>
-    <section class="section">
-      <div class="container">
-        <article class="journal-entry">
-          <header class="journal-header">
-            <p class="journal-date">${formattedDate}</p>
-            <h1 class="journal-title">${escapeHTML(entry.title)}</h1>
-            <p class="journal-excerpt">${escapeHTML(entry.summary || '')}</p>
-          </header>
-
-          <div class="journal-content">
-${contentHTML}
-          </div>
-
-          <footer class="journal-footer">
-            <a class="back-link" href="../news.html">
-              <span class="back-arrow" aria-hidden="true">&larr;</span>
-              Back to all news
-            </a>
-          </footer>
-        </article>
-      </div>
-    </section>
-  </main>
-
-  <footer class="footer" role="contentinfo">
-    <div class="container footer-inner">
-      <p>&copy; <span id="year"></span> Minyts Holdings LLC. All rights reserved.</p>
-    </div>
-  </footer>
-
-</body>
-</html>`;
-
-      // Add the script tag separately to avoid breaking the outer script
-      html = html.replace('</body>', '<script>document.getElementById("year").textContent = new Date().getFullYear();</' + 'script></body>');
-
+      const html = parts.join('\n');
       const blob = new Blob([html], { type: 'text/html' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `${entry.id}.html`;
+      a.download = entry.id + '.html';
       a.click();
       URL.revokeObjectURL(url);
 
