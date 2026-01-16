@@ -635,17 +635,20 @@
       function markInteraction() {
         if (!userInteracting) {
           userInteracting = true;
+          pauseAutoScroll();
         }
         scheduleResume();
       }
 
       function scheduleResume() {
+        if (reduceMotion) return;
         if (resumeTimer) {
           clearTimeout(resumeTimer);
         }
         resumeTimer = setTimeout(() => {
           userInteracting = false;
           resumeTimer = null;
+          startAutoScroll();
         }, RESUME_DELAY_MS);
       }
 
@@ -680,6 +683,10 @@
           cancelAnimationFrame(autoFrame);
           autoFrame = null;
         }
+      }
+
+      function pauseAutoScroll() {
+        cancelAutoScroll();
       }
 
       viewport.addEventListener('pointerdown', markInteraction);
