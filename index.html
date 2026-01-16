@@ -542,6 +542,29 @@
       window.addEventListener('scroll', onScroll, { passive: true });
       window.addEventListener('resize', syncTopbarHeight);
 
+      // Mobile touch handling - show bar when touching/scrolling
+      let touchStartY = 0;
+      window.addEventListener('touchstart', (e) => {
+        touchStartY = e.touches[0].clientY;
+        if (window.scrollY > TOP_LOCK_PX) {
+          bar.classList.remove('topbar--hidden');
+          clearHideTimer();
+        }
+      }, { passive: true });
+
+      window.addEventListener('touchmove', () => {
+        if (window.scrollY > TOP_LOCK_PX) {
+          bar.classList.remove('topbar--hidden');
+          clearHideTimer();
+        }
+      }, { passive: true });
+
+      window.addEventListener('touchend', () => {
+        if (window.scrollY > TOP_LOCK_PX) {
+          scheduleHide();
+        }
+      }, { passive: true });
+
       syncTopbarHeight();
       handleScroll();
     })();
