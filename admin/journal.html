@@ -764,7 +764,8 @@
   <header class="header">
     <h1>Journal Control Panel</h1>
     <div class="header-actions">
-      <button class="btn btn-secondary btn-sm" onclick="exportData()">Export Data</button>
+      <button class="btn btn-success btn-sm" onclick="exportData()">Export index.json</button>
+      <button class="btn btn-secondary btn-sm" onclick="exportFullBackup()">Backup All</button>
     </div>
   </header>
 
@@ -1526,27 +1527,46 @@
     }
 
     function exportData() {
+      // Export in the format that matches journal/index.json
+      const indexData = {
+        entries: entries
+          .filter(e => e.status === 'published')
+          .map(e => ({
+            id: e.id,
+            title: e.title,
+            date: e.date,
+            status: e.status,
+            excerpt: e.summary || ''
+          }))
+      };
+
+      const blob = new Blob([JSON.stringify(indexData, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'index.json';
+      a.click();
+      URL.revokeObjectURL(url);
+
+      showToast('Exported index.json - place in journal/ folder', 'success');
+    }
+
+    function exportFullBackup() {
+      // Full backup with all data including drafts and audit log
       const data = {
         entries,
-        auditLog,
-        index: entries.map(e => ({
-          id: e.id,
-          date: e.date,
-          title: e.title,
-          summary: e.summary,
-          status: e.status
-        }))
+        auditLog
       };
 
       const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `minyts-journal-export-${new Date().toISOString().split('T')[0]}.json`;
+      a.download = `minyts-journal-backup-${new Date().toISOString().split('T')[0]}.json`;
       a.click();
       URL.revokeObjectURL(url);
 
-      showToast('Data exported', 'success');
+      showToast('Full backup exported', 'success');
     }
 
     // ============================================
