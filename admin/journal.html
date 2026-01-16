@@ -1,0 +1,1412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Journal Control Panel | Minyts</title>
+  <style>
+    :root {
+      --bg: #FFFFFF;
+      --bg-soft: #F7F9FB;
+      --bg-dark: #0B1220;
+      --text: #0B1220;
+      --text-muted: #4B5563;
+      --border: #E6E8EC;
+      --minyts-green: #1ED760;
+      --mcc-blue: #0A6CFF;
+      --danger: #DC2626;
+      --warning: #F59E0B;
+      --radius: 0.5rem;
+      --font-sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background: var(--bg-soft);
+      color: var(--text);
+      line-height: 1.5;
+      min-height: 100vh;
+    }
+
+    /* Header */
+    .header {
+      background: var(--bg-dark);
+      color: white;
+      padding: 1rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header h1 {
+      font-size: 1.125rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .header h1::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      background: var(--minyts-green);
+      border-radius: 50%;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 0.75rem;
+    }
+
+    /* Layout */
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+
+    /* Tabs */
+    .tabs {
+      display: flex;
+      gap: 0.25rem;
+      margin-bottom: 1.5rem;
+      background: var(--bg);
+      padding: 0.25rem;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+    }
+
+    .tab {
+      flex: 1;
+      padding: 0.75rem 1rem;
+      background: transparent;
+      border: none;
+      border-radius: calc(var(--radius) - 2px);
+      font-size: 0.875rem;
+      font-weight: 500;
+      cursor: pointer;
+      color: var(--text-muted);
+      transition: all 0.15s;
+    }
+
+    .tab:hover {
+      color: var(--text);
+    }
+
+    .tab.active {
+      background: var(--bg-dark);
+      color: white;
+    }
+
+    /* Panels */
+    .panel {
+      display: none;
+    }
+
+    .panel.active {
+      display: block;
+    }
+
+    /* Cards */
+    .card {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .card-title {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+    }
+
+    /* Form Elements */
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    .form-group:last-child {
+      margin-bottom: 0;
+    }
+
+    label {
+      display: block;
+      font-size: 0.875rem;
+      font-weight: 500;
+      margin-bottom: 0.375rem;
+    }
+
+    input[type="text"],
+    input[type="date"],
+    textarea,
+    select {
+      width: 100%;
+      padding: 0.625rem 0.75rem;
+      font-size: 0.9375rem;
+      font-family: inherit;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--bg);
+      color: var(--text);
+      transition: border-color 0.15s;
+    }
+
+    input:focus,
+    textarea:focus,
+    select:focus {
+      outline: none;
+      border-color: var(--mcc-blue);
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    .char-count {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-align: right;
+      margin-top: 0.25rem;
+    }
+
+    .char-count.over {
+      color: var(--danger);
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.625rem 1rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+      font-family: inherit;
+      border: none;
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .btn-primary {
+      background: var(--mcc-blue);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #0856CC;
+    }
+
+    .btn-success {
+      background: var(--minyts-green);
+      color: var(--bg-dark);
+    }
+
+    .btn-success:hover {
+      background: #1ABF56;
+    }
+
+    .btn-secondary {
+      background: var(--bg-soft);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    .btn-secondary:hover {
+      background: var(--border);
+    }
+
+    .btn-danger {
+      background: var(--danger);
+      color: white;
+    }
+
+    .btn-danger:hover {
+      background: #B91C1C;
+    }
+
+    .btn-warning {
+      background: var(--warning);
+      color: var(--bg-dark);
+    }
+
+    .btn-sm {
+      padding: 0.375rem 0.625rem;
+      font-size: 0.8125rem;
+    }
+
+    /* Content Blocks */
+    .blocks-container {
+      min-height: 200px;
+    }
+
+    .block {
+      background: var(--bg-soft);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      margin-bottom: 0.75rem;
+      overflow: hidden;
+    }
+
+    .block-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      cursor: grab;
+    }
+
+    .block-header:active {
+      cursor: grabbing;
+    }
+
+    .block-drag {
+      color: var(--text-muted);
+      font-size: 1.25rem;
+      line-height: 1;
+    }
+
+    .block-type {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      flex: 1;
+    }
+
+    .block-remove {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      padding: 0.25rem;
+      font-size: 1.125rem;
+      line-height: 1;
+    }
+
+    .block-remove:hover {
+      color: var(--danger);
+    }
+
+    .block-content {
+      padding: 1rem;
+    }
+
+    .block-content textarea {
+      min-height: 120px;
+    }
+
+    .block.dragging {
+      opacity: 0.5;
+      border-style: dashed;
+    }
+
+    .block.drag-over {
+      border-color: var(--mcc-blue);
+      border-width: 2px;
+    }
+
+    /* Add Block Buttons */
+    .add-block-row {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .add-block-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.375rem;
+      padding: 0.5rem 0.875rem;
+      font-size: 0.8125rem;
+      font-weight: 500;
+      background: var(--bg);
+      border: 1px dashed var(--border);
+      border-radius: var(--radius);
+      cursor: pointer;
+      color: var(--text-muted);
+      transition: all 0.15s;
+    }
+
+    .add-block-btn:hover {
+      border-color: var(--mcc-blue);
+      color: var(--mcc-blue);
+      border-style: solid;
+    }
+
+    /* File Upload */
+    .file-upload {
+      border: 2px dashed var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .file-upload:hover {
+      border-color: var(--mcc-blue);
+      background: rgba(10, 108, 255, 0.02);
+    }
+
+    .file-upload input {
+      display: none;
+    }
+
+    .file-upload-text {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+
+    .file-upload-text strong {
+      color: var(--mcc-blue);
+    }
+
+    .file-preview {
+      margin-top: 1rem;
+      max-width: 100%;
+    }
+
+    .file-preview img {
+      max-width: 100%;
+      max-height: 200px;
+      border-radius: var(--radius);
+    }
+
+    /* Video Options */
+    .video-options {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .video-option {
+      flex: 1;
+      padding: 0.5rem;
+      font-size: 0.8125rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      cursor: pointer;
+      text-align: center;
+    }
+
+    .video-option.active {
+      background: var(--mcc-blue);
+      color: white;
+      border-color: var(--mcc-blue);
+    }
+
+    /* Entry Controls */
+    .entry-controls {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      margin-top: 1.5rem;
+    }
+
+    .entry-controls .btn {
+      flex: 1;
+      justify-content: center;
+      min-width: 120px;
+    }
+
+    /* Entry List */
+    .entry-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .entry-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .entry-item:hover {
+      border-color: var(--mcc-blue);
+    }
+
+    .entry-status {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .entry-status.draft {
+      background: var(--warning);
+    }
+
+    .entry-status.published {
+      background: var(--minyts-green);
+    }
+
+    .entry-status.hidden {
+      background: var(--text-muted);
+    }
+
+    .entry-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .entry-title {
+      font-weight: 500;
+      margin-bottom: 0.25rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .entry-meta {
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+    }
+
+    .entry-actions {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    /* Empty State */
+    .empty-state {
+      text-align: center;
+      padding: 3rem 1rem;
+      color: var(--text-muted);
+    }
+
+    .empty-state-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      opacity: 0.5;
+    }
+
+    /* Toast Notifications */
+    .toast-container {
+      position: fixed;
+      bottom: 1.5rem;
+      right: 1.5rem;
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .toast {
+      padding: 0.875rem 1.25rem;
+      background: var(--bg-dark);
+      color: white;
+      border-radius: var(--radius);
+      font-size: 0.875rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      animation: slideIn 0.2s ease;
+    }
+
+    .toast.success {
+      background: var(--minyts-green);
+      color: var(--bg-dark);
+    }
+
+    .toast.error {
+      background: var(--danger);
+    }
+
+    @keyframes slideIn {
+      from {
+        transform: translateX(100%);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+
+    /* Modal */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.2s;
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .modal {
+      background: var(--bg);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      max-width: 400px;
+      width: 90%;
+      transform: scale(0.95);
+      transition: transform 0.2s;
+    }
+
+    .modal-overlay.active .modal {
+      transform: scale(1);
+    }
+
+    .modal-title {
+      font-size: 1.125rem;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+    }
+
+    .modal-text {
+      color: var(--text-muted);
+      margin-bottom: 1.5rem;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 0.75rem;
+      justify-content: flex-end;
+    }
+
+    /* Output Panel */
+    .output-panel {
+      background: var(--bg-dark);
+      color: #A1A1AA;
+      border-radius: var(--radius);
+      padding: 1rem;
+      font-family: monospace;
+      font-size: 0.8125rem;
+      max-height: 300px;
+      overflow: auto;
+    }
+
+    .output-panel pre {
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    /* Responsive */
+    @media (max-width: 640px) {
+      .container {
+        padding: 1rem;
+      }
+
+      .entry-controls {
+        flex-direction: column;
+      }
+
+      .entry-controls .btn {
+        min-width: 100%;
+      }
+
+      .entry-item {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .entry-actions {
+        width: 100%;
+        margin-top: 0.75rem;
+      }
+
+      .entry-actions .btn {
+        flex: 1;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <h1>Journal Control Panel</h1>
+    <div class="header-actions">
+      <button class="btn btn-secondary btn-sm" onclick="exportData()">Export Data</button>
+    </div>
+  </header>
+
+  <div class="container">
+    <!-- Tabs -->
+    <div class="tabs">
+      <button class="tab active" data-panel="editor">New Entry</button>
+      <button class="tab" data-panel="entries">All Entries</button>
+      <button class="tab" data-panel="output">Output</button>
+    </div>
+
+    <!-- Editor Panel -->
+    <div id="editor" class="panel active">
+      <!-- Metadata -->
+      <div class="card">
+        <div class="card-title">Entry Metadata</div>
+
+        <div class="form-group">
+          <label for="entry-date">Date</label>
+          <input type="date" id="entry-date">
+        </div>
+
+        <div class="form-group">
+          <label for="entry-title">Headline</label>
+          <input type="text" id="entry-title" placeholder="Enter headline..." maxlength="120">
+          <div class="char-count"><span id="title-count">0</span>/120</div>
+        </div>
+
+        <div class="form-group">
+          <label for="entry-summary">Summary</label>
+          <textarea id="entry-summary" placeholder="Brief 1-2 sentence summary..." maxlength="240" rows="2"></textarea>
+          <div class="char-count"><span id="summary-count">0</span>/240</div>
+        </div>
+      </div>
+
+      <!-- Content Blocks -->
+      <div class="card">
+        <div class="card-title">Content</div>
+
+        <div id="blocks-container" class="blocks-container">
+          <!-- Blocks will be inserted here -->
+        </div>
+
+        <div class="add-block-row">
+          <button class="add-block-btn" onclick="addBlock('paragraph')">
+            <span>+</span> Paragraph
+          </button>
+          <button class="add-block-btn" onclick="addBlock('image')">
+            <span>+</span> Image
+          </button>
+          <button class="add-block-btn" onclick="addBlock('video')">
+            <span>+</span> Video
+          </button>
+        </div>
+      </div>
+
+      <!-- Controls -->
+      <div class="card">
+        <div class="card-title">Actions</div>
+        <div class="entry-controls">
+          <button class="btn btn-secondary" onclick="saveDraft()">Save Draft</button>
+          <button class="btn btn-success" onclick="publishEntry()">Publish</button>
+          <button class="btn btn-warning" onclick="hideEntry()" id="hide-btn" style="display:none;">Hide</button>
+          <button class="btn btn-danger" onclick="confirmDelete()" id="delete-btn" style="display:none;">Delete</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Entries Panel -->
+    <div id="entries" class="panel">
+      <div class="card">
+        <div class="card-title">All Entries</div>
+        <div id="entry-list" class="entry-list">
+          <div class="empty-state">
+            <div class="empty-state-icon">📝</div>
+            <p>No journal entries yet.<br>Create your first entry above.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Output Panel -->
+    <div id="output" class="panel">
+      <div class="card">
+        <div class="card-title">Generated Output</div>
+        <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 1rem;">
+          Copy this output and commit to your repository. In Phase 2, this will auto-commit via GitHub API.
+        </p>
+        <div class="output-panel">
+          <pre id="output-json">// Save or publish an entry to see output here</pre>
+        </div>
+        <div style="margin-top: 1rem;">
+          <button class="btn btn-primary" onclick="copyOutput()">Copy to Clipboard</button>
+          <button class="btn btn-secondary" onclick="downloadOutput()">Download Files</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete Confirmation Modal -->
+  <div id="delete-modal" class="modal-overlay">
+    <div class="modal">
+      <div class="modal-title">Delete Entry?</div>
+      <p class="modal-text">This will move the entry to the deleted folder. This action can be undone by an admin.</p>
+      <div class="modal-actions">
+        <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+        <button class="btn btn-danger" onclick="deleteEntry()">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <script>
+    // ============================================
+    // STATE
+    // ============================================
+    let currentEntry = null;
+    let entries = [];
+    let auditLog = [];
+    let blockIdCounter = 0;
+
+    // Load from localStorage
+    function loadState() {
+      const savedEntries = localStorage.getItem('minyts_journal_entries');
+      const savedAudit = localStorage.getItem('minyts_journal_audit');
+
+      if (savedEntries) {
+        entries = JSON.parse(savedEntries);
+      }
+      if (savedAudit) {
+        auditLog = JSON.parse(savedAudit);
+      }
+
+      renderEntryList();
+    }
+
+    // Save to localStorage
+    function saveState() {
+      localStorage.setItem('minyts_journal_entries', JSON.stringify(entries));
+      localStorage.setItem('minyts_journal_audit', JSON.stringify(auditLog));
+    }
+
+    // ============================================
+    // TABS
+    // ============================================
+    document.querySelectorAll('.tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+
+        tab.classList.add('active');
+        document.getElementById(tab.dataset.panel).classList.add('active');
+      });
+    });
+
+    // ============================================
+    // FORM INITIALIZATION
+    // ============================================
+    function initForm() {
+      // Set default date to today
+      document.getElementById('entry-date').value = new Date().toISOString().split('T')[0];
+
+      // Character counters
+      document.getElementById('entry-title').addEventListener('input', (e) => {
+        const count = e.target.value.length;
+        const counter = document.getElementById('title-count');
+        counter.textContent = count;
+        counter.parentElement.classList.toggle('over', count > 120);
+      });
+
+      document.getElementById('entry-summary').addEventListener('input', (e) => {
+        const count = e.target.value.length;
+        const counter = document.getElementById('summary-count');
+        counter.textContent = count;
+        counter.parentElement.classList.toggle('over', count > 240);
+      });
+    }
+
+    // ============================================
+    // CONTENT BLOCKS
+    // ============================================
+    function addBlock(type) {
+      const container = document.getElementById('blocks-container');
+      const blockId = `block-${++blockIdCounter}`;
+
+      let blockHTML = '';
+
+      switch(type) {
+        case 'paragraph':
+          blockHTML = `
+            <div class="block" id="${blockId}" draggable="true" data-type="paragraph">
+              <div class="block-header">
+                <span class="block-drag">⋮⋮</span>
+                <span class="block-type">Paragraph</span>
+                <button class="block-remove" onclick="removeBlock('${blockId}')">&times;</button>
+              </div>
+              <div class="block-content">
+                <textarea placeholder="Write your paragraph here. Markdown supported."></textarea>
+              </div>
+            </div>
+          `;
+          break;
+
+        case 'image':
+          blockHTML = `
+            <div class="block" id="${blockId}" draggable="true" data-type="image">
+              <div class="block-header">
+                <span class="block-drag">⋮⋮</span>
+                <span class="block-type">Image</span>
+                <button class="block-remove" onclick="removeBlock('${blockId}')">&times;</button>
+              </div>
+              <div class="block-content">
+                <label class="file-upload">
+                  <input type="file" accept="image/*" onchange="handleImageUpload(this, '${blockId}')">
+                  <div class="file-upload-text">
+                    <strong>Click to upload</strong> or drag and drop<br>
+                    PNG, JPG, WebP (max 5MB)
+                  </div>
+                  <div class="file-preview" id="${blockId}-preview"></div>
+                </label>
+                <div class="form-group" style="margin-top: 1rem;">
+                  <input type="text" placeholder="Optional caption..." class="image-caption">
+                </div>
+              </div>
+            </div>
+          `;
+          break;
+
+        case 'video':
+          blockHTML = `
+            <div class="block" id="${blockId}" draggable="true" data-type="video">
+              <div class="block-header">
+                <span class="block-drag">⋮⋮</span>
+                <span class="block-type">Video</span>
+                <button class="block-remove" onclick="removeBlock('${blockId}')">&times;</button>
+              </div>
+              <div class="block-content">
+                <div class="video-options">
+                  <button class="video-option active" onclick="setVideoMode(this, '${blockId}', 'embed')">Embed URL</button>
+                  <button class="video-option" onclick="setVideoMode(this, '${blockId}', 'upload')">Upload File</button>
+                </div>
+                <div id="${blockId}-embed">
+                  <input type="text" placeholder="Paste YouTube or Vimeo URL..." class="video-url">
+                </div>
+                <div id="${blockId}-upload" style="display: none;">
+                  <label class="file-upload">
+                    <input type="file" accept="video/mp4,video/webm" onchange="handleVideoUpload(this, '${blockId}')">
+                    <div class="file-upload-text">
+                      <strong>Click to upload</strong> video<br>
+                      MP4, WebM (max 50MB)
+                    </div>
+                  </label>
+                </div>
+              </div>
+            </div>
+          `;
+          break;
+      }
+
+      container.insertAdjacentHTML('beforeend', blockHTML);
+      initDragAndDrop();
+    }
+
+    function removeBlock(blockId) {
+      document.getElementById(blockId)?.remove();
+    }
+
+    function setVideoMode(btn, blockId, mode) {
+      const block = document.getElementById(blockId);
+      block.querySelectorAll('.video-option').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      document.getElementById(`${blockId}-embed`).style.display = mode === 'embed' ? 'block' : 'none';
+      document.getElementById(`${blockId}-upload`).style.display = mode === 'upload' ? 'block' : 'none';
+    }
+
+    function handleImageUpload(input, blockId) {
+      const file = input.files[0];
+      if (!file) return;
+
+      if (file.size > 5 * 1024 * 1024) {
+        showToast('Image must be under 5MB', 'error');
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const preview = document.getElementById(`${blockId}-preview`);
+        preview.innerHTML = `<img src="${e.target.result}" alt="Preview">`;
+
+        // Store data on the block
+        const block = document.getElementById(blockId);
+        block.dataset.imageData = e.target.result;
+        block.dataset.fileName = file.name;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function handleVideoUpload(input, blockId) {
+      const file = input.files[0];
+      if (!file) return;
+
+      if (file.size > 50 * 1024 * 1024) {
+        showToast('Video must be under 50MB', 'error');
+        return;
+      }
+
+      const block = document.getElementById(blockId);
+      block.dataset.videoFile = file.name;
+      showToast(`Video selected: ${file.name}`, 'success');
+    }
+
+    // ============================================
+    // DRAG AND DROP
+    // ============================================
+    function initDragAndDrop() {
+      const blocks = document.querySelectorAll('.block');
+
+      blocks.forEach(block => {
+        block.addEventListener('dragstart', handleDragStart);
+        block.addEventListener('dragend', handleDragEnd);
+        block.addEventListener('dragover', handleDragOver);
+        block.addEventListener('dragleave', handleDragLeave);
+        block.addEventListener('drop', handleDrop);
+      });
+    }
+
+    let draggedBlock = null;
+
+    function handleDragStart(e) {
+      draggedBlock = this;
+      this.classList.add('dragging');
+      e.dataTransfer.effectAllowed = 'move';
+    }
+
+    function handleDragEnd() {
+      this.classList.remove('dragging');
+      document.querySelectorAll('.block').forEach(b => b.classList.remove('drag-over'));
+    }
+
+    function handleDragOver(e) {
+      e.preventDefault();
+      if (this !== draggedBlock) {
+        this.classList.add('drag-over');
+      }
+    }
+
+    function handleDragLeave() {
+      this.classList.remove('drag-over');
+    }
+
+    function handleDrop(e) {
+      e.preventDefault();
+      if (this !== draggedBlock) {
+        const container = document.getElementById('blocks-container');
+        const allBlocks = [...container.querySelectorAll('.block')];
+        const draggedIndex = allBlocks.indexOf(draggedBlock);
+        const droppedIndex = allBlocks.indexOf(this);
+
+        if (draggedIndex < droppedIndex) {
+          this.after(draggedBlock);
+        } else {
+          this.before(draggedBlock);
+        }
+      }
+      this.classList.remove('drag-over');
+    }
+
+    // ============================================
+    // ENTRY MANAGEMENT
+    // ============================================
+    function generateSlug(title) {
+      return title
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-|-$/g, '')
+        .substring(0, 50);
+    }
+
+    function getEntryData() {
+      const date = document.getElementById('entry-date').value;
+      const title = document.getElementById('entry-title').value.trim();
+      const summary = document.getElementById('entry-summary').value.trim();
+
+      if (!date || !title) {
+        showToast('Date and headline are required', 'error');
+        return null;
+      }
+
+      const slug = generateSlug(title);
+      const id = `${date}-${slug}`;
+
+      // Get content blocks
+      const content = [];
+      document.querySelectorAll('#blocks-container .block').forEach(block => {
+        const type = block.dataset.type;
+
+        switch(type) {
+          case 'paragraph':
+            const text = block.querySelector('textarea').value.trim();
+            if (text) {
+              content.push({ type: 'paragraph', text });
+            }
+            break;
+
+          case 'image':
+            if (block.dataset.imageData) {
+              content.push({
+                type: 'image',
+                file: `media/${block.dataset.fileName || 'image.png'}`,
+                data: block.dataset.imageData,
+                caption: block.querySelector('.image-caption')?.value || ''
+              });
+            }
+            break;
+
+          case 'video':
+            const embedUrl = block.querySelector('.video-url')?.value;
+            const uploadFile = block.dataset.videoFile;
+
+            if (embedUrl) {
+              content.push({ type: 'video', mode: 'embed', url: embedUrl });
+            } else if (uploadFile) {
+              content.push({ type: 'video', mode: 'upload', file: `media/${uploadFile}` });
+            }
+            break;
+        }
+      });
+
+      return {
+        id,
+        date,
+        title,
+        summary,
+        content,
+        author: {
+          name: 'Local User',
+          username: 'local'
+        }
+      };
+    }
+
+    function saveDraft() {
+      const data = getEntryData();
+      if (!data) return;
+
+      data.status = 'draft';
+      data.created_at = currentEntry?.created_at || new Date().toISOString();
+      data.updated_at = new Date().toISOString();
+
+      saveEntry(data, 'draft');
+      showToast('Draft saved', 'success');
+    }
+
+    function publishEntry() {
+      const data = getEntryData();
+      if (!data) return;
+
+      if (data.content.length === 0) {
+        showToast('Add at least one content block', 'error');
+        return;
+      }
+
+      data.status = 'published';
+      data.created_at = currentEntry?.created_at || new Date().toISOString();
+      data.updated_at = new Date().toISOString();
+
+      saveEntry(data, 'publish');
+      showToast('Entry published!', 'success');
+    }
+
+    function hideEntry() {
+      if (!currentEntry) return;
+
+      currentEntry.status = 'hidden';
+      currentEntry.updated_at = new Date().toISOString();
+
+      saveEntry(currentEntry, 'hide');
+      showToast('Entry hidden', 'success');
+    }
+
+    function saveEntry(data, action) {
+      // Find existing or add new
+      const existingIndex = entries.findIndex(e => e.id === data.id);
+
+      if (existingIndex >= 0) {
+        entries[existingIndex] = data;
+      } else {
+        entries.unshift(data);
+      }
+
+      // Add audit log
+      auditLog.push({
+        timestamp: new Date().toISOString(),
+        user: 'local',
+        action,
+        entry_id: data.id
+      });
+
+      currentEntry = data;
+      saveState();
+      renderEntryList();
+      updateOutput(data);
+      updateControlButtons();
+    }
+
+    function confirmDelete() {
+      document.getElementById('delete-modal').classList.add('active');
+    }
+
+    function closeModal() {
+      document.getElementById('delete-modal').classList.remove('active');
+    }
+
+    function deleteEntry() {
+      if (!currentEntry) return;
+
+      const index = entries.findIndex(e => e.id === currentEntry.id);
+      if (index >= 0) {
+        entries.splice(index, 1);
+      }
+
+      auditLog.push({
+        timestamp: new Date().toISOString(),
+        user: 'local',
+        action: 'delete',
+        entry_id: currentEntry.id
+      });
+
+      saveState();
+      renderEntryList();
+      clearForm();
+      closeModal();
+      showToast('Entry deleted', 'success');
+    }
+
+    function updateControlButtons() {
+      const hideBtn = document.getElementById('hide-btn');
+      const deleteBtn = document.getElementById('delete-btn');
+
+      if (currentEntry) {
+        hideBtn.style.display = 'inline-flex';
+        deleteBtn.style.display = 'inline-flex';
+        hideBtn.textContent = currentEntry.status === 'hidden' ? 'Unhide' : 'Hide';
+      } else {
+        hideBtn.style.display = 'none';
+        deleteBtn.style.display = 'none';
+      }
+    }
+
+    // ============================================
+    // OUTPUT
+    // ============================================
+    function updateOutput(entry) {
+      // Create clean entry.json (without image data blobs)
+      const cleanEntry = { ...entry };
+      cleanEntry.content = entry.content.map(block => {
+        const clean = { ...block };
+        delete clean.data; // Remove base64 data
+        return clean;
+      });
+
+      const output = {
+        entryJson: cleanEntry,
+        indexEntry: {
+          id: entry.id,
+          date: entry.date,
+          title: entry.title,
+          summary: entry.summary,
+          status: entry.status
+        },
+        folderPath: `journal/${entry.id}/`,
+        commitMessage: `${entry.status === 'draft' ? 'Draft' : 'Publish'} journal entry: ${entry.title}`
+      };
+
+      document.getElementById('output-json').textContent = JSON.stringify(output, null, 2);
+    }
+
+    function copyOutput() {
+      const output = document.getElementById('output-json').textContent;
+      navigator.clipboard.writeText(output).then(() => {
+        showToast('Copied to clipboard', 'success');
+      });
+    }
+
+    function downloadOutput() {
+      if (!currentEntry) {
+        showToast('No entry to download', 'error');
+        return;
+      }
+
+      // Create clean entry.json
+      const cleanEntry = { ...currentEntry };
+      cleanEntry.content = currentEntry.content.map(block => {
+        const clean = { ...block };
+        delete clean.data;
+        return clean;
+      });
+
+      const blob = new Blob([JSON.stringify(cleanEntry, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${currentEntry.id}-entry.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+
+      showToast('Downloaded entry.json', 'success');
+    }
+
+    function exportData() {
+      const data = {
+        entries,
+        auditLog,
+        index: entries.map(e => ({
+          id: e.id,
+          date: e.date,
+          title: e.title,
+          summary: e.summary,
+          status: e.status
+        }))
+      };
+
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `minyts-journal-export-${new Date().toISOString().split('T')[0]}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+
+      showToast('Data exported', 'success');
+    }
+
+    // ============================================
+    // ENTRY LIST
+    // ============================================
+    function renderEntryList() {
+      const list = document.getElementById('entry-list');
+
+      if (entries.length === 0) {
+        list.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-state-icon">📝</div>
+            <p>No journal entries yet.<br>Create your first entry above.</p>
+          </div>
+        `;
+        return;
+      }
+
+      list.innerHTML = entries.map(entry => `
+        <div class="entry-item" onclick="loadEntry('${entry.id}')">
+          <div class="entry-status ${entry.status}"></div>
+          <div class="entry-info">
+            <div class="entry-title">${entry.title}</div>
+            <div class="entry-meta">${entry.date} &middot; ${entry.status}</div>
+          </div>
+          <div class="entry-actions" onclick="event.stopPropagation()">
+            <button class="btn btn-secondary btn-sm" onclick="loadEntry('${entry.id}')">Edit</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function loadEntry(id) {
+      const entry = entries.find(e => e.id === id);
+      if (!entry) return;
+
+      currentEntry = entry;
+
+      // Populate form
+      document.getElementById('entry-date').value = entry.date;
+      document.getElementById('entry-title').value = entry.title;
+      document.getElementById('entry-summary').value = entry.summary;
+
+      // Update char counts
+      document.getElementById('title-count').textContent = entry.title.length;
+      document.getElementById('summary-count').textContent = entry.summary.length;
+
+      // Clear and rebuild blocks
+      document.getElementById('blocks-container').innerHTML = '';
+
+      entry.content.forEach(block => {
+        addBlock(block.type);
+        const lastBlock = document.querySelector('#blocks-container .block:last-child');
+
+        switch(block.type) {
+          case 'paragraph':
+            lastBlock.querySelector('textarea').value = block.text;
+            break;
+          case 'image':
+            if (block.data) {
+              lastBlock.dataset.imageData = block.data;
+              lastBlock.dataset.fileName = block.file?.replace('media/', '');
+              lastBlock.querySelector('.file-preview').innerHTML = `<img src="${block.data}" alt="Preview">`;
+            }
+            lastBlock.querySelector('.image-caption').value = block.caption || '';
+            break;
+          case 'video':
+            if (block.mode === 'embed') {
+              lastBlock.querySelector('.video-url').value = block.url || '';
+            }
+            break;
+        }
+      });
+
+      updateOutput(entry);
+      updateControlButtons();
+
+      // Switch to editor tab
+      document.querySelector('[data-panel="editor"]').click();
+
+      showToast('Entry loaded', 'success');
+    }
+
+    function clearForm() {
+      currentEntry = null;
+      document.getElementById('entry-date').value = new Date().toISOString().split('T')[0];
+      document.getElementById('entry-title').value = '';
+      document.getElementById('entry-summary').value = '';
+      document.getElementById('title-count').textContent = '0';
+      document.getElementById('summary-count').textContent = '0';
+      document.getElementById('blocks-container').innerHTML = '';
+      document.getElementById('output-json').textContent = '// Save or publish an entry to see output here';
+      updateControlButtons();
+    }
+
+    // ============================================
+    // TOAST NOTIFICATIONS
+    // ============================================
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      toast.className = `toast ${type}`;
+      toast.textContent = message;
+      container.appendChild(toast);
+
+      setTimeout(() => {
+        toast.remove();
+      }, 3000);
+    }
+
+    // ============================================
+    // INITIALIZE
+    // ============================================
+    document.addEventListener('DOMContentLoaded', () => {
+      initForm();
+      loadState();
+      updateControlButtons();
+    });
+  </script>
+</body>
+</html>
