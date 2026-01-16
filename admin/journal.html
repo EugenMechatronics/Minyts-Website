@@ -833,6 +833,7 @@
           <button class="btn btn-success" onclick="publishEntry()">Publish</button>
           <button class="btn btn-warning" onclick="hideEntry()" id="hide-btn" style="display:none;">Hide</button>
           <button class="btn btn-danger" onclick="confirmDelete()" id="delete-btn" style="display:none;">Delete</button>
+          <button class="btn btn-secondary" onclick="exportEntryHTML()" id="export-html-btn" style="display:none;">Export Entry HTML</button>
         </div>
       </div>
     </div>
@@ -1039,8 +1040,13 @@
               </div>
               <div class="block-content">
                 <div class="url-input-row">
-                  <input type="text" placeholder="Paste URL to preview..." class="url-input" id="${blockId}-url">
-                  <button class="url-fetch-btn" onclick="fetchUrlPreview('${blockId}')">Fetch</button>
+                  <input type="text" placeholder="Paste URL..." class="url-input" id="${blockId}-url">
+                  <button class="url-fetch-btn" onclick="fetchUrlPreview('${blockId}')">Add</button>
+                </div>
+                <div id="${blockId}-fields" style="display:none; margin-top: 1rem;">
+                  <input type="text" placeholder="Title (e.g., Minyts Holdings on Facebook)" class="url-title-input" id="${blockId}-title" style="margin-bottom: 0.5rem;">
+                  <input type="text" placeholder="Description" class="url-desc-input" id="${blockId}-desc" style="margin-bottom: 0.5rem;">
+                  <button class="url-fetch-btn" onclick="updateUrlFromFields('${blockId}')" style="background: #16a34a;">Update Preview</button>
                 </div>
                 <div id="${blockId}-preview"></div>
               </div>
@@ -1124,60 +1130,54 @@
         return;
       }
 
-      // Show loading
-      previewContainer.innerHTML = '<div class="url-preview-loading">Fetching preview...</div>';
+      // Extract domain info
+      const urlObj = new URL(url);
+      const domain = urlObj.hostname.replace('www.', '');
+      const favicon = `https://www.google.com/s2/favicons?domain=${domain}&sz=32`;
 
-      try {
-        // Extract domain info
-        const urlObj = new URL(url);
-        const domain = urlObj.hostname.replace('www.', '');
-        const favicon = `https://www.google.com/s2/favicons?domain=${domain}&sz=32`;
+      // Store basic data on the block
+      block.dataset.urlData = JSON.stringify({
+        url: url,
+        domain: domain,
+        title: domain,
+        description: '',
+        image: '',
+        favicon: favicon
+      });
 
-        // Use a CORS proxy or fallback to basic info
-        // For local development, we'll create a manual preview
-        // In production, you'd use a metadata API like open-graph.io or microlink.io
+      // Show editable fields
+      const fieldsDiv = document.getElementById(`${blockId}-fields`);
+      fieldsDiv.style.display = 'block';
+      document.getElementById(`${blockId}-title`).value = domain;
+      document.getElementById(`${blockId}-desc`).value = '';
 
-        // Try to fetch Open Graph data via a proxy (optional - works with some URLs)
-        let title = url;
-        let description = '';
-        let image = '';
+      // Render initial preview
+      renderUrlPreview(blockId, {
+        url,
+        domain,
+        title: domain,
+        description: 'Enter a description above',
+        image: '',
+        favicon
+      });
 
-        // For now, create a basic preview with the URL info
-        // Store the data on the block
-        block.dataset.urlData = JSON.stringify({
-          url: url,
-          domain: domain,
-          title: title,
-          description: description,
-          image: image,
-          favicon: favicon
-        });
+      showToast('URL added - customize title & description below', 'success');
+    }
 
-        // Render the preview card
-        renderUrlPreview(blockId, {
-          url,
-          domain,
-          title: domain,
-          description: url,
-          image: '',
-          favicon
-        });
+    function updateUrlFromFields(blockId) {
+      const block = document.getElementById(blockId);
+      if (!block.dataset.urlData) return;
 
-        showToast('URL added', 'success');
-      } catch (error) {
-        previewContainer.innerHTML = '<div class="url-preview-error">Failed to fetch preview. URL will still be saved.</div>';
+      const data = JSON.parse(block.dataset.urlData);
+      const title = document.getElementById(`${blockId}-title`).value.trim() || data.domain;
+      const desc = document.getElementById(`${blockId}-desc`).value.trim();
 
-        // Still save basic URL data
-        const urlObj = new URL(url);
-        block.dataset.urlData = JSON.stringify({
-          url: url,
-          domain: urlObj.hostname.replace('www.', ''),
-          title: url,
-          description: '',
-          image: '',
-          favicon: ''
-        });
-      }
+      data.title = title;
+      data.description = desc;
+      block.dataset.urlData = JSON.stringify(data);
+
+      renderUrlPreview(blockId, data);
+      showToast('Preview updated', 'success');
     }
 
     function renderUrlPreview(blockId, data) {
@@ -1455,14 +1455,17 @@
     function updateControlButtons() {
       const hideBtn = document.getElementById('hide-btn');
       const deleteBtn = document.getElementById('delete-btn');
+      const exportHtmlBtn = document.getElementById('export-html-btn');
 
       if (currentEntry) {
         hideBtn.style.display = 'inline-flex';
         deleteBtn.style.display = 'inline-flex';
+        exportHtmlBtn.style.display = 'inline-flex';
         hideBtn.textContent = currentEntry.status === 'hidden' ? 'Unhide' : 'Hide';
       } else {
         hideBtn.style.display = 'none';
         deleteBtn.style.display = 'none';
+        exportHtmlBtn.style.display = 'none';
       }
     }
 
@@ -1625,7 +1628,7 @@
         }
       });
 
-      const html = `<!DOCTYPE html>
+      let html = `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -1636,8 +1639,12 @@
   <meta name="robots" content="index, follow" />
 
   <link rel="stylesheet" href="../styles.css" />
-  <link rel="icon" type="image/svg+xml" href="../assets/minytsbetalogo.svg" />
-  <link rel="icon" type="image/png" href="../assets/minytsbetalogo.PNG" />
+  <link rel="icon" type="image/png" href="../assets/favicon-96x96.png" sizes="96x96" />
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />
+  <link rel="shortcut icon" href="../assets/favicon.ico" />
+  <link rel="apple-touch-icon" sizes="180x180" href="../assets/apple-touch-icon.png" />
+  <meta name="apple-mobile-web-app-title" content="Minyts Holdings" />
+  <link rel="manifest" href="../assets/site.webmanifest" />
 
   <style>
     .journal-entry { max-width: 680px; margin: 0 auto; }
@@ -1725,9 +1732,11 @@ ${contentHTML}
     </div>
   </footer>
 
-  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
 </body>
 </html>`;
+
+      // Add the script tag separately to avoid breaking the outer script
+      html = html.replace('</body>', '<script>document.getElementById("year").textContent = new Date().getFullYear();</' + 'script></body>');
 
       const blob = new Blob([html], { type: 'text/html' });
       const url = URL.createObjectURL(blob);
@@ -1841,6 +1850,13 @@ ${contentHTML}
               image: block.image,
               favicon: block.favicon
             });
+            // Show and populate editable fields
+            const fieldsDiv = document.getElementById(`${lastBlock.id}-fields`);
+            if (fieldsDiv) {
+              fieldsDiv.style.display = 'block';
+              document.getElementById(`${lastBlock.id}-title`).value = block.title || block.domain || '';
+              document.getElementById(`${lastBlock.id}-desc`).value = block.description || '';
+            }
             renderUrlPreview(lastBlock.id, block);
             break;
         }

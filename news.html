@@ -28,8 +28,12 @@
   <link rel="stylesheet" href="styles.css" />
 
   <!-- Favicon -->
-  <link rel="icon" type="image/svg+xml" href="assets/minytsbetalogo.svg" />
-  <link rel="icon" type="image/png" href="assets/minytsbetalogo.PNG" />
+  <link rel="icon" type="image/png" href="assets/favicon-96x96.png" sizes="96x96" />
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+  <link rel="shortcut icon" href="assets/favicon.ico" />
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png" />
+  <meta name="apple-mobile-web-app-title" content="Minyts Holdings" />
+  <link rel="manifest" href="assets/site.webmanifest" />
 
   <style>
     .news-archive{
@@ -188,6 +192,129 @@
 
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
+
+    // ✅ Topbar auto hide/show (SMOOTH + NO PAGE MOVEMENT)
+    (function () {
+      const bar = document.querySelector('.topbar');
+      const spacer = document.querySelector('.topbar-spacer');
+      if (!bar || !spacer) return;
+
+      const root = document.documentElement;
+      const inner = bar.querySelector('.topbar-inner');
+
+      const TOP_LOCK_PX = 2;
+      const HIDE_DELAY_MS = 1400;
+      let hideTimer = null;
+
+      let isInteracting = false;
+      let ticking = false;
+
+      function syncTopbarHeight() {
+        const h = (inner ? inner.offsetHeight : bar.offsetHeight) || 68;
+        root.style.setProperty('--topbar-h', h + 'px');
+        spacer.style.height = `var(--topbar-h)`;
+      }
+
+      function showBar() {
+        if (!bar.classList.contains('topbar--hidden')) return;
+        bar.classList.remove('topbar--hidden');
+      }
+
+      function hideBar() {
+        if (window.scrollY <= TOP_LOCK_PX) return;
+        if (isInteracting) return;
+        bar.classList.add('topbar--hidden');
+      }
+
+      function clearHideTimer() {
+        if (hideTimer) clearTimeout(hideTimer);
+        hideTimer = null;
+      }
+
+      function scheduleHide() {
+        clearHideTimer();
+        const snapshotY = window.scrollY;
+
+        hideTimer = setTimeout(() => {
+          if (Math.abs(window.scrollY - snapshotY) > 1) {
+            scheduleHide();
+            return;
+          }
+          hideBar();
+        }, HIDE_DELAY_MS);
+      }
+
+      function handleScroll() {
+        if (window.scrollY <= TOP_LOCK_PX) {
+          bar.classList.remove('topbar--hidden');
+          clearHideTimer();
+          return;
+        }
+
+        bar.classList.remove('topbar--hidden');
+        scheduleHide();
+      }
+
+      function onScroll() {
+        if (ticking) return;
+        ticking = true;
+        window.requestAnimationFrame(() => {
+          handleScroll();
+          ticking = false;
+        });
+      }
+
+      function setInteracting(v) {
+        isInteracting = v;
+        if (v) {
+          bar.classList.remove('topbar--hidden');
+          clearHideTimer();
+        } else {
+          if (window.scrollY > TOP_LOCK_PX) scheduleHide();
+        }
+      }
+
+      bar.addEventListener('pointerenter', () => setInteracting(true));
+      bar.addEventListener('pointerleave', () => setInteracting(false));
+      bar.addEventListener('pointerdown', () => setInteracting(true));
+      bar.addEventListener('pointerup', () => setInteracting(false));
+
+      bar.addEventListener('focusin', () => setInteracting(true));
+      bar.addEventListener('focusout', () => {
+        setTimeout(() => {
+          const stillFocused = bar.contains(document.activeElement);
+          setInteracting(stillFocused);
+        }, 80);
+      });
+
+      window.addEventListener('scroll', onScroll, { passive: true });
+      window.addEventListener('resize', syncTopbarHeight);
+
+      let touchStartY = 0;
+      window.addEventListener('touchstart', (e) => {
+        touchStartY = e.touches[0].clientY;
+        if (window.scrollY > TOP_LOCK_PX) {
+          bar.classList.remove('topbar--hidden');
+          clearHideTimer();
+        }
+      }, { passive: true });
+
+      window.addEventListener('touchmove', () => {
+        if (window.scrollY > TOP_LOCK_PX) {
+          bar.classList.remove('topbar--hidden');
+          clearHideTimer();
+        }
+      }, { passive: true });
+
+      window.addEventListener('touchend', () => {
+        if (window.scrollY > TOP_LOCK_PX) {
+          scheduleHide();
+        }
+      }, { passive: true });
+
+      syncTopbarHeight();
+      handleScroll();
+    })();
 
     // NEWS ARCHIVE
     (function() {
