@@ -608,11 +608,20 @@
 
     // NEWS TICKER
     (function() {
+      const viewport = document.querySelector('.news-ticker-viewport');
       const track = document.getElementById('newsTickerTrack');
-      if (!track) return;
+      if (!track || !viewport) return;
 
       const MAX_ITEMS = 5;
       const DATA_URL = 'journal/index.json';
+      const AUTO_SPEED_PX_PER_SEC = 30;
+      const RESUME_DELAY_MS = 2500;
+      const reduceMotion = window.matchMedia ? window.matchMedia('(prefers-reduced-motion: reduce)').matches : false;
+
+      let autoFrame = null;
+      let lastFrameTime = 0;
+      let userInteracting = false;
+      let resumeTimer = null;
 
       function formatDate(dateStr) {
         const date = new Date(dateStr + 'T00:00:00');
@@ -623,13 +632,69 @@
         });
       }
 
+      function markInteraction() {
+        if (!userInteracting) {
+          userInteracting = true;
+        }
+        scheduleResume();
+      }
+
+      function scheduleResume() {
+        if (resumeTimer) {
+          clearTimeout(resumeTimer);
+        }
+        resumeTimer = setTimeout(() => {
+          userInteracting = false;
+          resumeTimer = null;
+        }, RESUME_DELAY_MS);
+      }
+
+      function animateTicker(timestamp) {
+        if (!lastFrameTime) {
+          lastFrameTime = timestamp;
+        }
+        const delta = timestamp - lastFrameTime;
+        lastFrameTime = timestamp;
+
+        if (!userInteracting && viewport.scrollHeight > viewport.clientHeight) {
+          const increment = (AUTO_SPEED_PX_PER_SEC * delta) / 1000;
+          viewport.scrollTop += increment;
+          const halfHeight = track.scrollHeight / 2;
+          if (viewport.scrollTop >= halfHeight) {
+            viewport.scrollTop -= halfHeight;
+          }
+        }
+
+        autoFrame = requestAnimationFrame(animateTicker);
+      }
+
+      function startAutoScroll() {
+        cancelAutoScroll();
+        if (reduceMotion) return;
+        lastFrameTime = 0;
+        autoFrame = requestAnimationFrame(animateTicker);
+      }
+
+      function cancelAutoScroll() {
+        if (autoFrame) {
+          cancelAnimationFrame(autoFrame);
+          autoFrame = null;
+        }
+      }
+
+      viewport.addEventListener('pointerdown', markInteraction);
+      viewport.addEventListener('wheel', markInteraction, { passive: true });
+      viewport.addEventListener('touchstart', markInteraction, { passive: true });
+      viewport.addEventListener('pointerup', () => scheduleResume());
+      viewport.addEventListener('pointerleave', () => scheduleResume());
+      viewport.addEventListener('touchend', () => scheduleResume());
+
       function renderTicker(entries) {
         if (!entries || entries.length === 0) {
           track.innerHTML = '<p class="news-ticker-loading">No updates available.</p>';
           return;
         }
 
-        // Filter published and sort by date descending
         const published = entries
           .filter(e => e.status === 'published')
           .sort((a, b) => new Date(b.date) - new Date(a.date))
@@ -640,7 +705,6 @@
           return;
         }
 
-        // Create items HTML
         const itemsHTML = published.map(entry => `
           <a class="news-ticker-item" href="journal/${entry.id}.html">
             <p class="news-ticker-date">${formatDate(entry.date)}</p>
@@ -648,17 +712,11 @@
           </a>
         `).join('');
 
-        // Duplicate for seamless loop
         track.innerHTML = itemsHTML + itemsHTML;
-
-        // Adjust animation duration based on item count
-        const itemHeight = 60; // approximate height per item
-        const totalHeight = published.length * itemHeight;
-        const duration = published.length * 4; // ~4 seconds per item
-        track.style.animationDuration = duration + 's';
+        viewport.scrollTop = 0;
+        startAutoScroll();
       }
 
-      // Fetch data
       fetch(DATA_URL)
         .then(res => {
           if (!res.ok) throw new Error('Failed to load');

@@ -16,11 +16,11 @@
   <meta name="apple-mobile-web-app-title" content="Minyts Holdings" />
   <link rel="manifest" href="../assets/site.webmanifest" />
 
-  <style>
-    .journal-entry {
-      max-width: 680px;
-      margin: 0 auto;
-    }
+    <style>
+      .journal-entry {
+        max-width: 680px;
+        margin: 0 auto;
+      }
 
     .journal-header {
       margin-bottom: 2rem;
@@ -143,6 +143,10 @@
       border-top: 1px solid var(--border);
     }
 
+    .journal-back-stack {
+      margin-bottom: 1.25rem;
+    }
+
     .back-link {
       display: inline-flex;
       align-items: center;
@@ -207,6 +211,12 @@
     <section class="section">
       <div class="container">
         <article class="journal-entry">
+          <div class="journal-back-stack">
+            <a class="back-link" href="../news.html">
+              <span class="back-arrow" aria-hidden="true">&larr;</span>
+              Back to all news
+            </a>
+          </div>
           <header class="journal-header">
             <p class="journal-date">January 16, 2026</p>
             <h1 class="journal-title">Follow Minyts on Facebook</h1>

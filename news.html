@@ -193,6 +193,45 @@
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
 
+    const NEWS_SCROLL_KEY = 'minyts-news-scroll';
+    let scrollStorage = null;
+    let scrollSaveRaf = null;
+
+    try {
+      scrollStorage = window.sessionStorage;
+    } catch (error) {
+      scrollStorage = null;
+    }
+
+    function storeNewsScroll() {
+      if (!scrollStorage) return;
+      scrollStorage.setItem(NEWS_SCROLL_KEY, String(window.scrollY || 0));
+    }
+
+    function restoreNewsScroll() {
+      if (!scrollStorage) return;
+      const stored = scrollStorage.getItem(NEWS_SCROLL_KEY);
+      if (!stored) return;
+      const value = Number(stored);
+      if (Number.isNaN(value)) return;
+      window.scrollTo({ top: value });
+    }
+
+    restoreNewsScroll();
+
+    window.addEventListener('pageshow', () => {
+      restoreNewsScroll();
+    });
+
+    window.addEventListener('scroll', () => {
+      if (!scrollStorage) return;
+      if (scrollSaveRaf) cancelAnimationFrame(scrollSaveRaf);
+      scrollSaveRaf = requestAnimationFrame(() => {
+        scrollStorage.setItem(NEWS_SCROLL_KEY, String(window.scrollY || 0));
+        scrollSaveRaf = null;
+      });
+    }, { passive: true });
+
     // ✅ Topbar auto hide/show (SMOOTH + NO PAGE MOVEMENT)
     (function () {
       const bar = document.querySelector('.topbar');
@@ -332,6 +371,14 @@
         });
       }
 
+      function attachEntryListeners() {
+        archive.querySelectorAll('.news-entry').forEach(entry => {
+          entry.addEventListener('click', () => {
+            storeNewsScroll();
+          });
+        });
+      }
+
       function renderArchive(entries) {
         if (!entries || entries.length === 0) {
           archive.innerHTML = '<p class="news-empty">No updates available yet.</p>';
@@ -354,6 +401,8 @@
             <p class="news-entry-excerpt">${entry.excerpt || ''}</p>
           </a>
         `).join('');
+
+        attachEntryListeners();
       }
 
       fetch(DATA_URL)

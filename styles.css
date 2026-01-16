@@ -823,23 +823,26 @@ section[id]{ scroll-margin-top: calc(var(--topbar-h) + 1rem); }
 
 .news-ticker-viewport{
   height: 180px;
-  overflow: hidden;
+  overflow-y: auto;
   position: relative;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
+}
+
+.news-ticker-viewport::-webkit-scrollbar{
+  width: 5px;
+}
+
+.news-ticker-viewport::-webkit-scrollbar-thumb{
+  background: rgba(11, 18, 32, 0.25);
+  border-radius: 999px;
 }
 
 .news-ticker-track{
   display: flex;
   flex-direction: column;
-  animation: tickerScroll 20s linear infinite;
-}
-
-.news-ticker-track:hover{
-  animation-play-state: paused;
-}
-
-@keyframes tickerScroll{
-  0%{ transform: translateY(0); }
-  100%{ transform: translateY(-50%); }
 }
 
 .news-ticker-item{
