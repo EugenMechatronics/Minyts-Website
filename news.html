@@ -158,6 +158,37 @@
         </nav>
 
         <div class="nav-signature" aria-label="Brand signature">in Minyts.</div>
+
+        <button class="nav-toggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu">
+          Menu
+        </button>
+      </div>
+    </div>
+
+    <!-- MOBILE MENU -->
+    <div class="mobile-menu" id="mobile-menu" hidden>
+      <div class="container mobile-menu-inner" role="navigation" aria-label="Mobile navigation">
+        <a class="nav-item" href="index.html#our-identity">
+          <span class="nav-label">Regards</span>
+          <span class="nav-hand hand-hour" aria-hidden="true"></span>
+        </a>
+        <a class="nav-item" href="index.html#how-we-operate">
+          <span class="nav-label">The Manual</span>
+          <span class="nav-hand hand-minute" aria-hidden="true"></span>
+        </a>
+        <a class="nav-item" href="index.html#companies-holdings">
+          <span class="nav-label">Accompaniments</span>
+          <span class="nav-hand hand-second" aria-hidden="true"></span>
+        </a>
+        <a class="nav-item" href="index.html#contact-info">
+          <span class="nav-label">Communicate</span>
+          <span class="nav-hand hand-continuation" aria-hidden="true"></span>
+        </a>
+        <a class="nav-item" href="news.html">
+          <span class="nav-label">Journal's</span>
+          <span class="nav-hand hand-hour" aria-hidden="true"></span>
+        </a>
+        <div class="mobile-signature">in Minyts.</div>
       </div>
     </div>
   </header>
@@ -192,6 +223,24 @@
 
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Mobile menu toggle
+    const toggle = document.querySelector('.nav-toggle');
+    const mobileMenu = document.getElementById('mobile-menu');
+
+    toggle?.addEventListener('click', () => {
+      const isOpen = toggle.getAttribute('aria-expanded') === 'true';
+      toggle.setAttribute('aria-expanded', String(!isOpen));
+      mobileMenu.hidden = isOpen;
+    });
+
+    mobileMenu?.addEventListener('click', (e) => {
+      const target = e.target.closest('a');
+      if (target) {
+        mobileMenu.hidden = true;
+        toggle.setAttribute('aria-expanded', 'false');
+      }
+    });
 
     const NEWS_SCROLL_KEY = 'minyts-news-scroll';
     let scrollStorage = null;
