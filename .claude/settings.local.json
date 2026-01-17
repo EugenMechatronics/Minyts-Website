@@ -5,7 +5,10 @@
       "Bash(Out-Null)",
       "Bash($matches[1])",
       "Bash(Out-File -FilePath 'c:\\\\Users\\\\beezy\\\\Documents\\\\MINYTS\\\\Minyts-Website\\\\admin\\\\temp_check.js' -Encoding utf8)",
-      "Bash(Remove-Item 'c:\\\\Users\\\\beezy\\\\Documents\\\\MINYTS\\\\Minyts-Website\\\\admin\\\\temp_check.js' -ErrorAction SilentlyContinue \")"
+      "Bash(Remove-Item 'c:\\\\Users\\\\beezy\\\\Documents\\\\MINYTS\\\\Minyts-Website\\\\admin\\\\temp_check.js' -ErrorAction SilentlyContinue \")",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(git add:*)"
     ]
   }
 }
