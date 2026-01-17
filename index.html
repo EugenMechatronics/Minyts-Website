@@ -714,6 +714,13 @@
         startAutoScroll();
       }
 
+      // Restart auto-scroll when page becomes visible (mobile browsers pause timers)
+      document.addEventListener('visibilitychange', () => {
+        if (!document.hidden && !userInteracting && !reduceMotion && track.children.length > 0) {
+          startAutoScroll();
+        }
+      });
+
       fetch(DATA_URL)
         .then(res => {
           if (!res.ok) throw new Error('Failed to load');
