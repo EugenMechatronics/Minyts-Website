@@ -618,7 +618,11 @@
       const RESUME_DELAY_MS = 2500;
       const reduceMotion = window.matchMedia ? window.matchMedia('(prefers-reduced-motion: reduce)').matches : false;
 
+      let scrollTimer = null;
       let resumeTimer = null;
+      let isScrolling = false;
+      const TICK_MS = 50;
+      const INCREMENT = (AUTO_SPEED_PX_PER_SEC * TICK_MS) / 1000;
 
       function formatDate(dateStr) {
         const date = new Date(dateStr + 'T00:00:00');
@@ -629,19 +633,35 @@
         });
       }
 
-      function pauseAutoScroll() {
-        track.style.animationPlayState = 'paused';
+      function scrollStep() {
+        if (!isScrolling) return;
+        viewport.scrollTop += INCREMENT;
+        const halfHeight = track.scrollHeight / 2;
+        if (viewport.scrollTop >= halfHeight) {
+          viewport.scrollTop -= halfHeight;
+        }
+        scrollTimer = setTimeout(scrollStep, TICK_MS);
       }
 
       function startAutoScroll() {
-        track.style.animationPlayState = 'running';
+        if (reduceMotion || isScrolling) return;
+        isScrolling = true;
+        scrollStep();
+      }
+
+      function pauseAutoScroll() {
+        isScrolling = false;
+        if (scrollTimer) {
+          clearTimeout(scrollTimer);
+          scrollTimer = null;
+        }
       }
 
       function markInteraction() {
         pauseAutoScroll();
         if (resumeTimer) clearTimeout(resumeTimer);
         resumeTimer = setTimeout(() => {
-          if (!reduceMotion) startAutoScroll();
+          startAutoScroll();
         }, RESUME_DELAY_MS);
       }
 
@@ -673,13 +693,8 @@
         `).join('');
 
         track.innerHTML = itemsHTML + itemsHTML;
-
-        // Calculate animation duration based on content height (30px per second)
-        const halfHeight = track.scrollHeight / 2;
-        const duration = halfHeight / AUTO_SPEED_PX_PER_SEC;
-
-        // Apply CSS animation
-        track.style.animation = reduceMotion ? 'none' : `tickerScroll ${duration}s linear infinite`;
+        viewport.scrollTop = 0;
+        setTimeout(startAutoScroll, 200);
       }
 
       fetch(DATA_URL)

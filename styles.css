@@ -823,8 +823,11 @@ section[id]{ scroll-margin-top: calc(var(--topbar-h) + 1rem); }
 
 .news-ticker-viewport{
   height: 180px;
-  overflow: hidden;
+  overflow-y: auto;
+  overflow-x: hidden;
   position: relative;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
 }
 
 .news-ticker-viewport::-webkit-scrollbar{
