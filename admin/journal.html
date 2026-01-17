@@ -729,6 +729,61 @@
       word-break: break-word;
     }
 
+    /* Export Options */
+    .export-option {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .export-option:hover {
+      border-color: var(--mcc-blue);
+      background: rgba(10, 108, 255, 0.02);
+    }
+
+    .export-option input[type="checkbox"] {
+      width: auto;
+      margin: 0;
+    }
+
+    .export-entry-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.375rem 0.5rem;
+      border-radius: calc(var(--radius) - 2px);
+      cursor: pointer;
+    }
+
+    .export-entry-item:hover {
+      background: var(--bg-soft);
+    }
+
+    .export-entry-item input[type="checkbox"] {
+      width: auto;
+      margin: 0;
+    }
+
+    .export-entry-item .entry-status {
+      width: 8px;
+      height: 8px;
+    }
+
+    .export-entry-item span {
+      flex: 1;
+      font-size: 0.875rem;
+    }
+
+    .export-entry-item .entry-date {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
     /* Responsive */
     @media (max-width: 640px) {
       .container {
@@ -764,6 +819,7 @@
   <header class="header">
     <h1>Journal Control Panel</h1>
     <div class="header-actions">
+      <button class="btn btn-primary btn-sm" onclick="openExportModal()">Export All Files</button>
       <button class="btn btn-success btn-sm" onclick="exportData()">Export index.json</button>
       <button class="btn btn-secondary btn-sm" onclick="exportFullBackup()">Backup All</button>
     </div>
@@ -877,6 +933,52 @@
       <div class="modal-actions">
         <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
         <button class="btn btn-danger" onclick="deleteEntry()">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Export All Modal -->
+  <div id="export-modal" class="modal-overlay">
+    <div class="modal" style="max-width: 550px;">
+      <div class="modal-title">Export Files</div>
+      <p class="modal-text">Select entries and export format.</p>
+
+      <div style="margin-bottom: 1rem;">
+        <div style="display: flex; gap: 0.5rem; margin-bottom: 0.75rem;">
+          <button class="btn btn-secondary btn-sm" onclick="selectAllEntries()">Select All</button>
+          <button class="btn btn-secondary btn-sm" onclick="deselectAllEntries()">Deselect All</button>
+          <button class="btn btn-secondary btn-sm" onclick="selectPublishedEntries()">Published Only</button>
+        </div>
+        <div id="export-entry-list" style="max-height: 200px; overflow-y: auto; border: 1px solid var(--border); border-radius: var(--radius); padding: 0.5rem;">
+          <!-- Entry checkboxes will be inserted here -->
+        </div>
+      </div>
+
+      <div style="margin-bottom: 1rem;">
+        <label style="font-weight: 600; margin-bottom: 0.5rem; display: block;">Export Format</label>
+        <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+          <label class="export-option">
+            <input type="checkbox" id="export-html" checked>
+            <span>HTML files (individual journal pages)</span>
+          </label>
+          <label class="export-option">
+            <input type="checkbox" id="export-index-json" checked>
+            <span>index.json (for news.html listing)</span>
+          </label>
+          <label class="export-option">
+            <input type="checkbox" id="export-full-json">
+            <span>Full entries JSON (with all content data)</span>
+          </label>
+          <label class="export-option">
+            <input type="checkbox" id="export-individual-json">
+            <span>Individual entry JSON files</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn btn-secondary" onclick="closeExportModal()">Cancel</button>
+        <button class="btn btn-success" onclick="executeExport()">Export Selected</button>
       </div>
     </div>
   </div>
@@ -1673,6 +1775,7 @@
       parts.push('    .back-link { display: inline-flex; align-items: center; gap: 0.35rem; font-size: 0.875rem; font-weight: 600; color: var(--mcc-blue); }');
       parts.push('    .back-link:hover .back-arrow { transform: translateX(-2px); }');
       parts.push('    .back-arrow { transition: transform var(--t-fast) var(--ease); }');
+      parts.push('    .journal-back-stack { margin-bottom: 1.25rem; }');
       parts.push('  <' + '/style>');
       parts.push('<' + '/head>');
       parts.push('<body>');
@@ -1701,6 +1804,12 @@
       parts.push('    <section class="section">');
       parts.push('      <div class="container">');
       parts.push('        <article class="journal-entry">');
+      parts.push('          <div class="journal-back-stack">');
+      parts.push('            <a class="back-link" href="../news.html">');
+      parts.push('              <span class="back-arrow" aria-hidden="true">&larr;<' + '/span>');
+      parts.push('              Back to all news');
+      parts.push('            <' + '/a>');
+      parts.push('          <' + '/div>');
       parts.push('          <header class="journal-header">');
       parts.push('            <p class="journal-date">' + formattedDate + '<' + '/p>');
       parts.push('            <h1 class="journal-title">' + escapeHTML(entry.title) + '<' + '/h1>');
@@ -1872,6 +1981,313 @@
       document.getElementById('blocks-container').innerHTML = '';
       document.getElementById('output-json').textContent = '// Save or publish an entry to see output here';
       updateControlButtons();
+    }
+
+    // ============================================
+    // EXPORT ALL MODAL
+    // ============================================
+    function openExportModal() {
+      if (entries.length === 0) {
+        showToast('No entries to export', 'error');
+        return;
+      }
+
+      // Populate entry list with checkboxes
+      const list = document.getElementById('export-entry-list');
+      list.innerHTML = entries.map(entry => `
+        <label class="export-entry-item">
+          <input type="checkbox" value="${entry.id}" checked>
+          <div class="entry-status ${entry.status}"></div>
+          <span>${escapeHTML(entry.title)}</span>
+          <span class="entry-date">${entry.date}</span>
+        </label>
+      `).join('');
+
+      document.getElementById('export-modal').classList.add('active');
+    }
+
+    function closeExportModal() {
+      document.getElementById('export-modal').classList.remove('active');
+    }
+
+    function selectAllEntries() {
+      document.querySelectorAll('#export-entry-list input[type="checkbox"]').forEach(cb => cb.checked = true);
+    }
+
+    function deselectAllEntries() {
+      document.querySelectorAll('#export-entry-list input[type="checkbox"]').forEach(cb => cb.checked = false);
+    }
+
+    function selectPublishedEntries() {
+      document.querySelectorAll('#export-entry-list input[type="checkbox"]').forEach(cb => {
+        const entry = entries.find(e => e.id === cb.value);
+        cb.checked = entry && entry.status === 'published';
+      });
+    }
+
+    function getSelectedEntryIds() {
+      const checked = document.querySelectorAll('#export-entry-list input[type="checkbox"]:checked');
+      return Array.from(checked).map(cb => cb.value);
+    }
+
+    async function executeExport() {
+      const selectedIds = getSelectedEntryIds();
+      if (selectedIds.length === 0) {
+        showToast('Select at least one entry', 'error');
+        return;
+      }
+
+      const selectedEntries = entries.filter(e => selectedIds.includes(e.id));
+      const exportHtml = document.getElementById('export-html').checked;
+      const exportIndexJson = document.getElementById('export-index-json').checked;
+      const exportFullJson = document.getElementById('export-full-json').checked;
+      const exportIndividualJson = document.getElementById('export-individual-json').checked;
+
+      if (!exportHtml && !exportIndexJson && !exportFullJson && !exportIndividualJson) {
+        showToast('Select at least one export format', 'error');
+        return;
+      }
+
+      let exportCount = 0;
+
+      // Export HTML files
+      if (exportHtml) {
+        for (const entry of selectedEntries) {
+          exportSingleEntryHTML(entry);
+          exportCount++;
+        }
+      }
+
+      // Export index.json
+      if (exportIndexJson) {
+        const indexData = {
+          entries: selectedEntries
+            .filter(e => e.status === 'published')
+            .map(e => ({
+              id: e.id,
+              title: e.title,
+              date: e.date,
+              status: e.status,
+              excerpt: e.summary || ''
+            }))
+        };
+
+        downloadJSON(indexData, 'index.json');
+        exportCount++;
+      }
+
+      // Export full entries JSON (with content but without base64 blobs)
+      if (exportFullJson) {
+        const fullData = {
+          exported_at: new Date().toISOString(),
+          entries: selectedEntries.map(e => {
+            const cleanEntry = { ...e };
+            cleanEntry.content = e.content.map(block => {
+              const clean = { ...block };
+              delete clean.data; // Remove base64 image data
+              return clean;
+            });
+            return cleanEntry;
+          })
+        };
+
+        downloadJSON(fullData, `entries-full-${new Date().toISOString().split('T')[0]}.json`);
+        exportCount++;
+      }
+
+      // Export individual entry JSON files
+      if (exportIndividualJson) {
+        for (const entry of selectedEntries) {
+          const cleanEntry = { ...entry };
+          cleanEntry.content = entry.content.map(block => {
+            const clean = { ...block };
+            delete clean.data;
+            return clean;
+          });
+          downloadJSON(cleanEntry, `${entry.id}.json`);
+          exportCount++;
+        }
+      }
+
+      closeExportModal();
+      showToast(`Exported ${exportCount} file(s)`, 'success');
+    }
+
+    function downloadJSON(data, filename) {
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function exportSingleEntryHTML(entry) {
+      const formattedDate = new Date(entry.date + 'T00:00:00').toLocaleDateString('en-US', {
+        month: 'long',
+        day: 'numeric',
+        year: 'numeric'
+      });
+
+      // Generate content HTML from blocks
+      const contentParts = [];
+      entry.content.forEach(block => {
+        switch(block.type) {
+          case 'paragraph':
+            contentParts.push('            <p>' + escapeHTML(block.text) + '<' + '/p>');
+            break;
+          case 'image':
+            contentParts.push('            <figure class="journal-image">');
+            contentParts.push('              <img src="' + block.file + '" alt="' + escapeHTML(block.caption || '') + '" />');
+            if (block.caption) contentParts.push('              <figcaption>' + escapeHTML(block.caption) + '<' + '/figcaption>');
+            contentParts.push('            <' + '/figure>');
+            break;
+          case 'video':
+            if (block.mode === 'embed') {
+              const videoId = extractVideoId(block.url);
+              if (videoId.type === 'youtube') {
+                contentParts.push('            <div class="journal-video">');
+                contentParts.push('              <iframe src="https://www.youtube.com/embed/' + videoId.id + '" frameborder="0" allowfullscreen><' + '/iframe>');
+                contentParts.push('            <' + '/div>');
+              } else if (videoId.type === 'vimeo') {
+                contentParts.push('            <div class="journal-video">');
+                contentParts.push('              <iframe src="https://player.vimeo.com/video/' + videoId.id + '" frameborder="0" allowfullscreen><' + '/iframe>');
+                contentParts.push('            <' + '/div>');
+              }
+            }
+            break;
+          case 'url':
+            contentParts.push('            <a class="journal-url-card" href="' + escapeHTML(block.url) + '" target="_blank" rel="noopener noreferrer">');
+            contentParts.push('              <div class="journal-url-image placeholder">🔗<' + '/div>');
+            contentParts.push('              <div class="journal-url-content">');
+            contentParts.push('                <div class="journal-url-site">');
+            if (block.favicon) contentParts.push('                  <img src="' + escapeHTML(block.favicon) + '" alt="" />');
+            contentParts.push('                  ' + escapeHTML(block.domain));
+            contentParts.push('                <' + '/div>');
+            contentParts.push('                <div class="journal-url-title">' + escapeHTML(block.title || block.domain) + '<' + '/div>');
+            contentParts.push('                <div class="journal-url-desc">' + escapeHTML(block.description || block.url) + '<' + '/div>');
+            contentParts.push('              <' + '/div>');
+            contentParts.push('            <' + '/a>');
+            break;
+        }
+      });
+
+      // Build HTML
+      const parts = [];
+      parts.push('<!DOCTYPE html>');
+      parts.push('<html lang="en">');
+      parts.push('<head>');
+      parts.push('  <meta charset="UTF-8" />');
+      parts.push('  <meta name="viewport" content="width=device-width, initial-scale=1" />');
+      parts.push('  <title>' + escapeHTML(entry.title) + ' | Minyts Holdings<' + '/title>');
+      parts.push('  <meta name="description" content="' + escapeHTML(entry.summary || '') + '" />');
+      parts.push('  <meta name="robots" content="index, follow" />');
+      parts.push('  <link rel="stylesheet" href="../styles.css" />');
+      parts.push('  <link rel="icon" type="image/png" href="../assets/favicon-96x96.png" sizes="96x96" />');
+      parts.push('  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />');
+      parts.push('  <link rel="shortcut icon" href="../assets/favicon.ico" />');
+      parts.push('  <link rel="apple-touch-icon" sizes="180x180" href="../assets/apple-touch-icon.png" />');
+      parts.push('  <meta name="apple-mobile-web-app-title" content="Minyts Holdings" />');
+      parts.push('  <link rel="manifest" href="../assets/site.webmanifest" />');
+      parts.push('  <' + 'style>');
+      parts.push('    .journal-entry { max-width: 680px; margin: 0 auto; }');
+      parts.push('    .journal-header { margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--border); }');
+      parts.push('    .journal-date { font-size: 0.875rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 0.75rem; }');
+      parts.push('    .journal-title { font-size: var(--fs-h1-mobile); line-height: var(--lh-h1); letter-spacing: var(--ls-h1); margin: 0 0 1rem; }');
+      parts.push('    @media (min-width: 768px) { .journal-title { font-size: var(--fs-h1-desktop); } }');
+      parts.push('    .journal-excerpt { font-size: var(--fs-lead); color: var(--text-muted); margin: 0; }');
+      parts.push('    .journal-content { font-size: 1.0625rem; line-height: 1.7; }');
+      parts.push('    .journal-content p { margin: 0 0 1.5rem; }');
+      parts.push('    .journal-content a { color: var(--mcc-blue); text-decoration: underline; text-underline-offset: 2px; }');
+      parts.push('    .journal-content a:hover { text-decoration: none; }');
+      parts.push('    .journal-image { margin: 1.5rem 0; }');
+      parts.push('    .journal-image img { width: 100%; border-radius: var(--radius-card); }');
+      parts.push('    .journal-image figcaption { font-size: 0.875rem; color: var(--text-muted); margin-top: 0.5rem; text-align: center; }');
+      parts.push('    .journal-video { margin: 1.5rem 0; position: relative; padding-bottom: 56.25%; height: 0; }');
+      parts.push('    .journal-video iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: var(--radius-card); }');
+      parts.push('    .journal-url-card { border: 1px solid var(--border); border-radius: var(--radius-card); overflow: hidden; margin: 1.5rem 0; transition: transform var(--t-fast) var(--ease), box-shadow var(--t-fast) var(--ease); display: block; text-decoration: none; color: inherit; }');
+      parts.push('    .journal-url-card:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.08); }');
+      parts.push('    .journal-url-image { width: 100%; height: 160px; background: var(--bg-soft); display: flex; align-items: center; justify-content: center; font-size: 3rem; color: var(--text-muted); }');
+      parts.push('    .journal-url-content { padding: 1rem 1.25rem; }');
+      parts.push('    .journal-url-site { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.03em; margin-bottom: 0.375rem; display: flex; align-items: center; gap: 0.375rem; }');
+      parts.push('    .journal-url-site img { width: 16px; height: 16px; border-radius: 2px; }');
+      parts.push('    .journal-url-title { font-size: 1.125rem; font-weight: 600; margin-bottom: 0.375rem; }');
+      parts.push('    .journal-url-desc { font-size: 0.875rem; color: var(--text-muted); }');
+      parts.push('    .journal-footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--border); }');
+      parts.push('    .back-link { display: inline-flex; align-items: center; gap: 0.35rem; font-size: 0.875rem; font-weight: 600; color: var(--mcc-blue); }');
+      parts.push('    .back-link:hover .back-arrow { transform: translateX(-2px); }');
+      parts.push('    .back-arrow { transition: transform var(--t-fast) var(--ease); }');
+      parts.push('    .journal-back-stack { margin-bottom: 1.25rem; }');
+      parts.push('  <' + '/style>');
+      parts.push('<' + '/head>');
+      parts.push('<body>');
+      parts.push('  <header class="topbar" role="banner">');
+      parts.push('    <div class="container topbar-inner">');
+      parts.push('      <a class="brand" href="../index.html" aria-label="Minyts Holdings Home">');
+      parts.push('        <span class="logo-mark" aria-hidden="true">');
+      parts.push('          <img src="../assets/minytsbetalogo.svg" alt="Minyts logo" width="40" height="40" />');
+      parts.push('        <' + '/span>');
+      parts.push('        <span class="brand-text">Minyts Holdings LLC<' + '/span>');
+      parts.push('      <' + '/a>');
+      parts.push('      <div class="nav-wrap">');
+      parts.push('        <nav class="nav-group" aria-label="Primary navigation">');
+      parts.push('          <a class="nav-item" href="../index.html#our-identity"><span class="nav-label">Regards<' + '/span><span class="nav-hand hand-hour" aria-hidden="true"><' + '/span><' + '/a>');
+      parts.push('          <a class="nav-item" href="../index.html#how-we-operate"><span class="nav-label">The Manual<' + '/span><span class="nav-hand hand-minute" aria-hidden="true"><' + '/span><' + '/a>');
+      parts.push('          <a class="nav-item" href="../index.html#companies-holdings"><span class="nav-label">Accompaniments<' + '/span><span class="nav-hand hand-second" aria-hidden="true"><' + '/span><' + '/a>');
+      parts.push('          <a class="nav-item" href="../index.html#contact-info"><span class="nav-label">Communicate<' + '/span><span class="nav-hand hand-continuation" aria-hidden="true"><' + '/span><' + '/a>');
+      parts.push('          <a class="nav-item" href="../news.html"><span class="nav-label">Journal\'s<' + '/span><span class="nav-hand hand-hour" aria-hidden="true"><' + '/span><' + '/a>');
+      parts.push('        <' + '/nav>');
+      parts.push('        <div class="nav-signature" aria-label="Brand signature">in Minyts.<' + '/div>');
+      parts.push('      <' + '/div>');
+      parts.push('    <' + '/div>');
+      parts.push('  <' + '/header>');
+      parts.push('  <div class="topbar-spacer" aria-hidden="true"><' + '/div>');
+      parts.push('  <main>');
+      parts.push('    <section class="section">');
+      parts.push('      <div class="container">');
+      parts.push('        <article class="journal-entry">');
+      parts.push('          <div class="journal-back-stack">');
+      parts.push('            <a class="back-link" href="../news.html">');
+      parts.push('              <span class="back-arrow" aria-hidden="true">&larr;<' + '/span>');
+      parts.push('              Back to all news');
+      parts.push('            <' + '/a>');
+      parts.push('          <' + '/div>');
+      parts.push('          <header class="journal-header">');
+      parts.push('            <p class="journal-date">' + formattedDate + '<' + '/p>');
+      parts.push('            <h1 class="journal-title">' + escapeHTML(entry.title) + '<' + '/h1>');
+      parts.push('            <p class="journal-excerpt">' + escapeHTML(entry.summary || '') + '<' + '/p>');
+      parts.push('          <' + '/header>');
+      parts.push('          <div class="journal-content">');
+      parts.push(contentParts.join('\n'));
+      parts.push('          <' + '/div>');
+      parts.push('          <footer class="journal-footer">');
+      parts.push('            <a class="back-link" href="../news.html">');
+      parts.push('              <span class="back-arrow" aria-hidden="true">&larr;<' + '/span>');
+      parts.push('              Back to all news');
+      parts.push('            <' + '/a>');
+      parts.push('          <' + '/footer>');
+      parts.push('        <' + '/article>');
+      parts.push('      <' + '/div>');
+      parts.push('    <' + '/section>');
+      parts.push('  <' + '/main>');
+      parts.push('  <footer class="footer" role="contentinfo">');
+      parts.push('    <div class="container footer-inner">');
+      parts.push('      <p>&copy; <span id="year"><' + '/span> Minyts Holdings LLC. All rights reserved.<' + '/p>');
+      parts.push('    <' + '/div>');
+      parts.push('  <' + '/footer>');
+      parts.push('  <' + 'script>document.getElementById("year").textContent = new Date().getFullYear();<' + '/script>');
+      parts.push('<' + '/body>');
+      parts.push('<' + '/html>');
+
+      const html = parts.join('\n');
+      const blob = new Blob([html], { type: 'text/html' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = entry.id + '.html';
+      a.click();
+      URL.revokeObjectURL(url);
     }
 
     // ============================================
