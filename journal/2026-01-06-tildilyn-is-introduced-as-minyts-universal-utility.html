@@ -158,6 +158,100 @@ As part of the Minyts portfolio, Tildilyn benefits from shared systems, oversigh
         toggle.setAttribute('aria-expanded', 'false');
       }
     });
+
+    // Topbar auto hide/show
+    (function () {
+      const bar = document.querySelector('.topbar');
+      const spacer = document.querySelector('.topbar-spacer');
+      if (!bar || !spacer) return;
+
+      const root = document.documentElement;
+      const inner = bar.querySelector('.topbar-inner');
+
+      const TOP_LOCK_PX = 2;
+      const HIDE_DELAY_MS = 1400;
+      let hideTimer = null;
+      let isInteracting = false;
+      let ticking = false;
+
+      function isMenuOpen() {
+        return !!toggle && toggle.getAttribute('aria-expanded') === 'true';
+      }
+
+      function syncTopbarHeight() {
+        const h = (inner ? inner.offsetHeight : bar.offsetHeight) || 68;
+        root.style.setProperty('--topbar-h', h + 'px');
+        spacer.style.height = 'var(--topbar-h)';
+      }
+
+      function hideBar() {
+        if (window.scrollY <= TOP_LOCK_PX) return;
+        if (isMenuOpen()) return;
+        if (isInteracting) return;
+        bar.classList.add('topbar--hidden');
+      }
+
+      function clearHideTimer() {
+        if (hideTimer) clearTimeout(hideTimer);
+        hideTimer = null;
+      }
+
+      function scheduleHide() {
+        clearHideTimer();
+        const snapshotY = window.scrollY;
+        hideTimer = setTimeout(() => {
+          if (Math.abs(window.scrollY - snapshotY) > 1) { scheduleHide(); return; }
+          hideBar();
+        }, HIDE_DELAY_MS);
+      }
+
+      function handleScroll() {
+        if (window.scrollY <= TOP_LOCK_PX) {
+          bar.classList.remove('topbar--hidden');
+          clearHideTimer();
+          return;
+        }
+        bar.classList.remove('topbar--hidden');
+        scheduleHide();
+      }
+
+      function onScroll() {
+        if (ticking) return;
+        ticking = true;
+        window.requestAnimationFrame(() => { handleScroll(); ticking = false; });
+      }
+
+      function setInteracting(v) {
+        isInteracting = v;
+        if (v) { bar.classList.remove('topbar--hidden'); clearHideTimer(); }
+        else { if (window.scrollY > TOP_LOCK_PX) scheduleHide(); }
+      }
+
+      bar.addEventListener('pointerenter', () => setInteracting(true));
+      bar.addEventListener('pointerleave', () => setInteracting(false));
+      bar.addEventListener('pointerdown', () => setInteracting(true));
+      bar.addEventListener('pointerup', () => setInteracting(false));
+      bar.addEventListener('focusin', () => setInteracting(true));
+      bar.addEventListener('focusout', () => {
+        setTimeout(() => { setInteracting(bar.contains(document.activeElement)); }, 80);
+      });
+
+      window.addEventListener('scroll', onScroll, { passive: true });
+      window.addEventListener('resize', syncTopbarHeight);
+
+      window.addEventListener('touchstart', () => {
+        if (window.scrollY > TOP_LOCK_PX) { bar.classList.remove('topbar--hidden'); clearHideTimer(); }
+      }, { passive: true });
+      window.addEventListener('touchmove', () => {
+        if (window.scrollY > TOP_LOCK_PX) { bar.classList.remove('topbar--hidden'); clearHideTimer(); }
+      }, { passive: true });
+      window.addEventListener('touchend', () => {
+        if (window.scrollY > TOP_LOCK_PX) scheduleHide();
+      }, { passive: true });
+
+      syncTopbarHeight();
+      handleScroll();
+    })();
   </script>
 </body>
 </html>
