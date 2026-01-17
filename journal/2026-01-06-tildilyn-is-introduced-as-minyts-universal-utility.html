@@ -41,6 +41,7 @@
     .back-link { display: inline-flex; align-items: center; gap: 0.35rem; font-size: 0.875rem; font-weight: 600; color: var(--mcc-blue); }
     .back-link:hover .back-arrow { transform: translateX(-2px); }
     .back-arrow { transition: transform var(--t-fast) var(--ease); }
+    .journal-back-stack { margin-bottom: 1.25rem; }
   </style>
 </head>
 <body>
@@ -69,6 +70,12 @@
     <section class="section">
       <div class="container">
         <article class="journal-entry">
+          <div class="journal-back-stack">
+            <a class="back-link" href="../news.html">
+              <span class="back-arrow" aria-hidden="true">&larr;</span>
+              Back to all news
+            </a>
+          </div>
           <header class="journal-header">
             <p class="journal-date">January 6, 2026</p>
             <h1 class="journal-title">Tildilyn Is Introduced as Minyts’ Universal Utility Venture</h1>
