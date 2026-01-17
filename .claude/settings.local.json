@@ -8,7 +8,8 @@
       "Bash(Remove-Item 'c:\\\\Users\\\\beezy\\\\Documents\\\\MINYTS\\\\Minyts-Website\\\\admin\\\\temp_check.js' -ErrorAction SilentlyContinue \")",
       "Bash(git commit:*)",
       "Bash(git push:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(powershell -Command:*)"
     ]
   }
 }

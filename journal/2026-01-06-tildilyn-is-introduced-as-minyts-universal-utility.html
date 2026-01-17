@@ -62,6 +62,37 @@
           <a class="nav-item" href="../news.html"><span class="nav-label">Journal's</span><span class="nav-hand hand-hour" aria-hidden="true"></span></a>
         </nav>
         <div class="nav-signature" aria-label="Brand signature">in Minyts.</div>
+
+        <button class="nav-toggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu">
+          Menu
+        </button>
+      </div>
+    </div>
+
+    <!-- MOBILE MENU -->
+    <div class="mobile-menu" id="mobile-menu" hidden>
+      <div class="container mobile-menu-inner" role="navigation" aria-label="Mobile navigation">
+        <a class="nav-item" href="../index.html#our-identity">
+          <span class="nav-label">Regards</span>
+          <span class="nav-hand hand-hour" aria-hidden="true"></span>
+        </a>
+        <a class="nav-item" href="../index.html#how-we-operate">
+          <span class="nav-label">The Manual</span>
+          <span class="nav-hand hand-minute" aria-hidden="true"></span>
+        </a>
+        <a class="nav-item" href="../index.html#companies-holdings">
+          <span class="nav-label">Accompaniments</span>
+          <span class="nav-hand hand-second" aria-hidden="true"></span>
+        </a>
+        <a class="nav-item" href="../index.html#contact-info">
+          <span class="nav-label">Communicate</span>
+          <span class="nav-hand hand-continuation" aria-hidden="true"></span>
+        </a>
+        <a class="nav-item" href="../news.html">
+          <span class="nav-label">Journal's</span>
+          <span class="nav-hand hand-hour" aria-hidden="true"></span>
+        </a>
+        <div class="mobile-signature">in Minyts.</div>
       </div>
     </div>
   </header>
@@ -83,7 +114,7 @@
           </header>
           <div class="journal-content">
             <figure class="journal-image">
-              <img src="media/tildilynlogo.png" alt="" />
+              <img src="../assets/tildilynlogo.png" alt="Tildilyn logo" />
             </figure>
             <p>We’re introducing Tildilyn as part of our growing venture portfolio, built to operate as an universal utility service that adapts as needs evolve. Tildilyn is structured to expand its offerings over time, allowing us to develop, refine, and deploy services across multiple sectors with discipline and purpose. This marks the beginning of Tildilyn’s public journey, with our focus placed on building a strong operational foundation and sharing progress as capabilities come online.</p>
             <p>Tildilyn was formed out of a practical observation: individuals and businesses often need support that doesn’t fit neatly into a single category or industry label. Many real-world needs fall between traditional service lines, creating friction, delays, or unnecessary complexity. Tildilyn is being built to reduce that friction by operating as a flexible utility venture capable of meeting a wide range of demands as expertise is developed.
@@ -107,6 +138,26 @@ As part of the Minyts portfolio, Tildilyn benefits from shared systems, oversigh
       <p>&copy; <span id="year"></span> Minyts Holdings LLC. All rights reserved.</p>
     </div>
   </footer>
-  <script>document.getElementById("year").textContent = new Date().getFullYear();</script>
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    // Mobile menu toggle
+    const toggle = document.querySelector('.nav-toggle');
+    const menu = document.getElementById('mobile-menu');
+
+    toggle?.addEventListener('click', () => {
+      const isOpen = toggle.getAttribute('aria-expanded') === 'true';
+      toggle.setAttribute('aria-expanded', String(!isOpen));
+      menu.hidden = isOpen;
+    });
+
+    menu?.addEventListener('click', (e) => {
+      const target = e.target.closest('a');
+      if (target) {
+        menu.hidden = true;
+        toggle.setAttribute('aria-expanded', 'false');
+      }
+    });
+  </script>
 </body>
 </html>
