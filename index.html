@@ -618,11 +618,7 @@
       const RESUME_DELAY_MS = 2500;
       const reduceMotion = window.matchMedia ? window.matchMedia('(prefers-reduced-motion: reduce)').matches : false;
 
-      let autoTimer = null;
-      let userInteracting = false;
       let resumeTimer = null;
-      const TICK_MS = 33; // ~30fps
-      const INCREMENT_PER_TICK = (AUTO_SPEED_PX_PER_SEC * TICK_MS) / 1000;
 
       function formatDate(dateStr) {
         const date = new Date(dateStr + 'T00:00:00');
@@ -633,58 +629,25 @@
         });
       }
 
-      function markInteraction() {
-        if (!userInteracting) {
-          userInteracting = true;
-          pauseAutoScroll();
-        }
-        scheduleResume();
-      }
-
-      function scheduleResume() {
-        if (reduceMotion) return;
-        if (resumeTimer) {
-          clearTimeout(resumeTimer);
-        }
-        resumeTimer = setTimeout(() => {
-          userInteracting = false;
-          resumeTimer = null;
-          startAutoScroll();
-        }, RESUME_DELAY_MS);
-      }
-
-      function animateTicker() {
-        if (!userInteracting && track.scrollHeight > viewport.clientHeight) {
-          viewport.scrollTop += INCREMENT_PER_TICK;
-          const halfHeight = track.scrollHeight / 2;
-          if (viewport.scrollTop >= halfHeight) {
-            viewport.scrollTop -= halfHeight;
-          }
-        }
+      function pauseAutoScroll() {
+        track.style.animationPlayState = 'paused';
       }
 
       function startAutoScroll() {
-        cancelAutoScroll();
-        autoTimer = setInterval(animateTicker, TICK_MS);
+        track.style.animationPlayState = 'running';
       }
 
-      function cancelAutoScroll() {
-        if (autoTimer) {
-          clearInterval(autoTimer);
-          autoTimer = null;
-        }
-      }
-
-      function pauseAutoScroll() {
-        cancelAutoScroll();
+      function markInteraction() {
+        pauseAutoScroll();
+        if (resumeTimer) clearTimeout(resumeTimer);
+        resumeTimer = setTimeout(() => {
+          if (!reduceMotion) startAutoScroll();
+        }, RESUME_DELAY_MS);
       }
 
       viewport.addEventListener('pointerdown', markInteraction);
       viewport.addEventListener('wheel', markInteraction, { passive: true });
       viewport.addEventListener('touchstart', markInteraction, { passive: true });
-      viewport.addEventListener('pointerup', () => scheduleResume());
-      viewport.addEventListener('pointerleave', () => scheduleResume());
-      viewport.addEventListener('touchend', () => scheduleResume());
 
       function renderTicker(entries) {
         if (!entries || entries.length === 0) {
@@ -710,26 +673,14 @@
         `).join('');
 
         track.innerHTML = itemsHTML + itemsHTML;
-        viewport.scrollTop = 0;
-        // Delay start to ensure DOM is ready (helps on mobile)
-        setTimeout(() => {
-          if (!reduceMotion) startAutoScroll();
-        }, 100);
+
+        // Calculate animation duration based on content height (30px per second)
+        const halfHeight = track.scrollHeight / 2;
+        const duration = halfHeight / AUTO_SPEED_PX_PER_SEC;
+
+        // Apply CSS animation
+        track.style.animation = reduceMotion ? 'none' : `tickerScroll ${duration}s linear infinite`;
       }
-
-      // Restart auto-scroll when page becomes visible (mobile browsers pause timers)
-      document.addEventListener('visibilitychange', () => {
-        if (!document.hidden && !userInteracting && !reduceMotion && track.children.length > 0) {
-          startAutoScroll();
-        }
-      });
-
-      // Also try starting on first touch/scroll interaction end
-      window.addEventListener('load', () => {
-        if (!reduceMotion && track.children.length > 0 && !autoTimer) {
-          startAutoScroll();
-        }
-      });
 
       fetch(DATA_URL)
         .then(res => {
