@@ -659,7 +659,7 @@
         const delta = timestamp - lastFrameTime;
         lastFrameTime = timestamp;
 
-        if (!userInteracting && viewport.scrollHeight > viewport.clientHeight) {
+        if (!userInteracting && track.scrollHeight > viewport.clientHeight) {
           const increment = (AUTO_SPEED_PX_PER_SEC * delta) / 1000;
           viewport.scrollTop += increment;
           const halfHeight = track.scrollHeight / 2;
