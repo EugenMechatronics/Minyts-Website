@@ -711,12 +711,22 @@
 
         track.innerHTML = itemsHTML + itemsHTML;
         viewport.scrollTop = 0;
-        startAutoScroll();
+        // Delay start to ensure DOM is ready (helps on mobile)
+        setTimeout(() => {
+          if (!reduceMotion) startAutoScroll();
+        }, 100);
       }
 
       // Restart auto-scroll when page becomes visible (mobile browsers pause timers)
       document.addEventListener('visibilitychange', () => {
         if (!document.hidden && !userInteracting && !reduceMotion && track.children.length > 0) {
+          startAutoScroll();
+        }
+      });
+
+      // Also try starting on first touch/scroll interaction end
+      window.addEventListener('load', () => {
+        if (!reduceMotion && track.children.length > 0 && !autoTimer) {
           startAutoScroll();
         }
       });
