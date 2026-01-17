@@ -105,6 +105,19 @@
       color: var(--text-muted);
     }
 
+    .loading-spinner {
+      width: 32px;
+      height: 32px;
+      border: 3px solid var(--border);
+      border-top-color: var(--mcc-blue);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
     .journal-url-content {
       padding: 1rem 1.25rem;
     }
@@ -259,15 +272,17 @@
 
             <p>As our venture universe takes shape, we'll share updates, behind-the-scenes moments, and announcements about what's happening across Minyts Holdings and our portfolio companies.</p>
 
-            <a class="journal-url-card" href="https://www.facebook.com/share/1Pnskb2MtB/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer">
-              <img class="journal-url-image" src="../assets/minytsbetalogo.svg" alt="Minyts Holdings" style="object-fit: contain; padding: 2rem; background: var(--bg-soft);" />
+            <a class="journal-url-card" href="https://www.facebook.com/share/1Pnskb2MtB/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" data-url-preview="https://www.facebook.com/share/1Pnskb2MtB/?mibextid=wwXIfr">
+              <div class="journal-url-image placeholder" data-preview-image>
+                <span class="loading-spinner"></span>
+              </div>
               <div class="journal-url-content">
-                <div class="journal-url-site">
+                <div class="journal-url-site" data-preview-site>
                   <img src="https://www.google.com/s2/favicons?domain=facebook.com&sz=32" alt="" />
-                  facebook.com
+                  <span>facebook.com</span>
                 </div>
-                <div class="journal-url-title">Minyts Holdings on Facebook</div>
-                <div class="journal-url-desc">Follow us for updates on our ventures and company news.</div>
+                <div class="journal-url-title" data-preview-title>Minyts Holdings on Facebook</div>
+                <div class="journal-url-desc" data-preview-desc>Follow us for updates on our ventures and company news.</div>
               </div>
             </a>
 
@@ -404,6 +419,66 @@
 
       syncTopbarHeight();
       handleScroll();
+    })();
+
+    // URL Preview Auto-fetch
+    (function() {
+      const cards = document.querySelectorAll('[data-url-preview]');
+      cards.forEach(async (card) => {
+        const url = card.dataset.urlPreview;
+        if (!url) return;
+
+        try {
+          const response = await fetch('/.netlify/functions/og-fetch?url=' + encodeURIComponent(url));
+          if (!response.ok) throw new Error('Failed to fetch');
+
+          const data = await response.json();
+
+          // Update image
+          const imageEl = card.querySelector('[data-preview-image]');
+          if (imageEl && data.image) {
+            const img = document.createElement('img');
+            img.src = data.image;
+            img.alt = data.title || '';
+            img.style.width = '100%';
+            img.style.height = '100%';
+            img.style.objectFit = 'cover';
+            imageEl.innerHTML = '';
+            imageEl.classList.remove('placeholder');
+            imageEl.appendChild(img);
+          } else if (imageEl) {
+            // No image returned, show fallback
+            imageEl.innerHTML = '<img src="../assets/minytsbetalogo.svg" alt="Minyts" style="width:100%;height:100%;object-fit:contain;padding:2rem;background:var(--bg-soft);" />';
+            imageEl.classList.remove('placeholder');
+          }
+
+          // Update title if returned
+          const titleEl = card.querySelector('[data-preview-title]');
+          if (titleEl && data.title) {
+            titleEl.textContent = data.title;
+          }
+
+          // Update description if returned
+          const descEl = card.querySelector('[data-preview-desc]');
+          if (descEl && data.description) {
+            descEl.textContent = data.description;
+          }
+
+          // Update site name
+          const siteEl = card.querySelector('[data-preview-site] span');
+          if (siteEl && data.siteName) {
+            siteEl.textContent = data.siteName;
+          }
+
+        } catch (err) {
+          // On error, show fallback logo
+          const imageEl = card.querySelector('[data-preview-image]');
+          if (imageEl) {
+            imageEl.innerHTML = '<img src="../assets/minytsbetalogo.svg" alt="Minyts" style="width:100%;height:100%;object-fit:contain;padding:2rem;background:var(--bg-soft);" />';
+            imageEl.classList.remove('placeholder');
+          }
+        }
+      });
     })();
   </script>
 </body>
